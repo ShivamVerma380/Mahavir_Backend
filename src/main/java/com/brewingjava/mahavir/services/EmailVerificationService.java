@@ -70,7 +70,6 @@ public class EmailVerificationService {
             String otp = String.format("%06d", number);
 
 
-
             String message = "Dear Guest,\nOTP:"+otp+"\nIs your Otp for Mahavir Electronics. Please verify to proceed further.\nThanks & Regards,\nMahavir Electronics";
 
             m.setText(message);
