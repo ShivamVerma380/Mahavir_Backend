@@ -10,33 +10,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
+
 public class UserService {
     
     @Autowired
     public ResponseMessage responseMessage;
 
-    @Autowired
-    public User user;
 
     @Autowired
     public UserDao userDao;
 
-    public ResponseEntity<?> addUser(String email,String name,String address,String phoneNo,String city,String state,String pinCode){
+    public ResponseEntity<?> addUser(String email,String password,String name,String address,String phoneNo,String city,String state,String pinCode){
         try {
-            user = userDao.findByEmail(email);
-            if(user!=null){
+            User existingUser = userDao.findByEmail(email);
+            if(existingUser!=null){
                 responseMessage.setMessage("An account already exists with this email");
                 return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
             }
-            user.setEmail(email);
-            user.setAddress(address);
-            user.setCity(city);
-            user.setName(name);
-            user.setPhoneNo(phoneNo);
-            user.setPinCode(pinCode);
-            user.setState(state);
-
-            this.userDao.save(user);
+            User new_user = new User(email, password, name, address, phoneNo, city, state, pinCode);
+            
+            this.userDao.save(new_user);
             
             responseMessage.setMessage("User added successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);

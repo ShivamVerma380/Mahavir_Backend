@@ -20,9 +20,9 @@ public class UserController {
     public UserService userService;
 
     @PostMapping("/add-user")
-    public ResponseEntity<?> addUser(@RequestParam("email") String email,@RequestParam("name") String name,@RequestParam("address") String address,@RequestParam("phoneNo")String phoneNo,@RequestParam("city")String city,@RequestParam("state")String state,@RequestParam("pincode")String pinCode){
+    public ResponseEntity<?> addUser(@RequestParam("email") String email,@RequestParam("password") String password, @RequestParam("name") String name,@RequestParam("address") String address,@RequestParam("phoneNo")String phoneNo,@RequestParam("city")String city,@RequestParam("state")String state,@RequestParam("pincode")String pinCode){
         try {
-            return userService.addUser(email, name, address, phoneNo, city, state, pinCode);
+            return userService.addUser(email,password, name, address, phoneNo, city, state, pinCode);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

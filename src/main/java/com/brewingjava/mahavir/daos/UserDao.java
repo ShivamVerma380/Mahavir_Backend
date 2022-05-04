@@ -5,12 +5,11 @@ import com.brewingjava.mahavir.entities.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 @Component
-@EnableMongoRepositories
-public interface UserDao extends MongoRepository<String,User> {
+@Repository
+public interface UserDao extends MongoRepository<User,String> {
     
     public User findByEmail(String email);
-
-    public User save(User user);
 }

@@ -6,12 +6,15 @@ import org.springframework.stereotype.Component;
 
 import lombok.Generated;
 
+
 @Document(collection = "users")
 @Component
 public class User {
 
     @Id
     private String email;
+
+    private String password;
 
     private String name;
 
@@ -28,8 +31,12 @@ public class User {
     public User() {
     }
 
-    public User(String email, String name, String address, String phoneNo, String city, String state, String pinCode) {
+    
+
+    public User(String email, String password, String name, String address, String phoneNo, String city, String state,
+            String pinCode) {
         this.email = email;
+        this.password = password;
         this.name = name;
         this.address = address;
         this.phoneNo = phoneNo;
@@ -37,6 +44,8 @@ public class User {
         this.state = state;
         this.pinCode = pinCode;
     }
+
+
 
     public String getEmail() {
         return email;
@@ -94,12 +103,27 @@ public class User {
         this.pinCode = pinCode;
     }
 
-    @Override
-    public String toString() {
-        return "User [address=" + address + ", city=" + city + ", email=" + email + ", name=" + name + ", phoneNo=" + phoneNo
-                + ", pinCode=" + pinCode + ", state=" + state + "]";
+
+
+    public String getPassword() {
+        return password;
     }
 
+
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "User [address=" + address + ", city=" + city + ", email=" + email + ", name=" + name + ", password="
+                + password + ", phoneNo=" + phoneNo + ", pinCode=" + pinCode + ", state=" + state + "]";
+    }
+
+    
     
 
     
