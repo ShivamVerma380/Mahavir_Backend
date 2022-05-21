@@ -1,5 +1,7 @@
 package com.brewingjava.mahavir.services;
 
+import java.util.List;
+
 import com.brewingjava.mahavir.daos.OfferPosterDao;
 import com.brewingjava.mahavir.entities.OfferPosters;
 import com.brewingjava.mahavir.helper.ResponseMessage;
@@ -26,6 +28,7 @@ public class OfferPosterService{
     
 
 
+
     public ResponseEntity<?> addImage(MultipartFile multipartFile){
         try{
             offerPosters.setImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
@@ -37,8 +40,16 @@ public class OfferPosterService{
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
-       
-        
+    }
+
+    public ResponseEntity<?> getOffers(){
+        try{
+            List<OfferPosters> offers = offerPosterDao.findAll();
+            return ResponseEntity.status(HttpStatus.OK).body(offers);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 }
