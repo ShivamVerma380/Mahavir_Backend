@@ -25,7 +25,7 @@ public class UserService {
             User existingUser = userDao.findByEmail(email);
             if(existingUser!=null){
                 responseMessage.setMessage("An account already exists with this email");
-                return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
             User new_user = new User(email, password, name, address, phoneNo, city, state, pinCode);
             
