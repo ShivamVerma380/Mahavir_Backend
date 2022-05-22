@@ -9,7 +9,7 @@ import lombok.Generated;
 
 @Document(collection = "users")
 @Component
-public class User {
+public class UserRequest {
 
     @Id
     private String email;
@@ -28,12 +28,12 @@ public class User {
     
     private String pinCode;
     
-    public User() {
+    public UserRequest() {
     }
 
     
 
-    public User(String email, String password, String name, String address, String phoneNo, String city, String state,
+    public UserRequest(String email, String password, String name, String address, String phoneNo, String city, String state,
             String pinCode) {
         this.email = email;
         this.password = password;

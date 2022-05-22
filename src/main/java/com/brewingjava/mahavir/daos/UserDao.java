@@ -1,6 +1,6 @@
 package com.brewingjava.mahavir.daos;
 
-import com.brewingjava.mahavir.entities.User;
+import com.brewingjava.mahavir.entities.UserRequest;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Component
 @Repository
-public interface UserDao extends MongoRepository<User,String> {
+public interface UserDao extends MongoRepository<UserRequest,String> {
     
-    public User findByEmail(String email);
+    public UserRequest findByEmail(String email);
 }
