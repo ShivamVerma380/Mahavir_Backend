@@ -68,7 +68,9 @@ public class AdminService {
             adminDao.save(new_admin);
             
             //spring security
+            System.out.println("Before authentication manager");
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email,password));
+            System.out.println("After authentication manager");
             //Admin is authenticated successfully
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(new_admin.getEmail());
             String token = jwtUtil.generateToken(userDetails);
