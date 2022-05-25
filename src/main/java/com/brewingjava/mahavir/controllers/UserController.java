@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "*")
 public class UserController {
     
     @Autowired
@@ -34,7 +34,6 @@ public class UserController {
     }
 
     @PostMapping("/login-user")
-    @CrossOrigin
     public ResponseEntity<?> userLogin( @RequestParam("Email") String email,@RequestParam("Password") String password){
         try {
             return userService.loginUser(email, password);
