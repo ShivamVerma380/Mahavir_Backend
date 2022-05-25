@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -45,7 +46,7 @@ public class UserService {
     @Autowired
     public MySecurityConfig mySecurityConfig;
 
-    public ResponseEntity<?> addUser(String email,String password,String name,String address,String phoneNo,String city,String state,String pinCode){
+    public ResponseEntity<?> addUser(String email,String password,String firstName,String lastName,String phoneNo){
         try {
             //Check email in admin db
             Admin admin = adminDao.findByEmail(email);
@@ -61,7 +62,7 @@ public class UserService {
             }
             //add user
             String encoded_password = mySecurityConfig.passwordEncoder().encode(password);
-            UserRequest new_user = new UserRequest(email, encoded_password, name, address, phoneNo, city, state, pinCode);
+            UserRequest new_user = new UserRequest(email, encoded_password, firstName, lastName, phoneNo);
             this.userDao.save(new_user);
 
             //spring security
@@ -79,5 +80,32 @@ public class UserService {
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
+    }
+
+
+    public ResponseEntity<?> loginUser(String email,String password){
+        try {
+            UserRequest fetch_user = userDao.findByEmail(email);
+            if(fetch_user!=null){
+                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+                
+                
+                if(bCryptPasswordEncoder.matches(password,fetch_user.getPassword())){
+                    responseMessage.setMessage("User Logged In Successfully");
+                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                }
+                responseMessage.setMessage("Bad Credentials");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }else{
+                responseMessage.setMessage("User Not Found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage("User logged in successfully");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+        
     }
 }

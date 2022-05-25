@@ -16,93 +16,34 @@ public class UserRequest {
 
     private String password;
 
-    private String name;
+    private String firstName;
 
-    private String address;
+    private String lastName;
     
     private String phoneNo;
     
-    private String city;
-    
-    private String state;
-    
-    private String pinCode;
     
     public UserRequest() {
     }
 
-    
 
-    public UserRequest(String email, String password, String name, String address, String phoneNo, String city, String state,
-            String pinCode) {
+    public UserRequest(String email, String password, String firstName, String lastName, String phoneNo) {
         this.email = email;
         this.password = password;
-        this.name = name;
-        this.address = address;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.phoneNo = phoneNo;
-        this.city = city;
-        this.state = state;
-        this.pinCode = pinCode;
     }
-
 
 
     public String getEmail() {
         return email;
     }
 
+
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhoneNo() {
-        return phoneNo;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getPinCode() {
-        return pinCode;
-    }
-
-    public void setPinCode(String pinCode) {
-        this.pinCode = pinCode;
-    }
-
 
 
     public String getPassword() {
@@ -110,27 +51,46 @@ public class UserRequest {
     }
 
 
-
     public void setPassword(String password) {
         this.password = password;
     }
 
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+
+    public String getLastName() {
+        return lastName;
+    }
+
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
 
     @Override
     public String toString() {
-        return "User [address=" + address + ", city=" + city + ", email=" + email + ", name=" + name + ", password="
-                + password + ", phoneNo=" + phoneNo + ", pinCode=" + pinCode + ", state=" + state + "]";
+        return "UserRequest [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", password="
+                + password + ", phoneNo=" + phoneNo + "]";
     }
-
-    
-    
-
-    
-
-
-    
-
 
 
 }
