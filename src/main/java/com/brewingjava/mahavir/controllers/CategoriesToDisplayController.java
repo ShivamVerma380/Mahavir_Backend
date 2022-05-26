@@ -28,7 +28,7 @@ public class CategoriesToDisplayController {
 
     @PostMapping("/add-category")
     public ResponseEntity<?> addCategory(@RequestHeader("Authorization")String authorization,@RequestParam("CategoryName")String category,@RequestParam("CategoryImage")MultipartFile multipartFile){
-        try {
+        try{
             return categoriesToDisplayService.addCategory(authorization, category,multipartFile);
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,6 +43,17 @@ public class CategoriesToDisplayController {
 
             return categoriesToDisplayService.addSubCategory(authorization, category, subCategory);
             
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @PostMapping("/add-sub-sub-category")
+    public ResponseEntity<?> addSubSubCategory(@RequestHeader("Authorization")String authorization,@RequestParam("CategoryName")String category,@RequestParam("SubCategoryName")String subCategoryName,@RequestParam("SubSubCategoryName")String subSubCategory){
+        try {
+            return categoriesToDisplayService.addSubSubCategory(authorization, category, subCategoryName, subSubCategory);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

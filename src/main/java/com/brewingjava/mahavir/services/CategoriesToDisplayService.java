@@ -68,6 +68,7 @@ public class CategoriesToDisplayService {
         }
     }
 
+
     public ResponseEntity<?> getCategories(){
         try {
             List<CategoriesToDisplay> allCategories = categoriesToDisplayDao.findAll();
@@ -138,4 +139,67 @@ public class CategoriesToDisplayService {
 
     }
 
+
+    public ResponseEntity<?> addSubSubCategory(String authorization,String category,String subCategory,String subSubCategory){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findByEmail(email);
+            if(admin!=null){
+                CategoriesToDisplay existingCategory = categoriesToDisplayDao.findBycategory(category);
+                if(existingCategory!=null){
+                    List<SubCategories> list= existingCategory.getSubCategories();
+                    
+                    if(list==null){
+                        responseMessage.setMessage("No Sub Category found");
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+                    }
+
+                    ListIterator<SubCategories> subCategoriesList = existingCategory.getSubCategories().listIterator();
+                    while(subCategoriesList.hasNext()){
+                        if(subCategory.equals(subCategoriesList.next().getSubCategoryName())){
+                            
+                            List<String> subSubCategoriesList = subCategoriesList.next().getSubSubCategories();
+                            if(subSubCategoriesList==null){
+                                List<String> updatedSubSubCategoriesList = new ArrayList<>();
+                                updatedSubSubCategoriesList.add(subSubCategory);
+                                SubCategories object = new SubCategories(subCategory,subSubCategoriesList);
+                                List<SubCategories> new_sSubCategories = new ArrayList<>();
+                                new_sSubCategories.add(object);
+                                existingCategory.setSubCategories(new_sSubCategories);
+                                categoriesToDisplayDao.save(existingCategory);
+                                responseMessage.setMessage("Sub Sub Category Added Successfully");
+                                return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                            }
+                            subSubCategoriesList.add(subSubCategory);
+                            SubCategories object = new SubCategories(subCategory,subSubCategoriesList);
+                            List<SubCategories> new_sSubCategories = new ArrayList<>();
+                            new_sSubCategories.add(object);
+                            existingCategory.setSubCategories(new_sSubCategories);
+                            categoriesToDisplayDao.save(existingCategory);
+                            responseMessage.setMessage("Sub Sub Category Added Successfully");
+                            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                        }
+                    }
+                    responseMessage.setMessage("No Sub Category found");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+                    
+
+
+                }else{
+                    responseMessage.setMessage("Sorry, No category found!!");
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                }
+            }else{
+                responseMessage.setMessage("You do not have permisssions to add Sub Sub Category");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+
+    }
 }
