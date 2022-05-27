@@ -2,6 +2,7 @@ package com.brewingjava.mahavir.services;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -141,180 +142,76 @@ public class CategoriesToDisplayService {
 
     }
 
+
     public ResponseEntity<?> addSubSubCategory(String authorization,String category,String subCategory,String subSubCategory){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
             admin = adminDao.findByEmail(email);
             if(admin!=null){
-                //Find category from category name
-                //Find subcategories of that category
-                //Add sub sub category to required subCategory
-                //Save this category in database
-                CategoriesToDisplay existingCategory = categoriesToDisplayDao.findBycategory(category);
-                if(existingCategory!=null){
-                    List<SubCategories> existingSubCategories = existingCategory.getSubCategories();
-                    if(existingSubCategories!=null){
-                        ListIterator<SubCategories> listIterator = existingSubCategories.listIterator();
-                        System.out.println("existing subcategory not null");
-                        int i=0;
-                        while(listIterator.hasNext()){
-                            if(subCategory.equals(listIterator.next().getSubCategoryName())){
-                                System.out.println("subcategory found");
-                                HashSet<SubSubCategories> existingSubSubCategories = existingSubCategories.get(i).getSubSubCategories();
-                                System.out.println("existing sub sub category not null");
-                                if(existingSubSubCategories == null){
-                                    System.out.println("subsubcategory is null");
-                                    SubSubCategories subSubCategories = new SubSubCategories();
-                                    subSubCategories.setSubSubCategoryName(subSubCategory);
-                                    HashSet<SubSubCategories> updateSubSubCategories = new HashSet<>();
-                                    updateSubSubCategories.add(subSubCategories);
-                                    // listIterator.next().setSubSubCategories(updateSubSubCategories);
-                                    existingSubCategories.get(i).setSubSubCategories(updateSubSubCategories);
-                                    existingCategory.setSubCategories(existingSubCategories);
-                                    categoriesToDisplayDao.save(existingCategory);
-                                    responseMessage.setMessage("Sub Sub Category Added Successfully");
-                                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-                                }
-                                System.out.println("malsjdbju");
-                                // for(int j = 0; j < existingSubSubCategories.size(); j++){
-                                //     if(subSubCategory.equals(existingSubSubCategories.get(j).getSubSubCategoryName())){
-                                //         responseMessage.setMessage("Sub Sub Category already exists!!");
-                                //         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-                                //     }
-                                //     else{
-                                //         List<SubSubCategories> newSubSubCategories = new ArrayList<>();
-                                //         SubSubCategories updatedSubSubCategories = new SubSubCategories();
-                                //         updatedSubSubCategories.setSubSubCategoryName(subSubCategory);
-                                //         newSubSubCategories.add(updatedSubSubCategories);
-                                //         existingSubCategories.get(i).setSubSubCategories(newSubSubCategories);
-                                //         // listIterator.next().setSubSubCategories(newSubSubCategories);
-                                //         existingCategory.setSubCategories(existingSubCategories);
-                                //         categoriesToDisplayDao.save(existingCategory);
-                                //         responseMessage.setMessage("Sub Sub Category added successfully");
-                                //         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-                                //     }
-                                // }
-                                // if(existingSubSubCategories==null){
-                                if(existingSubCategories.contains(subSubCategory)){
-                                    responseMessage.setMessage("Sub Sub Category already exists!!");
-                                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-                                }
-                                else{
-                                    SubSubCategories subSubCategories = new SubSubCategories();
-                                    subSubCategories.setSubSubCategoryName(subSubCategory);
-                                    // existingSubCategories.get(i).getSubSubCategories().add(subSubCategories);
-                                    // categoriesToDisplayDao.save(existingCategory);
-                                    existingSubSubCategories.add(subSubCategories);
-                                    existingSubCategories.get(i).setSubSubCategories(existingSubSubCategories);
-                                    existingCategory.setSubCategories(existingSubCategories);
-                                    categoriesToDisplayDao.save(existingCategory);
-                                    responseMessage.setMessage("Sub Sub Category added successfully");
-                                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-                                }
-                                // ListIterator<SubSubCategories> existingSubSubCategoriesListIterator = existingSubSubCategories.listIterator();
-                                // while(existingSubSubCategoriesListIterator.hasNext()){
-                                //     if(subSubCategory.equals(existingSubSubCategoriesListIterator.next())){
-                                //         responseMessage.setMessage("Sub Sub Category already exist");
-                                //         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-                                //     }
-                                // }
-                                // SubSubCategories subSubCategories = new SubSubCategories();
-                                // subSubCategories.setSubSubCategoryName(subSubCategory);
-                                // existingSubSubCategories.add(subSubCategories);
-                                // existingSubCategories.get(i).setSubSubCategories(existingSubSubCategories);
-                                // // listIterator.next().setSubSubCategories(existingSubSubCategories);
-                                // existingCategory.setSubCategories(existingSubCategories);
-                                // categoriesToDisplayDao.save(existingCategory);
-                                // responseMessage.setMessage("Sub Sub Category added successfully");
-                                // return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-                            }   
-                            i++;
-                        }
-                        responseMessage.setMessage("Sorry!! No Sub Category found..");
-                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
-
-                    }else{
-                        responseMessage.setMessage("Sorry!! No Sub Category found..");
+                //Find category that matches with input category
+                CategoriesToDisplay existingCategoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
+                if(existingCategoriesToDisplay!=null){
+                    List<SubCategories> existingSubCategories = existingCategoriesToDisplay.getSubCategories();
+                    //Find subCategory that matches with input subCategory
+                    if(existingSubCategories==null){
+                        responseMessage.setMessage("Sorry!! No Sub Category found");
                         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
                     }
+                    ListIterator<SubCategories> listIterator = existingSubCategories.listIterator();
+                    int i=0;
+                    while(listIterator.hasNext()){
+                        if(listIterator.next().getSubCategoryName().equalsIgnoreCase(subCategory)){
+                            List<SubSubCategories> existingSubSubCategories = existingSubCategories.get(i).getSubSubCategories();
+                            //Check if existingSubSubCategories is null
+                            if(existingSubSubCategories==null){
+                                SubSubCategories subSubCategories = new SubSubCategories();
+                                subSubCategories.setSubSubCategoryName(subSubCategory);
+                                List<SubSubCategories> updatedSubSubCategories = new ArrayList<>();
+                                updatedSubSubCategories.add(subSubCategories);        
+                                existingSubCategories.get(i).setSubSubCategories(updatedSubSubCategories);
+                                existingCategoriesToDisplay.setSubCategories(existingSubCategories);
+                                categoriesToDisplayDao.save(existingCategoriesToDisplay);
+                                responseMessage.setMessage("Sub Sub Category added Successfully");
+                                return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                            }
+                            //Now we have to check input SubSubCategories is present in list of Existing SubSubCategories or not;
+                            ListIterator<SubSubCategories> existingSSCListIterator = existingSubSubCategories.listIterator();
+                            while(existingSSCListIterator.hasNext()){
+                                if(subSubCategory.equals(existingSSCListIterator.next().subSubCategoryName)){
+                                    responseMessage.setMessage("Sub Sub Category Already exists");
+                                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                                }
+                            }
+                            SubSubCategories subSubCategories = new SubSubCategories();
+                            subSubCategories.setSubSubCategoryName(subSubCategory);
+                            existingSubSubCategories.add(subSubCategories);
+                            existingSubCategories.get(i).setSubSubCategories(existingSubSubCategories);
+                            existingCategoriesToDisplay.setSubCategories(existingSubCategories);
+                            categoriesToDisplayDao.save(existingCategoriesToDisplay);
+                            responseMessage.setMessage("Sub Sub Category Added Successfully");
+                            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                        }
+                        i++;
+                    }
+                    //If not in if cond then out of while loop no sub  category is found
+                    responseMessage.setMessage("Sorry!!No Sub Category Found");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+
                 }else{
-                    responseMessage.setMessage("Sorry!! Category Not found..");
+                    responseMessage.setMessage("Sorry!! Category Not Found");
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
                 }
-
             }else{
-                responseMessage.setMessage("Yo do Not have permission to Add Sub Sub Category Successfully");
+                responseMessage.setMessage("You do not have permission to add sub category");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
+
     }
 
-    // public ResponseEntity<?> addSubSubCategory(String authorization,String category,String subCategory,String subSubCategory){
-    //     try {
-    //         String token = authorization.substring(7);
-    //         String email = jwtUtil.extractUsername(token);
-    //         admin = adminDao.findByEmail(email);
-    //         if(admin!=null){
-    //             CategoriesToDisplay existingCategory = categoriesToDisplayDao.findBycategory(category);
-    //             if(existingCategory!=null){
-    //                 List<SubCategories> list= existingCategory.getSubCategories();
-                    
-    //                 if(list==null){
-    //                     responseMessage.setMessage("No Sub Category found");
-    //                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
-    //                 }
-
-    //                 ListIterator<SubCategories> subCategoriesList = existingCategory.getSubCategories().listIterator();
-    //                 while(subCategoriesList.hasNext()){
-    //                     if(subCategory.equals(subCategoriesList.next().getSubCategoryName())){
-                            
-    //                         List<String> subSubCategoriesList = subCategoriesList.next().getSubSubCategories();
-    //                         if(subSubCategoriesList==null){
-    //                             List<String> updatedSubSubCategoriesList = new ArrayList<>();
-    //                             updatedSubSubCategoriesList.add(subSubCategory);
-    //                             SubCategories object = new SubCategories(subCategory,subSubCategoriesList);
-    //                             List<SubCategories> new_sSubCategories = new ArrayList<>();
-    //                             new_sSubCategories.add(object);
-    //                             existingCategory.setSubCategories(new_sSubCategories);
-    //                             categoriesToDisplayDao.save(existingCategory);
-    //                             responseMessage.setMessage("Sub Sub Category Added Successfully");
-    //                             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    //                         }
-    //                         subSubCategoriesList.add(subSubCategory);
-    //                         SubCategories object = new SubCategories(subCategory,subSubCategoriesList);
-    //                         List<SubCategories> new_sSubCategories = new ArrayList<>();
-    //                         new_sSubCategories.add(object);
-    //                         existingCategory.setSubCategories(new_sSubCategories);
-    //                         categoriesToDisplayDao.save(existingCategory);
-    //                         responseMessage.setMessage("Sub Sub Category Added Successfully");
-    //                         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    //                     }
-    //                 }
-    //                 responseMessage.setMessage("No Sub Category found");
-    //                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
-                    
-
-
-    //             }else{
-    //                 responseMessage.setMessage("Sorry, No category found!!");
-    //                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-    //             }
-    //         }else{
-    //             responseMessage.setMessage("You do not have permisssions to add Sub Sub Category");
-    //             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-    //         }
-
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         responseMessage.setMessage(e.getMessage());
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-    //     }
-
-    // }
 }

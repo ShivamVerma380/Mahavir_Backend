@@ -1,17 +1,18 @@
 package com.brewingjava.mahavir.entities;
 
 import java.util.HashSet;
+import java.util.List;
 
 public class SubCategories {
     
     private String subCategoryName;
 
-    private HashSet<SubSubCategories> subSubCategories;
+    List<SubSubCategories> subSubCategories;
 
     public SubCategories() {
     }
 
-    public SubCategories(String subCategoryName, HashSet<SubSubCategories> subSubCategories) {
+    public SubCategories(String subCategoryName, List<SubSubCategories> subSubCategories) {
         this.subCategoryName = subCategoryName;
         this.subSubCategories = subSubCategories;
     }
@@ -24,11 +25,11 @@ public class SubCategories {
         this.subCategoryName = subCategoryName;
     }
 
-    public HashSet<SubSubCategories> getSubSubCategories() {
+    public List<SubSubCategories> getSubSubCategories() {
         return subSubCategories;
     }
 
-    public void setSubSubCategories(HashSet<SubSubCategories> subSubCategories) {
+    public void setSubSubCategories(List<SubSubCategories> subSubCategories) {
         this.subSubCategories = subSubCategories;
     }
 
@@ -37,7 +38,9 @@ public class SubCategories {
         return "SubCategories [subCategoryName=" + subCategoryName + ", subSubCategories=" + subSubCategories + "]";
     }
 
-   
+    
+    
+    
 
     
 }

@@ -3,10 +3,14 @@ package com.brewingjava.mahavir.entities;
 import java.util.HashSet;
 
 public class SubSubCategories {
-    private String subSubCategoryName;
-    private HashSet<String> modelNumber;
+
+    public String subSubCategoryName;
+    
+    public HashSet<String> modelNumber;
+    
     public SubSubCategories() {
     }
+    
     public SubSubCategories(String subSubCategoryName, HashSet<String> modelNumber) {
         this.subSubCategoryName = subSubCategoryName;
         this.modelNumber = modelNumber;
