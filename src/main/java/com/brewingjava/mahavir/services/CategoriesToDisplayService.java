@@ -1,6 +1,7 @@
 package com.brewingjava.mahavir.services;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -9,6 +10,7 @@ import com.brewingjava.mahavir.daos.CategoriesToDisplayDao;
 import com.brewingjava.mahavir.entities.Admin;
 import com.brewingjava.mahavir.entities.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.SubCategories;
+import com.brewingjava.mahavir.entities.SubSubCategories;
 import com.brewingjava.mahavir.helper.JwtUtil;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 
@@ -154,18 +156,79 @@ public class CategoriesToDisplayService {
                     List<SubCategories> existingSubCategories = existingCategory.getSubCategories();
                     if(existingSubCategories!=null){
                         ListIterator<SubCategories> listIterator = existingSubCategories.listIterator();
+                        System.out.println("existing subcategory not null");
                         int i=0;
                         while(listIterator.hasNext()){
                             if(subCategory.equals(listIterator.next().getSubCategoryName())){
-                                if(existingCategory.getSubCategories().get(i).getSubSubCategories().contains(subSubCategory)){
-                                    responseMessage.setMessage("Sub Sub Category already exists");
+                                System.out.println("subcategory found");
+                                HashSet<SubSubCategories> existingSubSubCategories = existingSubCategories.get(i).getSubSubCategories();
+                                System.out.println("existing sub sub category not null");
+                                if(existingSubSubCategories == null){
+                                    System.out.println("subsubcategory is null");
+                                    SubSubCategories subSubCategories = new SubSubCategories();
+                                    subSubCategories.setSubSubCategoryName(subSubCategory);
+                                    HashSet<SubSubCategories> updateSubSubCategories = new HashSet<>();
+                                    updateSubSubCategories.add(subSubCategories);
+                                    // listIterator.next().setSubSubCategories(updateSubSubCategories);
+                                    existingSubCategories.get(i).setSubSubCategories(updateSubSubCategories);
+                                    existingCategory.setSubCategories(existingSubCategories);
+                                    categoriesToDisplayDao.save(existingCategory);
+                                    responseMessage.setMessage("Sub Sub Category Added Successfully");
+                                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                                }
+                                System.out.println("malsjdbju");
+                                // for(int j = 0; j < existingSubSubCategories.size(); j++){
+                                //     if(subSubCategory.equals(existingSubSubCategories.get(j).getSubSubCategoryName())){
+                                //         responseMessage.setMessage("Sub Sub Category already exists!!");
+                                //         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                                //     }
+                                //     else{
+                                //         List<SubSubCategories> newSubSubCategories = new ArrayList<>();
+                                //         SubSubCategories updatedSubSubCategories = new SubSubCategories();
+                                //         updatedSubSubCategories.setSubSubCategoryName(subSubCategory);
+                                //         newSubSubCategories.add(updatedSubSubCategories);
+                                //         existingSubCategories.get(i).setSubSubCategories(newSubSubCategories);
+                                //         // listIterator.next().setSubSubCategories(newSubSubCategories);
+                                //         existingCategory.setSubCategories(existingSubCategories);
+                                //         categoriesToDisplayDao.save(existingCategory);
+                                //         responseMessage.setMessage("Sub Sub Category added successfully");
+                                //         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                                //     }
+                                // }
+                                // if(existingSubSubCategories==null){
+                                if(existingSubCategories.contains(subSubCategory)){
+                                    responseMessage.setMessage("Sub Sub Category already exists!!");
                                     return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
                                 }
-                                existingCategory.getSubCategories().get(i).getSubSubCategories().add(subSubCategory);
-                                categoriesToDisplayDao.save(existingCategory);
-                                responseMessage.setMessage("Sub Sub Category added successfully!!");
-                                return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-                            }
+                                else{
+                                    SubSubCategories subSubCategories = new SubSubCategories();
+                                    subSubCategories.setSubSubCategoryName(subSubCategory);
+                                    // existingSubCategories.get(i).getSubSubCategories().add(subSubCategories);
+                                    // categoriesToDisplayDao.save(existingCategory);
+                                    existingSubSubCategories.add(subSubCategories);
+                                    existingSubCategories.get(i).setSubSubCategories(existingSubSubCategories);
+                                    existingCategory.setSubCategories(existingSubCategories);
+                                    categoriesToDisplayDao.save(existingCategory);
+                                    responseMessage.setMessage("Sub Sub Category added successfully");
+                                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                                }
+                                // ListIterator<SubSubCategories> existingSubSubCategoriesListIterator = existingSubSubCategories.listIterator();
+                                // while(existingSubSubCategoriesListIterator.hasNext()){
+                                //     if(subSubCategory.equals(existingSubSubCategoriesListIterator.next())){
+                                //         responseMessage.setMessage("Sub Sub Category already exist");
+                                //         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                                //     }
+                                // }
+                                // SubSubCategories subSubCategories = new SubSubCategories();
+                                // subSubCategories.setSubSubCategoryName(subSubCategory);
+                                // existingSubSubCategories.add(subSubCategories);
+                                // existingSubCategories.get(i).setSubSubCategories(existingSubSubCategories);
+                                // // listIterator.next().setSubSubCategories(existingSubSubCategories);
+                                // existingCategory.setSubCategories(existingSubCategories);
+                                // categoriesToDisplayDao.save(existingCategory);
+                                // responseMessage.setMessage("Sub Sub Category added successfully");
+                                // return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                            }   
                             i++;
                         }
                         responseMessage.setMessage("Sorry!! No Sub Category found..");
