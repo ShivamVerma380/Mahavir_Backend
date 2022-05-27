@@ -1,22 +1,17 @@
 package com.brewingjava.mahavir.entities;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.data.annotation.Id;
 
 public class SubCategories {
     
     private String subCategoryName;
 
-    //private List<String> subSubCategories;
-    Set<String> subSubCategories = new HashSet<>();
+    private HashSet<SubSubCategories> subSubCategories;
 
     public SubCategories() {
     }
 
-    public SubCategories(String subCategoryName, Set<String> subSubCategories) {
+    public SubCategories(String subCategoryName, HashSet<SubSubCategories> subSubCategories) {
         this.subCategoryName = subCategoryName;
         this.subSubCategories = subSubCategories;
     }
@@ -29,11 +24,11 @@ public class SubCategories {
         this.subCategoryName = subCategoryName;
     }
 
-    public Set<String> getSubSubCategories() {
+    public HashSet<SubSubCategories> getSubSubCategories() {
         return subSubCategories;
     }
 
-    public void setSubSubCategories(Set<String> subSubCategories) {
+    public void setSubSubCategories(HashSet<SubSubCategories> subSubCategories) {
         this.subSubCategories = subSubCategories;
     }
 
@@ -41,6 +36,8 @@ public class SubCategories {
     public String toString() {
         return "SubCategories [subCategoryName=" + subCategoryName + ", subSubCategories=" + subSubCategories + "]";
     }
+
+   
 
     
 }
