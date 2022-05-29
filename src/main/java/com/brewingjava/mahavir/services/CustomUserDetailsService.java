@@ -2,10 +2,10 @@ package com.brewingjava.mahavir.services;
 
 import java.util.ArrayList;
 
-import com.brewingjava.mahavir.daos.AdminDao;
-import com.brewingjava.mahavir.daos.UserDao;
-import com.brewingjava.mahavir.entities.Admin;
-import com.brewingjava.mahavir.entities.UserRequest;
+import com.brewingjava.mahavir.daos.admin.AdminDao;
+import com.brewingjava.mahavir.daos.user.UserDao;
+import com.brewingjava.mahavir.entities.admin.Admin;
+import com.brewingjava.mahavir.entities.user.UserRequest;
 import com.brewingjava.mahavir.helper.JwtUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
