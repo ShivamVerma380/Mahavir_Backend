@@ -1,6 +1,7 @@
 package com.brewingjava.mahavir.services.user;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import com.brewingjava.mahavir.config.MySecurityConfig;
@@ -25,6 +26,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import ch.qos.logback.core.pattern.util.AsIsEscapeUtil;
 
 @Component
 
@@ -169,5 +172,48 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
         
+    }
+
+    public ResponseEntity<?> addToCart(String authorization,String productName){
+        try {
+            String token = authorization.substring(7);  //"Bearer djfhfh"
+            String email = jwtUtil.extractUsername(token);
+            UserRequest userRequest = userDao.findByEmail(email);
+            if(userRequest!=null){
+                ProductDetail productDetail = productDetailsDao.findProductDetailByproductName(productName);
+                if(productDetail==null){
+                    responseMessage.setMessage("Product does not exist");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+                }
+                HashSet<String> cartList = userRequest.getUserCartProducts();
+                if(cartList==null){
+                    HashSet<String> updatedCartList = new HashSet<>();
+                    updatedCartList.add(productName);
+                    userRequest.setUserCartProducts(updatedCartList);
+                    userDao.save(userRequest);
+                    responseMessage.setMessage("Item added to Cart successfully");
+                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                }else{
+                    //Item already present in cart
+                    if(cartList.contains(productName)){
+                        responseMessage.setMessage("Item is already present in cart");
+                        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                    }
+                    cartList.add(productName);
+                    userRequest.setUserCartProducts(cartList);
+                    userDao.save(userRequest);
+                    responseMessage.setMessage("Item added to cart successfully");
+                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                }   
+
+            }else{
+                responseMessage.setMessage("Admin cannot add a product to cart");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.brewingjava.mahavir.entities.user;
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -24,7 +25,10 @@ public class UserRequest {
     
     private String phoneNo;
     
-    private List<Orders> productsBoughtByUser;  
+    private List<Orders> productsBoughtByUser; 
+    
+    private HashSet<String> userCartProducts;
+
 
     
     public UserRequest() {
@@ -103,12 +107,26 @@ public class UserRequest {
     }
 
 
+    
+    public HashSet<String> getUserCartProducts() {
+        return userCartProducts;
+    }
+
+
+    public void setUserCartProducts(HashSet<String> userCartProducts) {
+        this.userCartProducts = userCartProducts;
+    }
+
+
     @Override
     public String toString() {
         return "UserRequest [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", password="
-                + password + ", phoneNo=" + phoneNo + ", productsBoughtByUser=" + productsBoughtByUser + "]";
+                + password + ", phoneNo=" + phoneNo + ", productsBoughtByUser=" + productsBoughtByUser
+                + ", userCartProducts=" + userCartProducts + "]";
     }
 
+
+    
 
     
     

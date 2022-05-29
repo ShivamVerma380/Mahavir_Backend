@@ -45,6 +45,17 @@ public class UserController {
         }
     }
 
+    @PostMapping("/add-to-cart")
+    public ResponseEntity<?> addToCart(@RequestHeader("Authorization")String authorization,@RequestParam("ProductName")String productName){
+        try {
+            return userService.addToCart(authorization, productName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @PostMapping("/login-user")
     public ResponseEntity<?> userLogin( @RequestParam("Email") String email,@RequestParam("Password") String password){
         try {
