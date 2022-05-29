@@ -101,7 +101,11 @@ public class UserService {
         try {
             String token = Authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
-            
+            UserRequest userRequest = userDao.findByEmail(email);
+            if(userRequest==null){
+                responseMessage.setMessage("Admin can't buy a product");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
             ProductDetail productDetail = productDetailsDao.findProductDetailByproductName(ProductName);
             if (productDetail!=null) {
                 Orders orders = new Orders();
@@ -113,7 +117,7 @@ public class UserService {
                 orders.setProductName(ProductName);
                 orders.setProductPrice(productDetail.getProductPrice());
                 ordersDao.save(orders);
-                UserRequest userRequest = userDao.findByEmail(email);  
+                  
                 List<Orders> userOrders = userRequest.getProductsBoughtByUser();
                 if (userOrders==null) {
                     List<Orders> newOrders = new ArrayList<>();
