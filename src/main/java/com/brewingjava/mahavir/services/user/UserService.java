@@ -105,7 +105,7 @@ public class UserService {
             ProductDetail productDetail = productDetailsDao.findProductDetailByproductName(ProductName);
             if (productDetail!=null) {
                 Orders orders = new Orders();
-                orders.setOrderId("1234");
+                //orders.setOrderId("1234");
                 orders.setBuyDate(BuyDate);
                 orders.setBuyerEmail(email);
                 orders.setDateOfDelivery(DeliveryDate);

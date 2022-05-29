@@ -90,7 +90,7 @@ public class Orders {
     }
 
     public void setOrderId(String orderId) {
-        OrderId = orderId;
+        this.OrderId = orderId;
     }
 
     public String getBuyDate() {
