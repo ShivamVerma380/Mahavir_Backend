@@ -123,6 +123,9 @@ public class ProductDetailsService {
                                     productDetail.setProductVideo(
                                             new Binary(BsonBinarySubType.BINARY, productVideo.getBytes()));
                                     productDetail.setProductPrice(productPrice);
+                                    productDetail.setCategory(category);
+                                    productDetail.setSubCategory(subCategory);
+                                    productDetail.setSubSubCategory(subSubCategory);
                                     productDetailsDao.save(productDetail);
                                     responseMessage.setMessage("Model saved successfully");
                                     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
@@ -155,6 +158,90 @@ public class ProductDetailsService {
         }
     }
 
+
+    public ResponseEntity<?> removeProductDetails(String authorization,String productName){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findByEmail(email);
+            if(admin!=null){
+                //Remove product from Product database
+                ProductDetail productDetail = productDetailsDao.findProductDetailByproductName(productName);
+                if(productDetail!=null){
+                    try {
+                        productDetailsDao.delete(productDetail);
+                        //Remove product Name from subSubCategory arraylist
+                        String category = productDetail.getCategory();
+                        String subCategory = productDetail.getSubCategory();
+                        String subSubCategory = productDetail.getSubSubCategory();
+
+                        CategoriesToDisplay existingCategory = categoriesToDisplayDao.findBycategory(category);
+                        List<SubCategories> existingSubCategories = existingCategory.getSubCategories();
+                        int i=0;
+                        ListIterator<SubCategories> listIterator = existingSubCategories.listIterator();
+                        if(listIterator==null){
+                            responseMessage.setMessage("Product Not deleted");
+                            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+                        }
+                        while(listIterator.hasNext()){
+                            if(existingSubCategories.get(i).getSubCategoryName().equals(subCategory)){
+                                List<SubSubCategories> existingSubSubCategories = existingSubCategories.get(i).getSubSubCategories();
+                                ListIterator<SubSubCategories> ssCListIterator = existingSubSubCategories.listIterator();
+                                int j=0;
+                                while(ssCListIterator.hasNext()){
+                                    if(existingSubSubCategories.get(j).getSubSubCategoryName().equals(subSubCategory)){
+                                        System.out.println("Inside subSubCategories");
+                                        HashSet<String> existingProductName = existingSubSubCategories.get(j).getProductName();
+                                        existingProductName.remove(productName);
+                                        System.out.println("Removed from hashset");
+                                        // SubSubCategories new_SubSubCategories = new SubSubCategories();
+                                        // new_SubSubCategories.setSubSubCategoryName(subSubCategory);
+                                        // new_SubSubCategories.setProductName(existingProductName);
+                                        
+                                        existingSubSubCategories.get(j).setProductName(existingProductName);
+                                        System.out.println("Product Name set");
+                                        existingSubCategories.get(i).setSubSubCategories(existingSubSubCategories);
+                                        System.out.println("SubSub Categories set");
+                                        existingCategory.setSubCategories(existingSubCategories);
+                                        System.out.println("Categories set");
+                                        categoriesToDisplayDao.save(existingCategory);
+                                        System.out.println("Saved In Dao");
+                                        responseMessage.setMessage("Product Removed successfully");
+                                        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                                    
+                                    }
+                                    j++;
+                                }
+                            }
+
+                            i++;
+                        }
+                        responseMessage.setMessage("Product Not deleted");
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        responseMessage.setMessage(e.getMessage());
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+                    }
+                                            
+
+                }else{
+                    responseMessage.setMessage("Product does not exist");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+                }
+                
+                //Also remove from subSubCategory
+
+            }else{
+                responseMessage.setMessage("You do not have permission to remove a product");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 
     
 

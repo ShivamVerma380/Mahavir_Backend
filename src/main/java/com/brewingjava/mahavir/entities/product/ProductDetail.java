@@ -33,6 +33,12 @@ public class ProductDetail {
         
         private Binary productVideo;
 
+        private String category;
+
+        private String subCategory;
+
+        private String subSubCategory;
+
 
 
         
@@ -179,15 +185,54 @@ public class ProductDetail {
 
 
 
-        @Override
-        public String toString() {
-            return "ProductDetail [productDescription=" + productDescription + ", productImage1=" + productImage1
-                    + ", productImage2=" + productImage2 + ", productImage3=" + productImage3 + ", productImage4="
-                    + productImage4 + ", productImage5=" + productImage5 + ", productName=" + productName
-                    + ", productPrice=" + productPrice + ", productVideo=" + productVideo + ", productVideoLink="
-                    + productVideoLink + "]";
+        public String getCategory() {
+            return category;
         }
 
+
+
+        public void setCategory(String category) {
+            this.category = category;
+        }
+
+
+
+        public String getSubCategory() {
+            return subCategory;
+        }
+
+
+
+        public void setSubCategory(String subCategory) {
+            this.subCategory = subCategory;
+        }
+
+
+
+        public String getSubSubCategory() {
+            return subSubCategory;
+        }
+
+
+
+        public void setSubSubCategory(String subSubCategory) {
+            this.subSubCategory = subSubCategory;
+        }
+
+
+
+        @Override
+        public String toString() {
+            return "ProductDetail [category=" + category + ", productDescription=" + productDescription
+                    + ", productImage1=" + productImage1 + ", productImage2=" + productImage2 + ", productImage3="
+                    + productImage3 + ", productImage4=" + productImage4 + ", productImage5=" + productImage5
+                    + ", productName=" + productName + ", productPrice=" + productPrice + ", productVideo="
+                    + productVideo + ", productVideoLink=" + productVideoLink + ", subCategory=" + subCategory
+                    + ", subSubCategory=" + subSubCategory + "]";
+        }
+
+
+        
 
 
         
