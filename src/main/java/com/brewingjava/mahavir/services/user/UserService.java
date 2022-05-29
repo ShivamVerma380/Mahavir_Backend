@@ -1,9 +1,16 @@
 package com.brewingjava.mahavir.services.user;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.brewingjava.mahavir.config.MySecurityConfig;
 import com.brewingjava.mahavir.daos.admin.AdminDao;
+import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
+import com.brewingjava.mahavir.daos.user.OrdersDao;
 import com.brewingjava.mahavir.daos.user.UserDao;
 import com.brewingjava.mahavir.entities.admin.Admin;
+import com.brewingjava.mahavir.entities.product.ProductDetail;
+import com.brewingjava.mahavir.entities.user.Orders;
 import com.brewingjava.mahavir.entities.user.UserRequest;
 import com.brewingjava.mahavir.helper.JwtResponse;
 import com.brewingjava.mahavir.helper.JwtUtil;
@@ -47,6 +54,12 @@ public class UserService {
     @Autowired
     public MySecurityConfig mySecurityConfig;
 
+    @Autowired
+    public ProductDetailsDao productDetailsDao;
+
+    @Autowired
+    public OrdersDao ordersDao;
+
     public ResponseEntity<?> addUser(String email,String password,String firstName,String lastName,String phoneNo){
         try {
             //Check email in admin db
@@ -54,6 +67,7 @@ public class UserService {
             if(admin!=null){
                 responseMessage.setMessage("This email already exists with admin account");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+
             }
             //Check email in user db
             UserRequest existingUser = userDao.findByEmail(email);
@@ -80,6 +94,49 @@ public class UserService {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> buyProduct(String Authorization, String BuyDate, String DeliveryDate, String ProductName) {
+        try {
+            String token = Authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            
+            ProductDetail productDetail = productDetailsDao.findProductDetailByproductName(ProductName);
+            if (productDetail!=null) {
+                Orders orders = new Orders();
+                orders.setOrderId("1234");
+                orders.setBuyDate(BuyDate);
+                orders.setBuyerEmail(email);
+                orders.setDateOfDelivery(DeliveryDate);
+                orders.setProductImage(productDetail.getProductImage1());
+                orders.setProductName(ProductName);
+                orders.setProductPrice(productDetail.getProductPrice());
+                ordersDao.save(orders);
+                UserRequest userRequest = userDao.findByEmail(email);  
+                List<Orders> userOrders = userRequest.getProductsBoughtByUser();
+                if (userOrders==null) {
+                    List<Orders> newOrders = new ArrayList<>();
+                    newOrders.add(orders);
+                    userRequest.setProductsBoughtByUser(newOrders);
+                } else {
+                    userOrders.add(orders);
+                    userRequest.setProductsBoughtByUser(userOrders);
+                }
+                userDao.save(userRequest);
+                responseMessage.setMessage("Order saved successfully");
+                return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                
+            } else {
+                responseMessage.setMessage("Product not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+
         }
     }
 

@@ -24,7 +24,8 @@ public class UserRequest {
     
     private String phoneNo;
     
-    private List<ProductBought> productsBoughtByUser;
+    private List<Orders> productsBoughtByUser;  
+
     
     public UserRequest() {
     }
@@ -91,12 +92,13 @@ public class UserRequest {
     }
 
 
-    public List<ProductBought> getProductsBoughtByUser() {
+    public List<Orders> getProductsBoughtByUser() {
         return productsBoughtByUser;
     }
+    
 
 
-    public void setProductsBoughtByUser(List<ProductBought> productsBoughtByUser) {
+    public void setProductsBoughtByUser(List<Orders> productsBoughtByUser) {
         this.productsBoughtByUser = productsBoughtByUser;
     }
 

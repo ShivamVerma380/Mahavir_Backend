@@ -33,6 +33,18 @@ public class UserController {
         }
     }
 
+    @PostMapping("/buy-product")
+    public ResponseEntity<?> buyproduct(@RequestHeader("Authorization") String Authorization, @RequestParam("Buy_Date") String BuyDate, @RequestParam("Delivery_Date") String DeliveryDate, @RequestParam("Product_Name") String ProductName) {
+        try {
+            return userService.buyProduct(Authorization, BuyDate, DeliveryDate, ProductName);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @PostMapping("/login-user")
     public ResponseEntity<?> userLogin( @RequestParam("Email") String email,@RequestParam("Password") String password){
         try {

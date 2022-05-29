@@ -1,10 +1,13 @@
 package com.brewingjava.mahavir.entities.user;
 
 import org.bson.types.Binary;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductBought {
+@Document(collection = "Orders")
+public class Orders {
     
     private String productName;
 
@@ -14,20 +17,27 @@ public class ProductBought {
 
     private String DateOfDelivery;
 
-    private String Color;
+    @Id
+    private String OrderId;
+
 
     private String BuyDate;
 
-    public ProductBought() {
+    private String BuyerEmail;
+
+    public Orders() {
     }
 
-    public ProductBought(String productName, String productPrice, Binary productImage, String dateOfDelivery,
-            String color, String buyDate) {
+    public Orders(String productName, String productPrice, Binary productImage, String dateOfDelivery, String OrderId
+            , String buyDate, String BuyerEmail) {
         this.productName = productName;
         this.productPrice = productPrice;
+        
+        this.OrderId = OrderId;
+        this.BuyerEmail = BuyerEmail;
         ProductImage = productImage;
         DateOfDelivery = dateOfDelivery;
-        Color = color;
+       
         BuyDate = buyDate;
     }
 
@@ -63,12 +73,24 @@ public class ProductBought {
         DateOfDelivery = dateOfDelivery;
     }
 
-    public String getColor() {
-        return Color;
+    
+
+    
+
+    public String getBuyerEmail() {
+        return BuyerEmail;
     }
 
-    public void setColor(String color) {
-        Color = color;
+    public void setBuyerEmail(String buyerEmail) {
+        BuyerEmail = buyerEmail;
+    }
+
+    public String getOrderId() {
+        return OrderId;
+    }
+
+    public void setOrderId(String orderId) {
+        OrderId = orderId;
     }
 
     public String getBuyDate() {
@@ -81,10 +103,14 @@ public class ProductBought {
 
     @Override
     public String toString() {
-        return "ProductBought [BuyDate=" + BuyDate + ", Color=" + Color + ", DateOfDelivery=" + DateOfDelivery
-                + ", ProductImage=" + ProductImage + ", productName=" + productName + ", productPrice=" + productPrice
-                + "]";
+        return "Orders [BuyDate=" + BuyDate + ", BuyerEmail=" + BuyerEmail + ", DateOfDelivery=" + DateOfDelivery
+                + ", OrderId=" + OrderId + ", ProductImage=" + ProductImage + ", productName=" + productName
+                + ", productPrice=" + productPrice + "]";
     }
+
+    
+
+    
 
     
     
