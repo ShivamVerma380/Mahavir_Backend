@@ -46,7 +46,7 @@ public class ProductDetailsService {
     @Autowired
     public ProductDetailsDao productDetailsDao;
 
-    public ResponseEntity<?> addProductDetail( String productName, String productDescription,
+    public ResponseEntity<?> addProductDetail( String modelNumber, String productDescription,
             String productPrice, MultipartFile productImage1, MultipartFile productImage2, MultipartFile productImage3,
             MultipartFile productImage4, MultipartFile productImage5, MultipartFile productVideo, String category,
             String subCategory, String subSubCategory, String authorization) {
@@ -86,29 +86,29 @@ public class ProductDetailsService {
                                     SubSubCategories subSubCategories = new SubSubCategories();
                                     subSubCategories.setSubSubCategoryName(subSubCategory);
                                     
-                                    if (existingSubSubCategories.get(j).getProductName() == null) {
+                                    if (existingSubSubCategories.get(j).getmodelNumber() == null) {
                                         HashSet<String> updatedModelNo = new HashSet<>();
-                                        updatedModelNo.add(productName);
-                                        existingSubSubCategories.get(j).setProductName(updatedModelNo);
+                                        updatedModelNo.add(modelNumber);
+                                        existingSubSubCategories.get(j).setmodelNumber(updatedModelNo);
                                         existingSubCategories.get(i).setSubSubCategories(existingSubSubCategories);
                                         existingCategoriesToDisplay.setSubCategories(existingSubCategories);
                                         categoriesToDisplayDao.save(existingCategoriesToDisplay);
 
                                     } else {
-                                        HashSet<String> product_name = existingSubSubCategories.get(j).getProductName();
-                                        if(product_name.contains(productName)){
+                                        HashSet<String> product_name = existingSubSubCategories.get(j).getmodelNumber();
+                                        if(product_name.contains(modelNumber)){
                                             responseMessage.setMessage("Model already exists");
                                             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
                                         }
-                                        product_name.add(productName);
-                                        existingSubSubCategories.get(j).setProductName(product_name);
+                                        product_name.add(modelNumber);
+                                        existingSubSubCategories.get(j).setmodelNumber(product_name);
                                         existingSubCategories.get(i).setSubSubCategories(existingSubSubCategories);
                                         existingCategoriesToDisplay.setSubCategories(existingSubCategories);
                                         categoriesToDisplayDao.save(existingCategoriesToDisplay);
                                     }
 
                                     ProductDetail productDetail = new ProductDetail();
-                                    productDetail.setProductName(productName);
+                                    productDetail.setmodelNumber(modelNumber);
                                     productDetail.setProductDescription(productDescription);
                                     productDetail.setProductImage1(
                                             new Binary(BsonBinarySubType.BINARY, productImage1.getBytes()));
@@ -159,14 +159,14 @@ public class ProductDetailsService {
     }
 
 
-    public ResponseEntity<?> removeProductDetails(String authorization,String productName){
+    public ResponseEntity<?> removeProductDetails(String authorization,String modelNumber){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
             admin = adminDao.findByEmail(email);
             if(admin!=null){
                 //Remove product from Product database
-                ProductDetail productDetail = productDetailsDao.findProductDetailByproductName(productName);
+                ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
                 if(productDetail!=null){
                     try {
                         productDetailsDao.delete(productDetail);
@@ -191,14 +191,14 @@ public class ProductDetailsService {
                                 while(ssCListIterator.hasNext()){
                                     if(existingSubSubCategories.get(j).getSubSubCategoryName().equals(subSubCategory)){
                                         System.out.println("Inside subSubCategories");
-                                        HashSet<String> existingProductName = existingSubSubCategories.get(j).getProductName();
-                                        existingProductName.remove(productName);
+                                        HashSet<String> existingmodelNumber = existingSubSubCategories.get(j).getmodelNumber();
+                                        existingmodelNumber.remove(modelNumber);
                                         System.out.println("Removed from hashset");
                                         // SubSubCategories new_SubSubCategories = new SubSubCategories();
                                         // new_SubSubCategories.setSubSubCategoryName(subSubCategory);
-                                        // new_SubSubCategories.setProductName(existingProductName);
+                                        // new_SubSubCategories.setmodelNumber(existingmodelNumber);
                                         
-                                        existingSubSubCategories.get(j).setProductName(existingProductName);
+                                        existingSubSubCategories.get(j).setmodelNumber(existingmodelNumber);
                                         System.out.println("Product Name set");
                                         existingSubCategories.get(i).setSubSubCategories(existingSubSubCategories);
                                         System.out.println("SubSub Categories set");

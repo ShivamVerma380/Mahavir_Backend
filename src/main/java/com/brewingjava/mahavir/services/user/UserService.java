@@ -100,7 +100,7 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> buyProduct(String Authorization, String BuyDate, String DeliveryDate, String ProductName) {
+    public ResponseEntity<?> buyProduct(String Authorization, String BuyDate, String DeliveryDate, String modelNumber) {
         try {
             String token = Authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -109,7 +109,7 @@ public class UserService {
                 responseMessage.setMessage("Admin can't buy a product");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
-            ProductDetail productDetail = productDetailsDao.findProductDetailByproductName(ProductName);
+            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
             if (productDetail!=null) {
                 Orders orders = new Orders();
                 //orders.setOrderId("1234");
@@ -117,7 +117,7 @@ public class UserService {
                 orders.setBuyerEmail(email);
                 orders.setDateOfDelivery(DeliveryDate);
                 orders.setProductImage(productDetail.getProductImage1());
-                orders.setProductName(ProductName);
+                orders.setmodelNumber(modelNumber);
                 orders.setProductPrice(productDetail.getProductPrice());
                 ordersDao.save(orders);
                   
@@ -174,13 +174,13 @@ public class UserService {
         
     }
 
-    public ResponseEntity<?> addToCart(String authorization,String productName){
+    public ResponseEntity<?> addToCart(String authorization,String modelNumber){
         try {
             String token = authorization.substring(7);  //"Bearer djfhfh"
             String email = jwtUtil.extractUsername(token);
             UserRequest userRequest = userDao.findByEmail(email);
             if(userRequest!=null){
-                ProductDetail productDetail = productDetailsDao.findProductDetailByproductName(productName);
+                ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
                 if(productDetail==null){
                     responseMessage.setMessage("Product does not exist");
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
@@ -188,18 +188,18 @@ public class UserService {
                 HashSet<String> cartList = userRequest.getUserCartProducts();
                 if(cartList==null){
                     HashSet<String> updatedCartList = new HashSet<>();
-                    updatedCartList.add(productName);
+                    updatedCartList.add(modelNumber);
                     userRequest.setUserCartProducts(updatedCartList);
                     userDao.save(userRequest);
                     responseMessage.setMessage("Item added to Cart successfully");
                     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
                 }else{
                     //Item already present in cart
-                    if(cartList.contains(productName)){
+                    if(cartList.contains(modelNumber)){
                         responseMessage.setMessage("Item is already present in cart");
                         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
                     }
-                    cartList.add(productName);
+                    cartList.add(modelNumber);
                     userRequest.setUserCartProducts(cartList);
                     userDao.save(userRequest);
                     responseMessage.setMessage("Item added to cart successfully");

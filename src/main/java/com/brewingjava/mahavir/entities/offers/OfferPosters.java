@@ -11,6 +11,8 @@ public class OfferPosters {
 
     private Binary image;
 
+    
+
     public Binary getImage() {
         return image;
     }
@@ -18,6 +20,8 @@ public class OfferPosters {
     public void setImage(Binary image) {
         this.image = image;
     }
+
+    
 
    
     

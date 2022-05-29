@@ -34,9 +34,9 @@ public class UserController {
     }
 
     @PostMapping("/buy-product")
-    public ResponseEntity<?> buyproduct(@RequestHeader("Authorization") String Authorization, @RequestParam("Buy_Date") String BuyDate, @RequestParam("Delivery_Date") String DeliveryDate, @RequestParam("Product_Name") String ProductName) {
+    public ResponseEntity<?> buyproduct(@RequestHeader("Authorization") String Authorization, @RequestParam("Buy_Date") String BuyDate, @RequestParam("Delivery_Date") String DeliveryDate, @RequestParam("ModelNumber") String modelNumber) {
         try {
-            return userService.buyProduct(Authorization, BuyDate, DeliveryDate, ProductName);
+            return userService.buyProduct(Authorization, BuyDate, DeliveryDate, modelNumber);
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,9 +46,9 @@ public class UserController {
     }
 
     @PostMapping("/add-to-cart")
-    public ResponseEntity<?> addToCart(@RequestHeader("Authorization")String authorization,@RequestParam("ProductName")String productName){
+    public ResponseEntity<?> addToCart(@RequestHeader("Authorization")String authorization,@RequestParam("modelNumber")String modelNumber){
         try {
-            return userService.addToCart(authorization, productName);
+            return userService.addToCart(authorization, modelNumber);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

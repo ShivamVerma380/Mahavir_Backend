@@ -6,14 +6,14 @@ public class SubSubCategories {
 
     public String subSubCategoryName;
     
-    public HashSet<String> productName;
+    public HashSet<String> modelNumber;
     
     public SubSubCategories() {
     }
 
-    public SubSubCategories(String subSubCategoryName, HashSet<String> productName) {
+    public SubSubCategories(String subSubCategoryName, HashSet<String> modelNumber) {
         this.subSubCategoryName = subSubCategoryName;
-        this.productName = productName;
+        this.modelNumber = modelNumber;
     }
 
     public String getSubSubCategoryName() {
@@ -24,17 +24,17 @@ public class SubSubCategories {
         this.subSubCategoryName = subSubCategoryName;
     }
 
-    public HashSet<String> getProductName() {
-        return productName;
+    public HashSet<String> getmodelNumber() {
+        return modelNumber;
     }
 
-    public void setProductName(HashSet<String> productName) {
-        this.productName = productName;
+    public void setmodelNumber(HashSet<String> modelNumber) {
+        this.modelNumber = modelNumber;
     }
 
     @Override
     public String toString() {
-        return "SubSubCategories [productName=" + productName + ", subSubCategoryName=" + subSubCategoryName + "]";
+        return "SubSubCategories [modelNumber=" + modelNumber + ", subSubCategoryName=" + subSubCategoryName + "]";
     }
 
     

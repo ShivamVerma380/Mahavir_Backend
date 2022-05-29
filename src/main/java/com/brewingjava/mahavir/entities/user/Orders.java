@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Document(collection = "Orders")
 public class Orders {
     
-    private String productName;
+    private String modelNumber;
 
     private String productPrice;
 
@@ -28,9 +28,9 @@ public class Orders {
     public Orders() {
     }
 
-    public Orders(String productName, String productPrice, Binary productImage, String dateOfDelivery, String OrderId
+    public Orders(String modelNumber, String productPrice, Binary productImage, String dateOfDelivery, String OrderId
             , String buyDate, String BuyerEmail) {
-        this.productName = productName;
+        this.modelNumber = modelNumber;
         this.productPrice = productPrice;
         
         this.OrderId = OrderId;
@@ -41,12 +41,12 @@ public class Orders {
         BuyDate = buyDate;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getmodelNumber() {
+        return modelNumber;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setmodelNumber(String modelNumber) {
+        this.modelNumber = modelNumber;
     }
 
     public String getProductPrice() {
@@ -104,7 +104,7 @@ public class Orders {
     @Override
     public String toString() {
         return "Orders [BuyDate=" + BuyDate + ", BuyerEmail=" + BuyerEmail + ", DateOfDelivery=" + DateOfDelivery
-                + ", OrderId=" + OrderId + ", ProductImage=" + ProductImage + ", productName=" + productName
+                + ", OrderId=" + OrderId + ", ProductImage=" + ProductImage + ", modelNumber=" + modelNumber
                 + ", productPrice=" + productPrice + "]";
     }
 

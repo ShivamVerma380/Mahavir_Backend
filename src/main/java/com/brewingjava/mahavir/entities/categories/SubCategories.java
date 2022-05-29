@@ -1,6 +1,5 @@
 package com.brewingjava.mahavir.entities.categories;
 
-import java.util.HashSet;
 import java.util.List;
 
 public class SubCategories {

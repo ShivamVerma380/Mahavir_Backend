@@ -1,6 +1,6 @@
 package com.brewingjava.mahavir.entities.product;
 
-import java.util.List;
+
 
 import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
@@ -13,7 +13,7 @@ public class ProductDetail {
         //private List<String> modelNumber; //can keep this in inventory management database?
 
         @Id
-        private String productName;
+        private String modelNumber;
         
         private String productDescription;
         
@@ -48,10 +48,10 @@ public class ProductDetail {
 
 
 
-        public ProductDetail(String productName, String productDescription, Binary productImage1, Binary productImage2,
+        public ProductDetail(String modelNumber, String productDescription, Binary productImage1, Binary productImage2,
                 Binary productImage3, Binary productImage4, Binary productImage5, String productPrice,
                 String productVideoLink, Binary productVideo) {
-            this.productName = productName;
+            this.modelNumber = modelNumber;
             this.productDescription = productDescription;
             this.productImage1 = productImage1;
             this.productImage2 = productImage2;
@@ -65,14 +65,14 @@ public class ProductDetail {
 
 
 
-        public String getProductName() {
-            return productName;
+        public String getmodelNumber() {
+            return modelNumber;
         }
 
 
 
-        public void setProductName(String productName) {
-            this.productName = productName;
+        public void setmodelNumber(String modelNumber) {
+            this.modelNumber = modelNumber;
         }
 
 
@@ -226,7 +226,7 @@ public class ProductDetail {
             return "ProductDetail [category=" + category + ", productDescription=" + productDescription
                     + ", productImage1=" + productImage1 + ", productImage2=" + productImage2 + ", productImage3="
                     + productImage3 + ", productImage4=" + productImage4 + ", productImage5=" + productImage5
-                    + ", productName=" + productName + ", productPrice=" + productPrice + ", productVideo="
+                    + ", modelNumber=" + modelNumber + ", productPrice=" + productPrice + ", productVideo="
                     + productVideo + ", productVideoLink=" + productVideoLink + ", subCategory=" + subCategory
                     + ", subSubCategory=" + subSubCategory + "]";
         }
