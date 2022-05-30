@@ -3,7 +3,6 @@ package com.brewingjava.mahavir.entities.offers;
 import java.util.HashMap;
 
 import org.bson.types.Binary;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +13,8 @@ public class OfferPosters {
     private Binary image;
 
     private HashMap<String,OfferPosters> offerProductsList;
+
+    public HashMap<String,OfferTypeDetails> offerDetails;
 
     public OfferPosters() {
     }
@@ -27,6 +28,7 @@ public class OfferPosters {
         return offerProductsList;
     }
 
+   
     public void setOfferProductsList(HashMap<String, OfferPosters> offerProductsList) {
         this.offerProductsList = offerProductsList;
     }
@@ -39,6 +41,14 @@ public class OfferPosters {
         this.image = image;
     }
 
+
+    public HashMap<String, OfferTypeDetails> getOfferDetails() {
+        return offerDetails;
+    }
+
+    public void setOfferDetails(HashMap<String, OfferTypeDetails> offerDetails) {
+        this.offerDetails = offerDetails;
+    }
 
     @Override
     public String toString() {

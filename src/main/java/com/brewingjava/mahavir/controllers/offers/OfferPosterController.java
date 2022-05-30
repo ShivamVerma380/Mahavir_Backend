@@ -3,11 +3,9 @@ package com.brewingjava.mahavir.controllers.offers;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 import com.brewingjava.mahavir.services.offers.OfferPosterService;
 
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,10 +24,10 @@ public class OfferPosterController {
 
 
 
-    @PostMapping("/add-offer")
-    public ResponseEntity<?> addOffer(@RequestParam("offer") MultipartFile multipartFile){
+    @PostMapping("/add-offers")
+    public ResponseEntity<?> addOffer(@RequestParam("offerPoster") MultipartFile multipartFile,@RequestParam("modelNumber") String modelNumber,@RequestParam("offerType") String offerType,@RequestParam("offerValue")String offerPrice) {
         try{
-            return offerPosterService.addImage(multipartFile);
+            return offerPosterService.addOffer(multipartFile,modelNumber,offerType,offerPrice);
         }catch(Exception e){
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
@@ -37,7 +35,7 @@ public class OfferPosterController {
         }
     }
 
-    @GetMapping("/getoffers")
+    @GetMapping("/get-offers")
     public ResponseEntity<?> getOffers(){
         try{
             return offerPosterService.getOffers();

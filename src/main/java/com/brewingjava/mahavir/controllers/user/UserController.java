@@ -68,6 +68,16 @@ public class UserController {
         }
     }
 
+    @GetMapping("/get-orders")
+    public ResponseEntity<?> getOrders(@RequestHeader("Authorization") String authorization){
+        try {
+            return userService.getOrders(authorization);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @PostMapping("/login-user")
     public ResponseEntity<?> userLogin( @RequestParam("Email") String email,@RequestParam("Password") String password){
         try {
