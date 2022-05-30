@@ -15,6 +15,8 @@ public class ProductDetail {
         @Id
         private String modelNumber;
         
+        private String productName;
+
         private String productDescription;
         
         private Binary productImage1;
@@ -46,12 +48,12 @@ public class ProductDetail {
         
         }
 
-
-
-        public ProductDetail(String modelNumber, String productDescription, Binary productImage1, Binary productImage2,
-                Binary productImage3, Binary productImage4, Binary productImage5, String productPrice,
-                String productVideoLink, Binary productVideo) {
+        public ProductDetail(String modelNumber, String productName, String productDescription, Binary productImage1,
+                Binary productImage2, Binary productImage3, Binary productImage4, Binary productImage5,
+                String productPrice, String productVideoLink, Binary productVideo, String category, String subCategory,
+                String subSubCategory) {
             this.modelNumber = modelNumber;
+            this.productName = productName;
             this.productDescription = productDescription;
             this.productImage1 = productImage1;
             this.productImage2 = productImage2;
@@ -61,9 +63,18 @@ public class ProductDetail {
             this.productPrice = productPrice;
             this.productVideoLink = productVideoLink;
             this.productVideo = productVideo;
+            this.category = category;
+            this.subCategory = subCategory;
+            this.subSubCategory = subSubCategory;
         }
 
+        public String getProductName() {
+            return productName;
+        }
 
+        public void setProductName(String productName) {
+            this.productName = productName;
+        }
 
         public String getmodelNumber() {
             return modelNumber;
@@ -219,25 +230,14 @@ public class ProductDetail {
             this.subSubCategory = subSubCategory;
         }
 
-
-
         @Override
         public String toString() {
-            return "ProductDetail [category=" + category + ", productDescription=" + productDescription
-                    + ", productImage1=" + productImage1 + ", productImage2=" + productImage2 + ", productImage3="
-                    + productImage3 + ", productImage4=" + productImage4 + ", productImage5=" + productImage5
-                    + ", modelNumber=" + modelNumber + ", productPrice=" + productPrice + ", productVideo="
-                    + productVideo + ", productVideoLink=" + productVideoLink + ", subCategory=" + subCategory
-                    + ", subSubCategory=" + subSubCategory + "]";
-        }
-
-
-        
-
-
-        
-
-        
-        
+            return "ProductDetail [category=" + category + ", modelNumber=" + modelNumber + ", productDescription="
+                    + productDescription + ", productImage1=" + productImage1 + ", productImage2=" + productImage2
+                    + ", productImage3=" + productImage3 + ", productImage4=" + productImage4 + ", productImage5="
+                    + productImage5 + ", productName=" + productName + ", productPrice=" + productPrice
+                    + ", productVideo=" + productVideo + ", productVideoLink=" + productVideoLink + ", subCategory="
+                    + subCategory + ", subSubCategory=" + subSubCategory + "]";
+        }        
         
 }

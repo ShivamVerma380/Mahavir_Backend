@@ -46,7 +46,7 @@ public class ProductDetailsService {
     @Autowired
     public ProductDetailsDao productDetailsDao;
 
-    public ResponseEntity<?> addProductDetail( String modelNumber, String productDescription,
+    public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productDescription,
             String productPrice, MultipartFile productImage1, MultipartFile productImage2, MultipartFile productImage3,
             MultipartFile productImage4, MultipartFile productImage5, MultipartFile productVideo, String category,
             String subCategory, String subSubCategory, String authorization) {
@@ -126,6 +126,7 @@ public class ProductDetailsService {
                                     productDetail.setCategory(category);
                                     productDetail.setSubCategory(subCategory);
                                     productDetail.setSubSubCategory(subSubCategory);
+                                    productDetail.setProductName(productName);
                                     productDetailsDao.save(productDetail);
                                     responseMessage.setMessage("Model saved successfully");
                                     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);

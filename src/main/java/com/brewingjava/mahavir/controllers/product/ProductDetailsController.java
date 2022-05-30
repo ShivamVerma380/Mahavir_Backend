@@ -22,11 +22,11 @@ public class ProductDetailsController {
     public ProductDetailsService productDetailsService;
     
     @PostMapping("/add-product")
-    public ResponseEntity<?> addProductDetails(@RequestParam("modelNumber") String modelNumber,@RequestParam("productDesc") String productDescription,@RequestParam("productImage1") MultipartFile productImage1,
+    public ResponseEntity<?> addProductDetails(@RequestParam("modelNumber") String modelNumber,@RequestParam("productName") String productName, @RequestParam("productDesc") String productDescription,@RequestParam("productImage1") MultipartFile productImage1,
     @RequestParam("productImage2")MultipartFile productImage2,@RequestParam("productImage3") MultipartFile productImage3,@RequestParam("productImage4") MultipartFile productImage4,@RequestParam("productImage5") MultipartFile productImage5,
     @RequestParam("productPrice") String productPrice, @RequestParam("productVideo") MultipartFile productVideo ,@RequestParam("category") String category,@RequestParam("subCategory") String subCategory,@RequestParam("subSubCategory") String subSubCategory  ,@RequestHeader("Authorization") String authorization){
         try {
-            return productDetailsService.addProductDetail(modelNumber, productDescription, productPrice, productImage1, productImage2, productImage3, productImage4, productImage5, productVideo, category, subCategory, subSubCategory, authorization);
+            return productDetailsService.addProductDetail(modelNumber,productName, productDescription, productPrice, productImage1, productImage2, productImage3, productImage4, productImage5, productVideo, category, subCategory, subSubCategory, authorization);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
