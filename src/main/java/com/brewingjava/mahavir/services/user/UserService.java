@@ -149,7 +149,6 @@ public class UserService {
         }
     }
 
-
     public ResponseEntity<?> getBoughtProducts(String authorization){
         try {
             String token = authorization.substring(7);
@@ -170,7 +169,7 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
-
+    
     public ResponseEntity<?> loginUser(String email,String password){
         try {
             UserRequest fetch_user = userDao.findByEmail(email);
@@ -263,6 +262,30 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.OK).body(products);
         }
         catch(Exception e){
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getOrders(String authorization) {
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest user = userDao.findByEmail(email);
+            if(user == null){
+                responseMessage.setMessage("You cannot view orders");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            List<Orders> orders = user.getProductsBoughtByUser();
+            if(orders==null){
+                responseMessage.setMessage("No orders placed");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            responseMessage.setMessage("Orders");
+            return ResponseEntity.status(HttpStatus.OK).body(orders);
+
+        } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);

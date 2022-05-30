@@ -54,6 +54,11 @@ public class ProductDetailsService {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
             admin = adminDao.findByEmail(email);
+            ProductDetail productDetail1 = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+            if(productDetail1!=null){
+                responseMessage.setMessage("Product already exists");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
             if (admin != null) {
                 // Find category that matches with input category
                 CategoriesToDisplay existingCategoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
@@ -127,6 +132,7 @@ public class ProductDetailsService {
                                     productDetail.setSubCategory(subCategory);
                                     productDetail.setSubSubCategory(subSubCategory);
                                     productDetail.setProductName(productName);
+                                    productDetail.setOfferPrice("0");
                                     productDetailsDao.save(productDetail);
                                     responseMessage.setMessage("Model saved successfully");
                                     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);

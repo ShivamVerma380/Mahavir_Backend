@@ -45,6 +45,9 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+    
+    
+    
 
     @GetMapping("/get-bought-products")
     public ResponseEntity<?> getProduct(@RequestHeader("Authorization")String authorization){
@@ -72,6 +75,16 @@ public class UserController {
     public ResponseEntity<?> getCartDetails(@RequestHeader("Authorization") String authorization){
         try {
             return userService.getCartDetails(authorization);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @GetMapping("/get-orders")
+    public ResponseEntity<?> getOrders(@RequestHeader("Authorization") String authorization){
+        try {
+            return userService.getOrders(authorization);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);

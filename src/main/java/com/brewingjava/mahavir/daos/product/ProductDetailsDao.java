@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ProductDetailsDao extends MongoRepository<ProductDetail, String> {
     public ProductDetail findProductDetailBymodelNumber(String modelNumber);
+
 }
     
 

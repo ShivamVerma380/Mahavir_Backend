@@ -41,17 +41,19 @@ public class ProductDetail {
 
         private String subSubCategory;
 
-
+        private String OfferPrice; 
 
         
         public ProductDetail() {
         
         }
 
+       
+
         public ProductDetail(String modelNumber, String productName, String productDescription, Binary productImage1,
                 Binary productImage2, Binary productImage3, Binary productImage4, Binary productImage5,
                 String productPrice, String productVideoLink, Binary productVideo, String category, String subCategory,
-                String subSubCategory) {
+                String subSubCategory, String offerPrice) {
             this.modelNumber = modelNumber;
             this.productName = productName;
             this.productDescription = productDescription;
@@ -66,7 +68,10 @@ public class ProductDetail {
             this.category = category;
             this.subCategory = subCategory;
             this.subSubCategory = subSubCategory;
+            OfferPrice = offerPrice;
         }
+
+
 
         public String getProductName() {
             return productName;
@@ -138,6 +143,18 @@ public class ProductDetail {
 
         public Binary getProductImage4() {
             return productImage4;
+        }
+
+
+
+        public String getOfferPrice() {
+            return OfferPrice;
+        }
+
+
+
+        public void setOfferPrice(String offerPrice) {
+            OfferPrice = offerPrice;
         }
 
 
@@ -230,14 +247,18 @@ public class ProductDetail {
             this.subSubCategory = subSubCategory;
         }
 
+
+
         @Override
         public String toString() {
-            return "ProductDetail [category=" + category + ", modelNumber=" + modelNumber + ", productDescription="
-                    + productDescription + ", productImage1=" + productImage1 + ", productImage2=" + productImage2
-                    + ", productImage3=" + productImage3 + ", productImage4=" + productImage4 + ", productImage5="
-                    + productImage5 + ", productName=" + productName + ", productPrice=" + productPrice
-                    + ", productVideo=" + productVideo + ", productVideoLink=" + productVideoLink + ", subCategory="
-                    + subCategory + ", subSubCategory=" + subSubCategory + "]";
-        }        
+            return "ProductDetail [OfferPrice=" + OfferPrice + ", category=" + category + ", modelNumber=" + modelNumber
+                    + ", productDescription=" + productDescription + ", productImage1=" + productImage1
+                    + ", productImage2=" + productImage2 + ", productImage3=" + productImage3 + ", productImage4="
+                    + productImage4 + ", productImage5=" + productImage5 + ", productName=" + productName
+                    + ", productPrice=" + productPrice + ", productVideo=" + productVideo + ", productVideoLink="
+                    + productVideoLink + ", subCategory=" + subCategory + ", subSubCategory=" + subSubCategory + "]";
+        }
+
+           
         
 }
