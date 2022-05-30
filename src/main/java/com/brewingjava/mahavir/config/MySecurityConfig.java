@@ -36,7 +36,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/add-user","/getoffers","/add-admin","/verify-email/{email}","/login-user","/get-categories").permitAll() //one doubt of image returning
+                .antMatchers("/add-user","/getoffers","/add-admin","/verify-email/{email}","/login-user","/get-categories","/get-cart-details").permitAll() //one doubt of image returning
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

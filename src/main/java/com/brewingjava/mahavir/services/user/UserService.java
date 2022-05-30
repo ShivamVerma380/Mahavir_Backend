@@ -24,6 +24,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer.UserInfoEndpointConfig;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -148,6 +149,27 @@ public class UserService {
         }
     }
 
+
+    public ResponseEntity<?> getBoughtProducts(String authorization){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest userRequest = userDao.findByEmail(email);
+            if(userRequest==null){
+                responseMessage.setMessage("User not found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            if(userRequest.getProductsBoughtByUser()==null){
+                responseMessage.setMessage("No products buyed");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            responseMessage.setMessage("My Orders");
+            return ResponseEntity.status(HttpStatus.OK).body(userRequest.getProductsBoughtByUser());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 
     public ResponseEntity<?> loginUser(String email,String password){
         try {
