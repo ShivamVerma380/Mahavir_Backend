@@ -15,6 +15,8 @@ public class ProductDetail {
         @Id
         private String modelNumber;
         
+        private String productName;
+
         private String productDescription;
         
         private Binary productImage1;
@@ -50,7 +52,7 @@ public class ProductDetail {
 
         public ProductDetail(String modelNumber, String productDescription, Binary productImage1, Binary productImage2,
                 Binary productImage3, Binary productImage4, Binary productImage5, String productPrice,
-                String productVideoLink, Binary productVideo) {
+                String productVideoLink, Binary productVideo,String productName) {
             this.modelNumber = modelNumber;
             this.productDescription = productDescription;
             this.productImage1 = productImage1;
@@ -61,6 +63,7 @@ public class ProductDetail {
             this.productPrice = productPrice;
             this.productVideoLink = productVideoLink;
             this.productVideo = productVideo;
+            this.productName = productName;
         }
 
 
@@ -219,6 +222,19 @@ public class ProductDetail {
             this.subSubCategory = subSubCategory;
         }
 
+        
+
+
+        public String getProductName() {
+            return productName;
+        }
+
+
+
+        public void setProductName(String productName) {
+            this.productName = productName;
+        }
+
 
 
         @Override
@@ -228,16 +244,7 @@ public class ProductDetail {
                     + productImage3 + ", productImage4=" + productImage4 + ", productImage5=" + productImage5
                     + ", modelNumber=" + modelNumber + ", productPrice=" + productPrice + ", productVideo="
                     + productVideo + ", productVideoLink=" + productVideoLink + ", subCategory=" + subCategory
-                    + ", subSubCategory=" + subSubCategory + "]";
-        }
-
-
-        
-
-
-        
-
-        
-        
+                    + ", subSubCategory=" + subSubCategory +",productName="+ productName+"]";
+        }     
         
 }
