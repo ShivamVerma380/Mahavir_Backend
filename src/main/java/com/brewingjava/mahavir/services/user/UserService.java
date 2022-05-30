@@ -20,6 +20,7 @@ import com.brewingjava.mahavir.services.CustomUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -211,6 +212,35 @@ public class UserService {
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
         } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getCartDetails(String authorization) {
+        try{
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest user = userDao.findByEmail(email);
+            if(user == null){
+                responseMessage.setMessage("You cannot view cart details");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            HashSet<String> cartDetails = user.getUserCartProducts();
+            if(cartDetails==null){
+                responseMessage.setMessage("Cart Empty");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            List<ProductDetail> products = new ArrayList<>();
+            for(String modelNummber : cartDetails){
+                ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNummber);
+                products.add(productDetail);
+            }
+            responseMessage.setMessage("Cart Details");
+            return ResponseEntity.status(HttpStatus.OK).body(products);
+        }
+        catch(Exception e){
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);

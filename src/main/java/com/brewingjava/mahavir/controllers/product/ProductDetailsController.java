@@ -46,5 +46,7 @@ public class ProductDetailsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    
 }
 
