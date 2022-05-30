@@ -45,6 +45,17 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+    
+    
+    @GetMapping("/get-bought-products")
+    public ResponseEntity<?> getProduct(@RequestHeader("Authorization")String authorization){
+        try {
+             return userService.getBoughtProducts(authorization);  
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 
     @PostMapping("/add-to-cart")
     public ResponseEntity<?> addToCart(@RequestHeader("Authorization")String authorization,@RequestParam("modelNumber")String modelNumber){
