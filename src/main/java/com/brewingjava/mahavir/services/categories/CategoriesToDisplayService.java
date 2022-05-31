@@ -24,6 +24,8 @@ import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
+import ch.qos.logback.classic.pattern.SyslogStartConverter;
+
 @Repository
 public class CategoriesToDisplayService {
     
@@ -130,6 +132,8 @@ public class CategoriesToDisplayService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+
 
     public ResponseEntity<?> addSubCategory(String authorization,String category,String subCategory){
         try {
@@ -249,6 +253,71 @@ public class CategoriesToDisplayService {
                 responseMessage.setMessage("You do not have permission to add sub category");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+
+    }
+
+
+    public ResponseEntity<?> getSubSubCategories(String authorization,String category,String subCategory){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admin can access it");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+
+            }
+
+            CategoriesToDisplay categoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
+            if(categoriesToDisplay==null){
+                responseMessage.setMessage("Category not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            
+            
+
+            List<SubCategories> existingSubCategories = categoriesToDisplay.getSubCategories();
+            
+            if(existingSubCategories==null){
+                responseMessage.setMessage("Sub Category Not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+
+            ListIterator<SubCategories> listIterator = existingSubCategories.listIterator();
+            
+            
+            int j=0;
+            while(listIterator.hasNext()){
+                //System.out.print(listIterator.next());
+                if(subCategory.equalsIgnoreCase(listIterator.next().getSubCategoryName())){
+                    //List<SubSubCategories> existingSubSubCategories = listIterator.next().getSubSubCategories();
+                    System.out.println(existingSubCategories.get(j).getSubCategoryName());
+                    List<SubSubCategories> existingSubSubCategories = existingSubCategories.get(j).getSubSubCategories();
+                    List<String> subSubCategories = new ArrayList<>();
+                    if(existingSubSubCategories==null){
+                        System.out.println("existing Sub Sub Categories is null");
+                        return ResponseEntity.status(HttpStatus.OK).body(subSubCategories);
+                    }
+                    ListIterator<SubSubCategories> ssCListIterator = existingSubSubCategories.listIterator();
+                    int k=0;
+                    while(ssCListIterator.hasNext()){
+                        System.out.println(ssCListIterator.next().getSubSubCategoryName());
+                        subSubCategories.add(existingSubSubCategories.get(k).getSubSubCategoryName());
+                        k++;
+                    }
+                    return ResponseEntity.status(HttpStatus.OK).body(subSubCategories);
+                }
+                j++;
+
+            } 
+            responseMessage.setMessage("Sub Category Not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
