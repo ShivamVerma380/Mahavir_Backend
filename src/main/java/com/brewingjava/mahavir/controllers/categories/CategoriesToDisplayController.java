@@ -71,4 +71,16 @@ public class CategoriesToDisplayController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+
+    @GetMapping("/get-sub-categories")
+    public ResponseEntity<?> getSubCategories(@RequestHeader("Authorization") String authorization,@RequestParam("Category")String category){
+        try {
+            return categoriesToDisplayService.getSubCategories(authorization, category);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+    
 }

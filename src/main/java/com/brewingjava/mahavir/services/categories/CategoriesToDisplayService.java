@@ -88,6 +88,49 @@ public class CategoriesToDisplayService {
         }
     }
 
+    public ResponseEntity<?> getSubCategories(String authorization,String category){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admin can access it");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+
+            }
+
+            CategoriesToDisplay categoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
+            if(categoriesToDisplay==null){
+                responseMessage.setMessage("Category not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            List<String> subCategoriesName = new ArrayList<>();
+
+            
+
+            List<SubCategories> existingSubCategories = categoriesToDisplay.getSubCategories();
+            
+            if(existingSubCategories==null){
+                return ResponseEntity.status(HttpStatus.OK).body(subCategoriesName);
+            }
+
+            ListIterator<SubCategories> listIterator = existingSubCategories.listIterator();
+            
+            
+
+            while(listIterator.hasNext()){
+                //System.out.print(listIterator.next());
+                subCategoriesName.add(listIterator.next().getSubCategoryName());
+            } 
+            return ResponseEntity.status(HttpStatus.OK).body(subCategoriesName);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     public ResponseEntity<?> addSubCategory(String authorization,String category,String subCategory){
         try {
             String token = authorization.substring(7);
