@@ -2,8 +2,10 @@ package com.brewingjava.mahavir.services.product;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import com.brewingjava.mahavir.daos.admin.AdminDao;
 import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
@@ -17,6 +19,7 @@ import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.entities.product.ProductReviews;
+import com.brewingjava.mahavir.entities.product.Review;
 import com.brewingjava.mahavir.entities.user.Orders;
 import com.brewingjava.mahavir.entities.user.UserRequest;
 import com.brewingjava.mahavir.helper.JwtUtil;
@@ -59,6 +62,8 @@ public class ProductDetailsService {
     @Autowired
     public ProductReivewsDao productReviewsDao;
 
+    @Autowired
+    public Review review;
     public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productDescription,
             String productPrice, MultipartFile productImage1, MultipartFile productImage2, MultipartFile productImage3,
             MultipartFile productImage4, MultipartFile productImage5, MultipartFile productVideo, String category,
@@ -264,7 +269,7 @@ public class ProductDetailsService {
     }
 
 
-    public ResponseEntity<?> addReview(String modelNumber, String review, String authorization) {
+    public ResponseEntity<?> addReview(String modelNumber, String rating, String review, String authorization) {
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -303,8 +308,12 @@ public class ProductDetailsService {
                     if(productReviews == null){
                         ProductReviews newProductReview = new ProductReviews();
                         newProductReview.setModelNumber(modelNumber); 
-                        HashMap<String, String> reviewerNameReview = new HashMap<>();
-                        reviewerNameReview.put(userName, review);
+                        HashMap<String, Review> reviewerNameReview = new HashMap<>();
+                        Review newReview = new Review();
+                        newReview.setReview(review);
+                        newReview.setRating(rating);
+                        reviewerNameReview.put(userName, newReview);
+                        newProductReview.setProductRating(rating);
                         newProductReview.setReviews(reviewerNameReview);
                         productReviewsDao.save(newProductReview);
                         responseMessage.setMessage("Review added successfully");
@@ -324,14 +333,27 @@ public class ProductDetailsService {
                         //     return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
                         // }
                         ProductReviews reviewsList = productReviewsDao.findProductReviewsBymodelNumber(modelNumber);
-                        HashMap<String, String> reviewerNameReview = reviewsList.getReviews();
+                        HashMap<String, Review> reviewerNameReview = reviewsList.getReviews();
                         // HashMap<String,String> newReviews = new HashMap<>();
                         // newReviews.put(userName, review);
-                        reviewerNameReview.put(userName, review);
                         
                         // for(int j = 0; j < reviewsList.getReviews().size(); j++){
                         //     System.out.println(reviewsList.getReviews());
                         // }
+                        double pRating = 0.0;
+                        Iterator hmIterator = reviewerNameReview.entrySet().iterator();
+                        while(hmIterator.hasNext()){
+                            Map.Entry mapElement = (Map.Entry)hmIterator.next();
+                            Review review1 = (Review)mapElement.getValue();
+                            pRating = pRating + Double.parseDouble(review1.getRating());
+                        }
+                        
+                        String ProductRating = Double.toString((Double.parseDouble(rating) + pRating)/ (reviewsList.getReviews().size()+1));
+                        Review newReview = new Review();
+                        newReview.setReview(review);
+                        newReview.setRating(rating);
+                        reviewerNameReview.put(userName, newReview);
+                        reviewsList.setProductRating(ProductRating);
                         reviewsList.setReviews(reviewerNameReview);
                         productReviewsDao.save(reviewsList);
                         responseMessage.setMessage("Review added successfully");

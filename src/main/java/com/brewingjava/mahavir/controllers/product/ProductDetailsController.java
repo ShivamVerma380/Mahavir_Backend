@@ -35,9 +35,9 @@ public class ProductDetailsController {
     }
 
     @PostMapping("/add-review")
-    public ResponseEntity<?> addReview(@RequestParam("modelNumber") String modelNumber, @RequestParam("review") String review, @RequestHeader("Authorization") String authorization){
+    public ResponseEntity<?> addReview(@RequestParam("modelNumber") String modelNumber,@RequestParam("rating")String rating, @RequestParam("review") String review, @RequestHeader("Authorization") String authorization){
         try {
-            return productDetailsService.addReview(modelNumber, review, authorization);
+            return productDetailsService.addReview(modelNumber,rating, review, authorization);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

@@ -11,17 +11,17 @@ public class ProductReviews {
     @Id
     private String modelNumber;
 
-    HashMap<String, String> reviews; // name : review
+    HashMap<String, Review> reviews; // name : review
 
-    private String rating;
+    private String productRating;
 
     public ProductReviews() {
     }
 
-    public ProductReviews(String modelNumber, HashMap<String, String> reviews, String rating) {
+    public ProductReviews(String modelNumber, HashMap<String, Review> reviews, String productRating) {
         this.modelNumber = modelNumber;
         this.reviews = reviews;
-        this.rating = rating;
+        this.productRating = productRating;
     }
 
     public String getModelNumber() {
@@ -32,25 +32,26 @@ public class ProductReviews {
         this.modelNumber = modelNumber;
     }
 
-    public HashMap<String, String> getReviews() {
+    public HashMap<String, Review> getReviews() {
         return reviews;
     }
 
-    public void setReviews(HashMap<String, String> reviews) {
+    public void setReviews(HashMap<String, Review> reviews) {
         this.reviews = reviews;
     }
 
-    public String getRating() {
-        return rating;
+    public String getProductRating() {
+        return productRating;
     }
 
-    public void setRating(String rating) {
-        this.rating = rating;
+    public void setProductRating(String productRating) {
+        this.productRating = productRating;
     }
 
     @Override
     public String toString() {
-        return "ProductReviews [modelNumber=" + modelNumber + ", rating=" + rating + ", reviews=" + reviews + "]";
+        return "ProductReviews [modelNumber=" + modelNumber + ", productRating=" + productRating + ", reviews="
+                + reviews + "]";
     }
 
     
