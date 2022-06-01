@@ -37,7 +37,7 @@ public class OfferPosterService{
     @Autowired
     public OfferTypeDetails offerPricePercentage;
 
-    public ResponseEntity<?> addOffer(MultipartFile multipartFile, String modelNumber, String OfferType, String OfferValue){
+    public ResponseEntity<?> addOffer(MultipartFile multipartFile, String modelNumber, String OfferType, String OfferValue, String category) {
         try{
             offerPosters.setImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
             if(productDetailsDao.findProductDetailBymodelNumber(modelNumber)==null){
@@ -66,6 +66,7 @@ public class OfferPosterService{
             productDetail.setOfferPrice(String.valueOf(priceNew));
             productDetailsDao.save(productDetail);
             offerPosters.setOfferDetails(offer);
+            offerPosters.setCategory(category);
             offerPosterDao.save(offerPosters);
             responseMessage.setMessage("Offer added successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
@@ -83,6 +84,17 @@ public class OfferPosterService{
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    public ResponseEntity<?> getOffersByCategory(String category) {
+        try {
+            OfferPosters offers = offerPosterDao.findOffersByCategory(category);
+            return ResponseEntity.status(HttpStatus.OK).body(offers);
+        }  catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
 

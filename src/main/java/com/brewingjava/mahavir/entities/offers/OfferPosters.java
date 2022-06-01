@@ -16,13 +16,19 @@ public class OfferPosters {
 
     public HashMap<String,OfferTypeDetails> offerDetails;
 
+    public String category;
+
     public OfferPosters() {
     }
 
-    public OfferPosters(Binary image, HashMap<String, OfferPosters> offerProductsList) {
+    public OfferPosters(Binary image, HashMap<String, OfferPosters> offerProductsList,
+            HashMap<String, OfferTypeDetails> offerDetails, String category) {
         this.image = image;
         this.offerProductsList = offerProductsList;
+        this.offerDetails = offerDetails;
+        this.category = category;
     }
+
 
     public HashMap<String, OfferPosters> getOfferProductsList() {
         return offerProductsList;
@@ -52,7 +58,16 @@ public class OfferPosters {
 
     @Override
     public String toString() {
-        return "OfferPosters [image=" + image + ", offerProductsList=" + offerProductsList + "]";
+        return "OfferPosters [category=" + category + ", image=" + image + ", offerDetails=" + offerDetails
+                + ", offerProductsList=" + offerProductsList + "]";
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }   
     
 }
