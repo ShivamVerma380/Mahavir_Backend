@@ -34,7 +34,16 @@ public class ProductDetailsController {
         }
     }
 
-
+    @PostMapping("/add-review")
+    public ResponseEntity<?> addReview(@RequestParam("modelNumber") String modelNumber, @RequestParam("review") String review, @RequestHeader("Authorization") String authorization){
+        try {
+            return productDetailsService.addReview(modelNumber, review, authorization);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 
     @DeleteMapping("/remove-product")
     public ResponseEntity<?> removeProductDetails(@RequestHeader("Authorization") String authorization,@RequestParam("productName")String productName){

@@ -1,5 +1,6 @@
 package com.brewingjava.mahavir.services.product;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
@@ -7,11 +8,17 @@ import java.util.ListIterator;
 import com.brewingjava.mahavir.daos.admin.AdminDao;
 import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
+import com.brewingjava.mahavir.daos.product.ProductReivewsDao;
+import com.brewingjava.mahavir.daos.user.OrdersDao;
+import com.brewingjava.mahavir.daos.user.UserDao;
 import com.brewingjava.mahavir.entities.admin.Admin;
 import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
+import com.brewingjava.mahavir.entities.product.ProductReviews;
+import com.brewingjava.mahavir.entities.user.Orders;
+import com.brewingjava.mahavir.entities.user.UserRequest;
 import com.brewingjava.mahavir.helper.JwtUtil;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 
@@ -44,7 +51,13 @@ public class ProductDetailsService {
     public CategoriesToDisplayDao categoriesToDisplayDao;
 
     @Autowired
+    public UserDao userDao;
+
+    @Autowired
     public ProductDetailsDao productDetailsDao;
+
+    @Autowired
+    public ProductReivewsDao productReviewsDao;
 
     public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productDescription,
             String productPrice, MultipartFile productImage1, MultipartFile productImage2, MultipartFile productImage3,
@@ -243,6 +256,92 @@ public class ProductDetailsService {
                 responseMessage.setMessage("You do not have permission to remove a product");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+
+    public ResponseEntity<?> addReview(String modelNumber, String review, String authorization) {
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest userRequest = userDao.findByEmail(email);
+
+            if(userRequest == null){
+                responseMessage.setMessage("User does not exist");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+            if(productDetail == null){
+                responseMessage.setMessage("Product does not exist");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            
+            // if(productReviewsDao.findProductReviewsBymodelNumber(modelNumber)!=null){
+            //     ProductReviews reviewsList = productReviewsDao.findProductReviewsBymodelNumber(modelNumber);
+            //     if(reviewsList.getReviews().get(reviewerName).equals(userDao.findByEmail(email).getFirstName())){
+            //         responseMessage.setMessage("You have already reviewed this product");
+            //         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            //     }
+            // }
+            List<Orders> orders = userRequest.getProductsBoughtByUser();
+            if(orders==null){
+                responseMessage.setMessage("You have not bought this product");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+
+            String userName = userDao.findByEmail(email).getFirstName() + userDao.findByEmail(email).getLastName();
+                        
+            // check if model number present in reviews
+            // if present then add review hashmap to that model number
+            for(int i= 0;i< orders.size();i++){
+                if(orders.get(i).getmodelNumber().equals(modelNumber)){
+                    ProductReviews productReviews = productReviewsDao.findProductReviewsBymodelNumber(modelNumber);
+                    if(productReviews == null){
+                        ProductReviews newProductReview = new ProductReviews();
+                        newProductReview.setModelNumber(modelNumber); 
+                        HashMap<String, String> reviewerNameReview = new HashMap<>();
+                        reviewerNameReview.put(userName, review);
+                        newProductReview.setReviews(reviewerNameReview);
+                        productReviewsDao.save(newProductReview);
+                        responseMessage.setMessage("Review added successfully");
+                        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                    }
+                    else{
+                        // HashMap<String,String> pr = ;
+                        if(productReviews.getReviews().containsKey(userName)){
+                            responseMessage.setMessage("You have already reviewed this product");
+                            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                        }
+                        // for(int p = 0; p < productReviewsDao.findProductReviewsBymodelNumber(modelNumber).getReviews().size(); p++){
+                            
+                        // }
+                        // if(pr.containsKey(userName)){
+                        //     responseMessage.setMessage("You have already reviewed");
+                        //     return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                        // }
+                        ProductReviews reviewsList = productReviewsDao.findProductReviewsBymodelNumber(modelNumber);
+                        HashMap<String, String> reviewerNameReview = reviewsList.getReviews();
+                        // HashMap<String,String> newReviews = new HashMap<>();
+                        // newReviews.put(userName, review);
+                        reviewerNameReview.put(userName, review);
+                        
+                        // for(int j = 0; j < reviewsList.getReviews().size(); j++){
+                        //     System.out.println(reviewsList.getReviews());
+                        // }
+                        reviewsList.setReviews(reviewerNameReview);
+                        productReviewsDao.save(reviewsList);
+                        responseMessage.setMessage("Review added successfully");
+                        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                    }
+                }
+            }
+            
+           responseMessage.setMessage("Your order does not contain this product");
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
