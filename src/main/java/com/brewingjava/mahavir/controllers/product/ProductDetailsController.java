@@ -48,6 +48,17 @@ public class ProductDetailsController {
         }
     }
 
+    @GetMapping("/get-reviews/{modelNumber}")
+    public ResponseEntity<?> getReviews(@PathVariable("modelNumber") String modelNumber){
+        try {
+            return productDetailsService.getReviewsByModelNumber(modelNumber);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @DeleteMapping("/remove-product")
     public ResponseEntity<?> removeProductDetails(@RequestHeader("Authorization") String authorization,@RequestParam("productName")String productName){
         try {
@@ -82,5 +93,7 @@ public class ProductDetailsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+
 }
 

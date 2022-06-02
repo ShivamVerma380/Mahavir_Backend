@@ -372,6 +372,18 @@ public class ProductDetailsService {
     }
 
 
+    public ResponseEntity<?> getReviewsByModelNumber(String modelNumber){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(productReviewsDao.findProductReviewsBymodelNumber(modelNumber));
+
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     public ResponseEntity<?> getAllProducts(){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(productDetailsDao.findAll());
