@@ -5,6 +5,7 @@ import com.brewingjava.mahavir.services.product.ProductDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,9 +72,10 @@ public class ProductDetailsController {
     }
 
     @GetMapping("/get-products/{modelNumber}")
-    public ResponseEntity<?> getProductByModelNumber(@PathVariable("modelNumber") String modelNumber){
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<?> getProductByModelNumber(@RequestHeader("Authorization")String authorization,@PathVariable("modelNumber") String modelNumber){
         try {
-            return productDetailsService.getProductByModelNumber(modelNumber);
+            return productDetailsService.getProductByModelNumber(authorization,modelNumber);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
