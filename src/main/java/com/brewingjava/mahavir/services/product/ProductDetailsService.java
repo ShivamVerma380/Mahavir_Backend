@@ -384,6 +384,24 @@ public class ProductDetailsService {
         }
     }
 
+    public ResponseEntity<?> getProductByModelNumber(String modelNumber){
+        try {
+            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+            if(productDetail==null){
+                responseMessage.setMessage("No Product found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(productDetail);
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     
 
     
