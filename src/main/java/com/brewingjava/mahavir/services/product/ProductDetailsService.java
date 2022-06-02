@@ -372,6 +372,18 @@ public class ProductDetailsService {
     }
 
 
+    public ResponseEntity<?> getAllProducts(){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(productDetailsDao.findAll());
+        } catch (Exception e) {
+            
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+
+        }
+    }
+
     
 
     
