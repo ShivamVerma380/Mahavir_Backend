@@ -36,14 +36,14 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/add-user","/get-offers","/add-admin","/verify-email/{email}","/login-user","/get-categories","/get-cart-details","/get-products","/get-products/{modelNumber}","get-reviews/{modelNumber}").permitAll() //one doubt of image returning
+                .antMatchers("/add-user","/get-offers","/add-admin","/verify-email/{email}","/login-user","/get-categories","/get-cart-details","/get-products","/get-products/{modelNumber}","get-reviews/{modelNumber}","/add-to-cart").permitAll() //one doubt of image returning
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-    http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
- //***************
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{

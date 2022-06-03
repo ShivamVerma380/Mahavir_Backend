@@ -60,6 +60,7 @@ public class UserController {
     }
 
     @PostMapping("/add-to-cart")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<?> addToCart(@RequestHeader("Authorization")String authorization,@RequestParam("modelNumber")String modelNumber){
         try {
             return userService.addToCart(authorization, modelNumber);
