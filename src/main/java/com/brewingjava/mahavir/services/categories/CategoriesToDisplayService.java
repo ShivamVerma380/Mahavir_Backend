@@ -94,6 +94,16 @@ public class CategoriesToDisplayService {
                     if(sCListIterator.next().getSubSubCategories()==null){
                         allCategories.get(i).getSubCategories().get(j).setSubSubCategories(new ArrayList<>());
                     }
+                    int k=0;
+                    List<SubSubCategories> subSubCategories = allCategories.get(i).getSubCategories().get(j).getSubSubCategories();
+                    ListIterator<SubSubCategories> subSubCatListIterator = subSubCategories.listIterator();
+                    while(subSubCatListIterator.hasNext()){
+                        if(subSubCatListIterator.next().modelNumber==null){
+                            allCategories.get(i).getSubCategories().get(j).getSubSubCategories().get(k).setmodelNumber(new HashSet<>());
+                        }
+                        k++;
+                    }
+
                     j++;
                 }
                 i++;
