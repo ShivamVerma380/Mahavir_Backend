@@ -29,7 +29,7 @@ public class UserRequest {
     
     private HashSet<String> userCartProducts;
 
-    private List<AddToCompare> addToCompare;
+    private List<String> addToCompare;  //String of model Numbers
 
     
     public UserRequest() {
@@ -118,13 +118,17 @@ public class UserRequest {
         this.userCartProducts = userCartProducts;
     }
 
+    
 
-    public List<AddToCompare> getAddToCompare() {
+
+
+
+    public List<String> getAddToCompare() {
         return addToCompare;
     }
 
 
-    public void setAddToCompare(List<AddToCompare> addToCompare) {
+    public void setAddToCompare(List<String> addToCompare) {
         this.addToCompare = addToCompare;
     }
 

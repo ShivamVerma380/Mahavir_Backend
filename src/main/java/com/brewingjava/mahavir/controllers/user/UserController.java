@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-//@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*")
 public class UserController {
     
     @Autowired
@@ -39,6 +39,17 @@ public class UserController {
         try {
             return userService.buyProduct(Authorization, BuyDate, DeliveryDate, modelNumber);
             
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @PostMapping("/add-to-compare")
+    public ResponseEntity<?> addToCompare(@RequestHeader("Authorization") String authorization,@RequestParam("Category") String category,@RequestParam("ModelNumber") String modelNumber){
+        try {
+            return userService.addToCompare(authorization, category, modelNumber);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

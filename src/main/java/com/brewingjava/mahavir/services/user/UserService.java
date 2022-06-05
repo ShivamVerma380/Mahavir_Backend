@@ -3,13 +3,16 @@ package com.brewingjava.mahavir.services.user;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 
 import com.brewingjava.mahavir.config.MySecurityConfig;
 import com.brewingjava.mahavir.daos.admin.AdminDao;
+import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
 import com.brewingjava.mahavir.daos.user.OrdersDao;
 import com.brewingjava.mahavir.daos.user.UserDao;
 import com.brewingjava.mahavir.entities.admin.Admin;
+import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.entities.user.Orders;
 import com.brewingjava.mahavir.entities.user.UserRequest;
@@ -19,6 +22,7 @@ import com.brewingjava.mahavir.helper.ResponseMessage;
 import com.brewingjava.mahavir.services.CustomUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators.Add;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -65,6 +69,10 @@ public class UserService {
     @Autowired
     public OrdersDao ordersDao;
 
+
+    @Autowired
+    public CategoriesToDisplayDao categoriesToDisplayDao;
+    
     public ResponseEntity<?> addUser(String email,String password,String firstName,String lastName,String phoneNo){
         try {
             //Check email in admin db
@@ -287,6 +295,60 @@ public class UserService {
             }
             responseMessage.setMessage("Orders");
             return ResponseEntity.status(HttpStatus.OK).body(orders);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> addToCompare(String authorization,String category,String modelNumber){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest userRequest = userDao.findByEmail(email);
+            if(userRequest==null){
+                responseMessage.setMessage("Only user can compare products");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+            if(productDetail==null){
+                responseMessage.setMessage("Product Does Not exist");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            
+            List<String> addToCompare = userRequest.getAddToCompare();
+            if(addToCompare.size()==4){
+                responseMessage.setMessage("You can compare only 4 products at a time");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            if(!addToCompare.isEmpty()){
+                ListIterator<String> listIterator = addToCompare.listIterator();
+                while(listIterator.hasNext()){
+                    
+                    if(listIterator.next().equals(modelNumber)){
+                        responseMessage.setMessage("Product already added to compare");
+                        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                    }
+
+                    
+                    if(!productDetail.getCategory().equals(category)){
+                    responseMessage.setMessage("You can compare similar products only");
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                    }                
+                    
+                }
+            }
+            
+
+            
+            addToCompare.add(modelNumber);
+            userRequest.setAddToCompare(addToCompare);
+            userDao.save(userRequest);
+            responseMessage.setMessage("Product added To Compare");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+
 
         } catch (Exception e) {
             e.printStackTrace();
