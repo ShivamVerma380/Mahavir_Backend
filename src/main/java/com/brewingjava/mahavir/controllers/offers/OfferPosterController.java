@@ -1,5 +1,7 @@
 package com.brewingjava.mahavir.controllers.offers;
 
+import java.util.List;
+
 import javax.websocket.server.PathParam;
 
 import com.brewingjava.mahavir.helper.ResponseMessage;
@@ -28,9 +30,13 @@ public class OfferPosterController {
 
 
     @PostMapping("/add-offers")
-    public ResponseEntity<?> addOffer(@RequestParam("offerPoster") MultipartFile multipartFile,@RequestParam("category")String category,@RequestParam("modelNumber") String modelNumber,@RequestParam("offerType") String offerType,@RequestParam("offerValue")String offerPrice) {
+    public ResponseEntity<?> addOffer(@RequestParam("offerPoster") MultipartFile multipartFile,@RequestParam("category") String category,@RequestParam("modelNumber") List<String> modelNumber) {
         try{
-            return offerPosterService.addOffer(multipartFile,modelNumber,offerType,offerPrice,category);
+            // return offerPosterService.addOffer(multipartFile,modelNumber,offerType,offerPrice,category);
+            // for(int i=0;i<modelNumber.size();i++){
+            //     System.out.println(modelNumber.get(i));
+            // }
+            return offerPosterService.addOffer(multipartFile, modelNumber, category);
         }catch(Exception e){
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
@@ -38,16 +44,16 @@ public class OfferPosterController {
         }
     }
 
-    @GetMapping("/get-offers")
-    public ResponseEntity<?> getOffers(){
-        try{
-            return offerPosterService.getOffers();
-        }catch(Exception e){
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
+    // @GetMapping("/get-offers")
+    // public ResponseEntity<?> getOffers(){
+    //     try{
+    //         return offerPosterService.getOffers();
+    //     }catch(Exception e){
+    //         e.printStackTrace();
+    //         responseMessage.setMessage(e.getMessage());
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    //     }
+    // }
 
     @GetMapping("/get-offers-by-category/{category}")
     public ResponseEntity<?> getOffersByCategory(@PathVariable("category") String category){

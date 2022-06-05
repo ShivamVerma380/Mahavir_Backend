@@ -1,6 +1,7 @@
 package com.brewingjava.mahavir.entities.offers;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.bson.types.Binary;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,31 +13,19 @@ public class OfferPosters {
 
     private Binary image;
 
-    private HashMap<String,OfferPosters> offerProductsList;
+    private List<String> modelNumbers;
 
-    public HashMap<String,OfferTypeDetails> offerDetails;
-
-    public String category;
+    
+    public String category;  //Display mobile offers on mobile click
 
     public OfferPosters() {
     }
 
-    public OfferPosters(Binary image, HashMap<String, OfferPosters> offerProductsList,
-            HashMap<String, OfferTypeDetails> offerDetails, String category) {
+    public OfferPosters(Binary image, List<String> modelNumbers,
+            String category) {
         this.image = image;
-        this.offerProductsList = offerProductsList;
-        this.offerDetails = offerDetails;
+        this.modelNumbers = modelNumbers;
         this.category = category;
-    }
-
-
-    public HashMap<String, OfferPosters> getOfferProductsList() {
-        return offerProductsList;
-    }
-
-   
-    public void setOfferProductsList(HashMap<String, OfferPosters> offerProductsList) {
-        this.offerProductsList = offerProductsList;
     }
 
     public Binary getImage() {
@@ -47,20 +36,15 @@ public class OfferPosters {
         this.image = image;
     }
 
-
-    public HashMap<String, OfferTypeDetails> getOfferDetails() {
-        return offerDetails;
+    public List<String> getModelNumbers() {
+        return modelNumbers;
     }
 
-    public void setOfferDetails(HashMap<String, OfferTypeDetails> offerDetails) {
-        this.offerDetails = offerDetails;
+    public void setModelNumbers(List<String> modelNumbers) {
+        this.modelNumbers = modelNumbers;
     }
 
-    @Override
-    public String toString() {
-        return "OfferPosters [category=" + category + ", image=" + image + ", offerDetails=" + offerDetails
-                + ", offerProductsList=" + offerProductsList + "]";
-    }
+    
 
     public String getCategory() {
         return category;
@@ -68,6 +52,17 @@ public class OfferPosters {
 
     public void setCategory(String category) {
         this.category = category;
-    }   
+    }
+
+    @Override
+    public String toString() {
+        return "OfferPosters [category=" + category + ", image=" + image + ", modelNumbers=" + modelNumbers + "]";
+    }
+
+    
+    
+
+    
+    
     
 }
