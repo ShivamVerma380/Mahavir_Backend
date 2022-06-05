@@ -25,7 +25,7 @@ public class JwtUtil {
 
     private String SECRET_KEY = "mahavirbackend2022";
 
-    private int jwtExpirationinMs = 86400000;  
+    private int jwtExpirationinMs = 100000000;  
 
     private int refreshExpirationinMs =  99999999;
 

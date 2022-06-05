@@ -30,8 +30,5 @@ public class EmailVerification {
     }
 
     
-    @GetMapping("/welcome")
-    public ResponseEntity<?> getString(){
-        return ResponseEntity.ok().body("Hello World");
-    }
+    
 }
