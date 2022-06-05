@@ -58,6 +58,8 @@ public class CategoriesToDisplayService {
                     return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
                 }
                 CategoriesToDisplay categoriesToDisplay = new CategoriesToDisplay(category,new Binary(BsonBinarySubType.BINARY,multipartFile.getBytes()));
+                categoriesToDisplay.setSubCategories(new ArrayList<>());
+                
                 categoriesToDisplayDao.save(categoriesToDisplay);
                 responseMessage.setMessage("Category added successfully");
                 return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
@@ -176,6 +178,7 @@ public class CategoriesToDisplayService {
                     if(list==null){
                         SubCategories subCategories = new SubCategories();
                         subCategories.setSubCategoryName(subCategory);
+                        subCategories.setSubSubCategories(new ArrayList<>());
 
 
                         List<SubCategories> updateSubCategories = new ArrayList<>();
@@ -196,6 +199,7 @@ public class CategoriesToDisplayService {
                     }
 
                     SubCategories subCategories = new SubCategories();
+                    subCategories.setSubSubCategories(new ArrayList<>());
                     subCategories.setSubCategoryName(subCategory);
                     existingCategory.getSubCategories().add(subCategories);
                     categoriesToDisplayDao.save(existingCategory);
@@ -242,6 +246,7 @@ public class CategoriesToDisplayService {
                             if(existingSubSubCategories==null){
                                 SubSubCategories subSubCategories = new SubSubCategories();
                                 subSubCategories.setSubSubCategoryName(subSubCategory);
+                                subSubCategories.setmodelNumber(new HashSet<>());
                                 List<SubSubCategories> updatedSubSubCategories = new ArrayList<>();
                                 updatedSubSubCategories.add(subSubCategories);        
                                 existingSubCategories.get(i).setSubSubCategories(updatedSubSubCategories);
@@ -260,6 +265,7 @@ public class CategoriesToDisplayService {
                             }
                             SubSubCategories subSubCategories = new SubSubCategories();
                             subSubCategories.setSubSubCategoryName(subSubCategory);
+                            subSubCategories.setmodelNumber(new HashSet<>());
                             existingSubSubCategories.add(subSubCategories);
                             existingSubCategories.get(i).setSubSubCategories(existingSubSubCategories);
                             existingCategoriesToDisplay.setSubCategories(existingSubCategories);

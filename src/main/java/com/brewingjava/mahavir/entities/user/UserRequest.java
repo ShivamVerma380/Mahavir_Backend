@@ -29,6 +29,7 @@ public class UserRequest {
     
     private HashSet<String> userCartProducts;
 
+    private List<AddToCompare> addToCompare;
 
     
     public UserRequest() {
@@ -118,12 +119,25 @@ public class UserRequest {
     }
 
 
+    public List<AddToCompare> getAddToCompare() {
+        return addToCompare;
+    }
+
+
+    public void setAddToCompare(List<AddToCompare> addToCompare) {
+        this.addToCompare = addToCompare;
+    }
+
+
     @Override
     public String toString() {
-        return "UserRequest [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", password="
-                + password + ", phoneNo=" + phoneNo + ", productsBoughtByUser=" + productsBoughtByUser
-                + ", userCartProducts=" + userCartProducts + "]";
+        return "UserRequest [addToCompare=" + addToCompare + ", email=" + email + ", firstName=" + firstName
+                + ", lastName=" + lastName + ", password=" + password + ", phoneNo=" + phoneNo
+                + ", productsBoughtByUser=" + productsBoughtByUser + ", userCartProducts=" + userCartProducts + "]";
     }
+
+    
+    
 
 
     

@@ -83,6 +83,9 @@ public class UserService {
             //add user
             String encoded_password = mySecurityConfig.passwordEncoder().encode(password);
             UserRequest new_user = new UserRequest(email, encoded_password, firstName, lastName, phoneNo);
+            new_user.setProductsBoughtByUser(new ArrayList<>());
+            new_user.setUserCartProducts(new HashSet<>());
+            new_user.setAddToCompare(new ArrayList<>());
             this.userDao.save(new_user);
 
             //spring security
