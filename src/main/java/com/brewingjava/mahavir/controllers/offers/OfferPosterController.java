@@ -44,16 +44,17 @@ public class OfferPosterController {
         }
     }
 
-    // @GetMapping("/get-offers")
-    // public ResponseEntity<?> getOffers(){
-    //     try{
-    //         return offerPosterService.getOffers();
-    //     }catch(Exception e){
-    //         e.printStackTrace();
-    //         responseMessage.setMessage(e.getMessage());
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    //     }
-    // }
+    
+    @GetMapping("/get-offers")
+    public ResponseEntity<?> getOffers(){
+        try{
+            return offerPosterService.getOffers();
+        }catch(Exception e){
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     @GetMapping("/get-offers-by-category/{category}")
     public ResponseEntity<?> getOffersByCategory(@PathVariable("category") String category){
