@@ -116,4 +116,16 @@ public class UserController {
     }
 
 
+    @GetMapping("/add-to-compare")
+    public ResponseEntity<?> getUserAddToCompare(@RequestHeader("Authorization") String authorization){
+        try {
+            return userService.getUserAddToCompare(authorization);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+
 }
