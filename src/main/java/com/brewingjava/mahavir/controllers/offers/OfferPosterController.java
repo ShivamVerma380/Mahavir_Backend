@@ -58,6 +58,7 @@ public class OfferPosterController {
     }
 
     @GetMapping("/get-offers-by-category/{category}")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<?> getOffersByCategory(@PathVariable("category") String category){
         try{
             return offerPosterService.getOffersByCategory(category);

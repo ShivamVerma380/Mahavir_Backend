@@ -66,7 +66,7 @@ public class ProductDetailsService {
     public Review review;
     public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productDescription,
             String productPrice, MultipartFile productImage1, MultipartFile productImage2, MultipartFile productImage3,
-            MultipartFile productImage4, MultipartFile productImage5, MultipartFile productVideo, String category,
+            MultipartFile productImage4, MultipartFile productImage5, String category,
             String subCategory, String subSubCategory, String authorization) {
         try {
             String token = authorization.substring(7);
@@ -143,8 +143,7 @@ public class ProductDetailsService {
                                             new Binary(BsonBinarySubType.BINARY, productImage4.getBytes()));
                                     productDetail.setProductImage5(
                                             new Binary(BsonBinarySubType.BINARY, productImage5.getBytes()));
-                                    productDetail.setProductVideo(
-                                            new Binary(BsonBinarySubType.BINARY, productVideo.getBytes()));
+                                    
                                     productDetail.setProductPrice(productPrice);
                                     productDetail.setCategory(category);
                                     productDetail.setSubCategory(subCategory);

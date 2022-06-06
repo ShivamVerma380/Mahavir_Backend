@@ -33,7 +33,6 @@ public class ProductDetail {
         
         private String productVideoLink;
         
-        private Binary productVideo;
 
         private String category;
 
@@ -52,7 +51,7 @@ public class ProductDetail {
 
         public ProductDetail(String modelNumber, String productName, String productDescription, Binary productImage1,
                 Binary productImage2, Binary productImage3, Binary productImage4, Binary productImage5,
-                String productPrice, String productVideoLink, Binary productVideo, String category, String subCategory,
+                String productPrice, String productVideoLink,  String category, String subCategory,
                 String subSubCategory, String offerPrice) {
             this.modelNumber = modelNumber;
             this.productName = productName;
@@ -64,7 +63,6 @@ public class ProductDetail {
             this.productImage5 = productImage5;
             this.productPrice = productPrice;
             this.productVideoLink = productVideoLink;
-            this.productVideo = productVideo;
             this.category = category;
             this.subCategory = subCategory;
             this.subSubCategory = subSubCategory;
@@ -201,17 +199,6 @@ public class ProductDetail {
 
 
 
-        public Binary getProductVideo() {
-            return productVideo;
-        }
-
-
-
-        public void setProductVideo(Binary productVideo) {
-            this.productVideo = productVideo;
-        }
-
-
 
         public String getCategory() {
             return category;
@@ -255,7 +242,7 @@ public class ProductDetail {
                     + ", productDescription=" + productDescription + ", productImage1=" + productImage1
                     + ", productImage2=" + productImage2 + ", productImage3=" + productImage3 + ", productImage4="
                     + productImage4 + ", productImage5=" + productImage5 + ", productName=" + productName
-                    + ", productPrice=" + productPrice + ", productVideo=" + productVideo + ", productVideoLink="
+                    + ", productPrice=" + productPrice  + ", productVideoLink="
                     + productVideoLink + ", subCategory=" + subCategory + ", subSubCategory=" + subSubCategory + "]";
         }
 
