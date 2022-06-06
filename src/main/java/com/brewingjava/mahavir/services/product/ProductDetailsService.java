@@ -1,5 +1,6 @@
 package com.brewingjava.mahavir.services.product;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,6 +16,7 @@ import com.brewingjava.mahavir.daos.user.OrdersDao;
 import com.brewingjava.mahavir.daos.user.UserDao;
 import com.brewingjava.mahavir.entities.admin.Admin;
 import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
+import com.brewingjava.mahavir.entities.categories.ProductInformationItem;
 import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
@@ -67,7 +69,7 @@ public class ProductDetailsService {
     public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productDescription,
             String productPrice, MultipartFile productImage1, MultipartFile productImage2, MultipartFile productImage3,
             MultipartFile productImage4, MultipartFile productImage5, String category,
-            String subCategory, String subSubCategory, String authorization) {
+            String subCategory, String subSubCategory,ArrayList<String> items ,String authorization) {
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -131,7 +133,7 @@ public class ProductDetailsService {
                                     }
 
                                     ProductDetail productDetail = new ProductDetail();
-                                    productDetail.setmodelNumber(modelNumber);
+                                    productDetail.setModelNumber(modelNumber);
                                     productDetail.setProductDescription(productDescription);
                                     productDetail.setProductImage1(
                                             new Binary(BsonBinarySubType.BINARY, productImage1.getBytes()));
@@ -150,7 +152,10 @@ public class ProductDetailsService {
                                     productDetail.setSubSubCategory(subSubCategory);
                                     productDetail.setProductName(productName);
                                     productDetail.setOfferPrice("0");
-                                    productDetail.setProductInformation(new HashMap<>());
+                                    
+                                    productDetail.setSubItems(new ArrayList<>());
+                                    productDetail.setItems(items);
+                                    //productDetail.setProductInformation(new ArrayList<ProductInformationItem>());
                                     productDetailsDao.save(productDetail);
                                     responseMessage.setMessage("Model saved successfully");
                                     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
@@ -420,7 +425,7 @@ public class ProductDetailsService {
     
 
     //Add Product Information By Model Number
-    public ResponseEntity<?> addProductInformationByModelNumber(String authorization,String modelNumber,HashMap<String,HashMap<String,String>> productDetail){
+    public ResponseEntity<?> addProductInformationByModelNumber(String authorization,String modelNumber,ArrayList<HashMap<String,String>> subItems){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -429,7 +434,7 @@ public class ProductDetailsService {
                 responseMessage.setMessage("Only admin can add product information");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
-            if(productDetail==null){
+            if(subItems==null){
                 responseMessage.setMessage("Product Information is Empty");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
@@ -438,7 +443,15 @@ public class ProductDetailsService {
                 responseMessage.setMessage("Product Not Found!!");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
-            existingProductDetail.setProductInformation(productDetail);
+            //existingProductDetail.setProductInformation(productDetail);
+            try {
+                //existingProductDetail.setProductInformation(productDetail);    
+                existingProductDetail.setSubItems(subItems);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+            
             productDetailsDao.save(existingProductDetail);    
             responseMessage.setMessage("Product Information Saved Successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);

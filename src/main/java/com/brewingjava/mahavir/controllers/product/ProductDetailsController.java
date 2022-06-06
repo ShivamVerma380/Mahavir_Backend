@@ -1,10 +1,13 @@
 package com.brewingjava.mahavir.controllers.product;
 
+import com.brewingjava.mahavir.entities.categories.ProductInformationItem;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 import com.brewingjava.mahavir.services.product.ProductDetailsService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,9 +35,9 @@ public class ProductDetailsController {
     @PostMapping("/add-product")
     public ResponseEntity<?> addProductDetails(@RequestParam("modelNumber") String modelNumber,@RequestParam("productName") String productName, @RequestParam("productDesc") String productDescription,@RequestParam("productImage1") MultipartFile productImage1,
     @RequestParam("productImage2")MultipartFile productImage2,@RequestParam("productImage3") MultipartFile productImage3,@RequestParam("productImage4") MultipartFile productImage4,@RequestParam("productImage5") MultipartFile productImage5,
-    @RequestParam("productPrice") String productPrice ,@RequestParam("category") String category,@RequestParam("subCategory") String subCategory,@RequestParam("subSubCategory") String subSubCategory  ,@RequestHeader("Authorization") String authorization){
+    @RequestParam("productPrice") String productPrice ,@RequestParam("category") String category,@RequestParam("subCategory") String subCategory,@RequestParam("subSubCategory") String subSubCategory ,@RequestParam("Items") ArrayList<String> items, @RequestHeader("Authorization") String authorization){
         try {
-            return productDetailsService.addProductDetail(modelNumber,productName, productDescription, productPrice, productImage1, productImage2, productImage3, productImage4, productImage5, category, subCategory, subSubCategory, authorization);
+            return productDetailsService.addProductDetail(modelNumber,productName, productDescription, productPrice, productImage1, productImage2, productImage3, productImage4, productImage5, category, subCategory, subSubCategory,items, authorization);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
@@ -43,9 +46,18 @@ public class ProductDetailsController {
     }
 
     @PostMapping("/add-product-information/{ModelNumber}")
-    public ResponseEntity<?> addProductDetails(@RequestHeader("Authorization") String authorization,@PathVariable("ModelNumber")String modelNumber, @RequestBody HashMap<String,HashMap<String,String>> productDetail){
+    public ResponseEntity<?> addProductDetails(@RequestHeader("Authorization") String authorization,@PathVariable("ModelNumber")String modelNumber, @RequestBody ArrayList<HashMap<String,String>> subItems){
         try {
-            return productDetailsService.addProductInformationByModelNumber(authorization, modelNumber, productDetail);
+
+            
+                // System.out.println(productDetail.getitemName());
+                // System.out.println(productDetail.getSubitemNames());
+                //List<HashMap<String,String>> list = productDetail.get(i).getSubitemNames();
+                
+            
+            return productDetailsService.addProductInformationByModelNumber(authorization, modelNumber, subItems);
+
+            //return productDetailsService.addProductInformationByModelNumber(authorization, modelNumber, productDetail);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
