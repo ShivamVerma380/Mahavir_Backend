@@ -43,9 +43,9 @@ public class ProductDetailsController {
     }
 
     @PostMapping("/add-product-information/{ModelNumber}")
-    public ResponseEntity<?> addProductDetails(@PathVariable("ModelNumber")String modelNumber, @RequestBody HashMap<String,HashMap<String,String>> productDetail){
+    public ResponseEntity<?> addProductDetails(@RequestHeader("Authorization") String authorization,@PathVariable("ModelNumber")String modelNumber, @RequestBody HashMap<String,HashMap<String,String>> productDetail){
         try {
-            return ResponseEntity.ok().body(productDetail.get("Display"));
+            return productDetailsService.addProductInformationByModelNumber(authorization, modelNumber, productDetail);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

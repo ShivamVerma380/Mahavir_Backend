@@ -425,6 +425,36 @@ public class ProductDetailsService {
 
     
 
+    //Add Product Information By Model Number
+    public ResponseEntity<?> addProductInformationByModelNumber(String authorization,String modelNumber,HashMap<String,HashMap<String,String>> productDetail){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admin can add product information");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            if(productDetail==null){
+                responseMessage.setMessage("Product Information is Empty");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            ProductDetail existingProductDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+            if(existingProductDetail==null){
+                responseMessage.setMessage("Product Not Found!!");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            existingProductDetail.setProductInformation(productDetail);
+            productDetailsDao.save(existingProductDetail);    
+            responseMessage.setMessage("Product Information Saved Successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     
 
 }
