@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
+import com.brewingjava.mahavir.entities.product.ProductInformationItem;
+
 @Component
 @Document(collection = "categories_to_display")
 public class CategoriesToDisplay {
@@ -18,6 +20,8 @@ public class CategoriesToDisplay {
 
     private List<SubCategories> subCategories;
 
+    private List<ProductInformationItem> productInformationItemList;
+
     public CategoriesToDisplay() {
     }
 
@@ -28,10 +32,14 @@ public class CategoriesToDisplay {
 
     
 
-    public CategoriesToDisplay(String category, Binary category_image, List<SubCategories> subCategories) {
+    
+
+    public CategoriesToDisplay(String category, Binary category_image, List<SubCategories> subCategories,
+            List<ProductInformationItem> productInformationItemList) {
         this.category = category;
         this.category_image = category_image;
         this.subCategories = subCategories;
+        this.productInformationItemList = productInformationItemList;
     }
 
     public String getCategory() {
@@ -58,10 +66,22 @@ public class CategoriesToDisplay {
         this.subCategories = subCategories;
     }
 
+    
+
+    public List<ProductInformationItem> getProductInformationItemList() {
+        return productInformationItemList;
+    }
+
+    public void setProductInformationItemList(List<ProductInformationItem> productInformationItemList) {
+        this.productInformationItemList = productInformationItemList;
+    }
+
     @Override
     public String toString() {
-        return "CategoriesToDisplay [category=" + category + ", category_image=" + category_image + ", subCategories="
-                + subCategories + "]";
+        return "CategoriesToDisplay [category=" + category + ", category_image=" + category_image
+                + ", productInformationItemList=" + productInformationItemList + ", subCategories=" + subCategories
+                + "]";
     }
+
     
 }

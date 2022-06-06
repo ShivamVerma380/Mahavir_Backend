@@ -3,11 +3,14 @@ package com.brewingjava.mahavir.controllers.categories;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 import com.brewingjava.mahavir.services.categories.CategoriesToDisplayService;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,6 +96,19 @@ public class CategoriesToDisplayController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }   
+    }
+
+
+    @PostMapping("/product-information/{Category}")
+    public ResponseEntity<?> addProductListItemsForCategory(@RequestHeader("Authorization") String authorization,@PathVariable("Category") String category,@RequestParam("ItemName") String itemName,@RequestParam("SubItems") List<String> subItems){
+        try {
+            return categoriesToDisplayService.addProductInformationItems(authorization, category,itemName, subItems);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+
     }
     
 }

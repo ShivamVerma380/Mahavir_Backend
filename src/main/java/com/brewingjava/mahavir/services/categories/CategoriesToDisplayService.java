@@ -12,6 +12,7 @@ import com.brewingjava.mahavir.entities.admin.Admin;
 import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
+import com.brewingjava.mahavir.entities.product.ProductInformationItem;
 import com.brewingjava.mahavir.helper.JwtUtil;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 
@@ -59,6 +60,7 @@ public class CategoriesToDisplayService {
                 }
                 CategoriesToDisplay categoriesToDisplay = new CategoriesToDisplay(category,new Binary(BsonBinarySubType.BINARY,multipartFile.getBytes()));
                 categoriesToDisplay.setSubCategories(new ArrayList<>());
+                categoriesToDisplay.setProductInformationItemList(new ArrayList<>());
                 
                 categoriesToDisplayDao.save(categoriesToDisplay);
                 responseMessage.setMessage("Category added successfully");
@@ -358,6 +360,48 @@ public class CategoriesToDisplayService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
 
+    }
+
+
+    public ResponseEntity<?> addProductInformationItems(String authorization,String category,String itemName,List<String> subItemsList){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can add product Information list");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+            CategoriesToDisplay existingCategoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
+            if(existingCategoriesToDisplay==null){
+                responseMessage.setMessage("Category Not Found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            List<ProductInformationItem> existingProductInformationItems = existingCategoriesToDisplay.getProductInformationItemList();
+            for(int i=0;i<existingProductInformationItems.size();i++){
+                if(existingProductInformationItems.get(i).getitemName().equalsIgnoreCase(itemName)){
+                    responseMessage.setMessage("Item already exists");
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                }
+            }
+            
+            HashSet<String> hashSet = new HashSet<>();
+            for(int i=0;i<subItemsList.size();i++){
+                hashSet.add(subItemsList.get(i));
+            }
+            ProductInformationItem item = new ProductInformationItem(itemName, new ArrayList<>(hashSet));
+
+            existingProductInformationItems.add(item);
+            existingCategoriesToDisplay.setProductInformationItemList(existingProductInformationItems);
+            categoriesToDisplayDao.save(existingCategoriesToDisplay);
+            responseMessage.setMessage("Product Information Item list saved");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
     }
 
 }
