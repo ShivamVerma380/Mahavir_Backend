@@ -122,17 +122,9 @@ public class CategoriesToDisplayService {
         }
     }
 
-    public ResponseEntity<?> getSubCategories(String authorization,String category){
+    public ResponseEntity<?> getSubCategories(String category){
         try {
-            String token = authorization.substring(7);
-            String email = jwtUtil.extractUsername(token);
-            admin = adminDao.findByEmail(email);
-            if(admin==null){
-                responseMessage.setMessage("Only admin can access it");
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-
-            }
-
+            
             CategoriesToDisplay categoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
             if(categoriesToDisplay==null){
                 responseMessage.setMessage("Category not found");
@@ -298,16 +290,9 @@ public class CategoriesToDisplayService {
     }
 
 
-    public ResponseEntity<?> getSubSubCategories(String authorization,String category,String subCategory){
+    public ResponseEntity<?> getSubSubCategories(String category,String subCategory){
         try {
-            String token = authorization.substring(7);
-            String email = jwtUtil.extractUsername(token);
-            admin = adminDao.findByEmail(email);
-            if(admin==null){
-                responseMessage.setMessage("Only admin can access it");
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-
-            }
+            
 
             CategoriesToDisplay categoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
             if(categoriesToDisplay==null){

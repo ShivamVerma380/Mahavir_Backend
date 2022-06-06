@@ -397,15 +397,9 @@ public class ProductDetailsService {
     }
 
     
-    public ResponseEntity<?> getProductByModelNumber(String authorization,String modelNumber){
+    public ResponseEntity<?> getProductByModelNumber(String modelNumber){
         try {
-            String token = authorization.substring(7);
-            String email = jwtUtil.extractUsername(token);
-            admin = adminDao.findByEmail(email);
-            UserRequest userRequest = userDao.findByEmail(email);
-            if(admin==null && userRequest==null){
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
+            
 
             ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
             if(productDetail==null){

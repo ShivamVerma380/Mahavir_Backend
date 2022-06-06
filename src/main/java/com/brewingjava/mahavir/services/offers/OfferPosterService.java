@@ -5,12 +5,17 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import com.brewingjava.mahavir.daos.admin.AdminDao;
 import com.brewingjava.mahavir.daos.offers.OfferPosterDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
+import com.brewingjava.mahavir.entities.admin.Admin;
 import com.brewingjava.mahavir.entities.offers.OfferPosters;
 import com.brewingjava.mahavir.entities.offers.OfferTypeDetails;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
+import com.brewingjava.mahavir.helper.JwtUtil;
 import com.brewingjava.mahavir.helper.ResponseMessage;
+
+import lombok.AllArgsConstructor.AnyAnnotation;
 
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
@@ -38,10 +43,22 @@ public class OfferPosterService{
     @Autowired
     public OfferTypeDetails offerPricePercentage;
 
+    @Autowired
+    public JwtUtil jwtUtil;
+
+    @Autowired
+    public AdminDao adminDao;
     
 
-    public ResponseEntity<?> addOffer(MultipartFile multipartFile, List<String> modelNumber, String category){
+    public ResponseEntity<?> addOffer(String authorization,MultipartFile multipartFile, List<String> modelNumber, String category){
         try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            Admin admin = adminDao.findByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can add offers");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
             offerPosters.setImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
             HashSet<String> hashSet = new HashSet<>();
             for(int i=0;i<modelNumber.size();i++){

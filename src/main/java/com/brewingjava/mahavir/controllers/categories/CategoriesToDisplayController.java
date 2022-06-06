@@ -79,9 +79,9 @@ public class CategoriesToDisplayController {
     
 
     @GetMapping("/get-sub-categories")
-    public ResponseEntity<?> getSubCategories(@RequestHeader("Authorization") String authorization,@RequestParam("Category")String category){
+    public ResponseEntity<?> getSubCategories(@RequestParam("Category")String category){
         try {
-            return categoriesToDisplayService.getSubCategories(authorization, category);
+            return categoriesToDisplayService.getSubCategories( category);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
@@ -89,9 +89,9 @@ public class CategoriesToDisplayController {
     }
 
     @GetMapping("/get-sub-sub-categories")
-    public ResponseEntity<?> getSubSubCategories(@RequestHeader("Authorization")String authorization,@RequestParam("Category")String category,@RequestParam("SubCategory")String subCategory){
+    public ResponseEntity<?> getSubSubCategories(@RequestParam("Category")String category,@RequestParam("SubCategory")String subCategory){
         try {
-            return categoriesToDisplayService.getSubSubCategories(authorization, category, subCategory);
+            return categoriesToDisplayService.getSubSubCategories(category, subCategory);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);

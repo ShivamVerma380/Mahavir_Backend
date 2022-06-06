@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Component
 @Document(collection = "categories_to_display")
 public class CategoriesToDisplay {
@@ -16,8 +18,10 @@ public class CategoriesToDisplay {
 
     private Binary category_image;
 
+    
     private List<SubCategories> subCategories;
 
+    
     private List<ProductInformationItem> productInformationItemList;
 
     public CategoriesToDisplay() {

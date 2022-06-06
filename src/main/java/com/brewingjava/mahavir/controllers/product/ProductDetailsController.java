@@ -100,9 +100,9 @@ public class ProductDetailsController {
 
     @GetMapping("/get-products/{modelNumber}")
     @CrossOrigin(origins = "*")
-    public ResponseEntity<?> getProductByModelNumber(@RequestHeader("Authorization")String authorization,@PathVariable("modelNumber") String modelNumber){
+    public ResponseEntity<?> getProductByModelNumber(@PathVariable("modelNumber") String modelNumber){
         try {
-            return productDetailsService.getProductByModelNumber(authorization,modelNumber);
+            return productDetailsService.getProductByModelNumber(modelNumber);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

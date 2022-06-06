@@ -8,6 +8,8 @@ import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Document(collection = "products_details")
 public class ProductDetail {
     
@@ -45,6 +47,7 @@ public class ProductDetail {
         private String OfferPrice; 
 
 
+    
         private HashMap<String,HashMap<String,String>> productInformation;
 
         
@@ -80,176 +83,9 @@ public class ProductDetail {
         }
 
 
-
-
-
-
-
-        public String getProductName() {
-            return productName;
-        }
-
-        public void setProductName(String productName) {
-            this.productName = productName;
-        }
-
-        public String getmodelNumber() {
-            return modelNumber;
-        }
-
-
-
-        public void setmodelNumber(String modelNumber) {
-            this.modelNumber = modelNumber;
-        }
-
-
-
-        public String getProductDescription() {
-            return productDescription;
-        }
-
-
-
-        public void setProductDescription(String productDescription) {
-            this.productDescription = productDescription;
-        }
-
-
-
-        public Binary getProductImage1() {
-            return productImage1;
-        }
-
-
-
-        public void setProductImage1(Binary productImage1) {
-            this.productImage1 = productImage1;
-        }
-
-
-
-        public Binary getProductImage2() {
-            return productImage2;
-        }
-
-
-
-        public void setProductImage2(Binary productImage2) {
-            this.productImage2 = productImage2;
-        }
-
-
-
-        public Binary getProductImage3() {
-            return productImage3;
-        }
-
-
-
-        public void setProductImage3(Binary productImage3) {
-            this.productImage3 = productImage3;
-        }
-
-
-
-        public Binary getProductImage4() {
-            return productImage4;
-        }
-
-
-
-        public String getOfferPrice() {
-            return OfferPrice;
-        }
-
-
-
-        public void setOfferPrice(String offerPrice) {
-            OfferPrice = offerPrice;
-        }
-
-
-
-        public void setProductImage4(Binary productImage4) {
-            this.productImage4 = productImage4;
-        }
-
-
-
-        public Binary getProductImage5() {
-            return productImage5;
-        }
-
-
-
-        public void setProductImage5(Binary productImage5) {
-            this.productImage5 = productImage5;
-        }
-
-
-
-        public String getProductPrice() {
-            return productPrice;
-        }
-
-
-
-        public void setProductPrice(String productPrice) {
-            this.productPrice = productPrice;
-        }
-
-
-
-        public String getProductVideoLink() {
-            return productVideoLink;
-        }
-
-
-
-        public void setProductVideoLink(String productVideoLink) {
-            this.productVideoLink = productVideoLink;
-        }
-
-
-
-
-        public String getCategory() {
-            return category;
-        }
-
-
-
-        public void setCategory(String category) {
-            this.category = category;
-        }
-
-
-
-        public String getSubCategory() {
-            return subCategory;
-        }
-
-
-
-        public void setSubCategory(String subCategory) {
-            this.subCategory = subCategory;
-        }
-
-
-
-        public String getSubSubCategory() {
-            return subSubCategory;
-        }
-
-
-
-        public void setSubSubCategory(String subSubCategory) {
-            this.subSubCategory = subSubCategory;
-        }
-
-
         
+
+
 
 
         public String getModelNumber() {
@@ -264,6 +100,266 @@ public class ProductDetail {
 
         public void setModelNumber(String modelNumber) {
             this.modelNumber = modelNumber;
+        }
+
+
+
+
+
+
+
+        public String getProductName() {
+            return productName;
+        }
+
+
+
+
+
+
+
+        public void setProductName(String productName) {
+            this.productName = productName;
+        }
+
+
+
+
+
+
+
+        public String getProductDescription() {
+            return productDescription;
+        }
+
+
+
+
+
+
+
+        public void setProductDescription(String productDescription) {
+            this.productDescription = productDescription;
+        }
+
+
+
+
+
+
+
+        public Binary getProductImage1() {
+            return productImage1;
+        }
+
+
+
+
+
+
+
+        public void setProductImage1(Binary productImage1) {
+            this.productImage1 = productImage1;
+        }
+
+
+
+
+
+
+
+        public Binary getProductImage2() {
+            return productImage2;
+        }
+
+
+
+
+
+
+
+        public void setProductImage2(Binary productImage2) {
+            this.productImage2 = productImage2;
+        }
+
+
+
+
+
+
+
+        public Binary getProductImage3() {
+            return productImage3;
+        }
+
+
+
+
+
+
+
+        public void setProductImage3(Binary productImage3) {
+            this.productImage3 = productImage3;
+        }
+
+
+
+
+
+
+
+        public Binary getProductImage4() {
+            return productImage4;
+        }
+
+
+
+
+
+
+
+        public void setProductImage4(Binary productImage4) {
+            this.productImage4 = productImage4;
+        }
+
+
+
+
+
+
+
+        public Binary getProductImage5() {
+            return productImage5;
+        }
+
+
+
+
+
+
+
+        public void setProductImage5(Binary productImage5) {
+            this.productImage5 = productImage5;
+        }
+
+
+
+
+
+
+
+        public String getProductPrice() {
+            return productPrice;
+        }
+
+
+
+
+
+
+
+        public void setProductPrice(String productPrice) {
+            this.productPrice = productPrice;
+        }
+
+
+
+
+
+
+
+        public String getProductVideoLink() {
+            return productVideoLink;
+        }
+
+
+
+
+
+
+
+        public void setProductVideoLink(String productVideoLink) {
+            this.productVideoLink = productVideoLink;
+        }
+
+
+
+
+
+
+
+        public String getCategory() {
+            return category;
+        }
+
+
+
+
+
+
+
+        public void setCategory(String category) {
+            this.category = category;
+        }
+
+
+
+
+
+
+
+        public String getSubCategory() {
+            return subCategory;
+        }
+
+
+
+
+
+
+
+        public void setSubCategory(String subCategory) {
+            this.subCategory = subCategory;
+        }
+
+
+
+
+
+
+
+        public String getSubSubCategory() {
+            return subSubCategory;
+        }
+
+
+
+
+
+
+
+        public void setSubSubCategory(String subSubCategory) {
+            this.subSubCategory = subSubCategory;
+        }
+
+
+
+
+
+
+
+        public String getOfferPrice() {
+            return OfferPrice;
+        }
+
+
+
+
+
+
+
+        public void setOfferPrice(String offerPrice) {
+            OfferPrice = offerPrice;
         }
 
 
