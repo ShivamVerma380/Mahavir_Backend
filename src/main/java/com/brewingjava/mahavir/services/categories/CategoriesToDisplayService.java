@@ -10,9 +10,9 @@ import com.brewingjava.mahavir.daos.admin.AdminDao;
 import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
 import com.brewingjava.mahavir.entities.admin.Admin;
 import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
+import com.brewingjava.mahavir.entities.categories.ProductInformationItem;
 import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
-import com.brewingjava.mahavir.entities.product.ProductInformationItem;
 import com.brewingjava.mahavir.helper.JwtUtil;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 

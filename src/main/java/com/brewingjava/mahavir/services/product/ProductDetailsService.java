@@ -150,6 +150,7 @@ public class ProductDetailsService {
                                     productDetail.setSubSubCategory(subSubCategory);
                                     productDetail.setProductName(productName);
                                     productDetail.setOfferPrice("0");
+                                    productDetail.setProductInformation(new HashMap<>());
                                     productDetailsDao.save(productDetail);
                                     responseMessage.setMessage("Model saved successfully");
                                     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);

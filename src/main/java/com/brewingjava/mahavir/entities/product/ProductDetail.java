@@ -2,6 +2,8 @@ package com.brewingjava.mahavir.entities.product;
 
 
 
+import java.util.HashMap;
+
 import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -42,6 +44,9 @@ public class ProductDetail {
 
         private String OfferPrice; 
 
+
+        private HashMap<String,HashMap<String,String>> productInformation;
+
         
         public ProductDetail() {
         
@@ -49,10 +54,14 @@ public class ProductDetail {
 
        
 
+        
+
+
+
         public ProductDetail(String modelNumber, String productName, String productDescription, Binary productImage1,
                 Binary productImage2, Binary productImage3, Binary productImage4, Binary productImage5,
-                String productPrice, String productVideoLink,  String category, String subCategory,
-                String subSubCategory, String offerPrice) {
+                String productPrice, String productVideoLink, String category, String subCategory,
+                String subSubCategory, String offerPrice, HashMap<String, HashMap<String, String>> productInformation) {
             this.modelNumber = modelNumber;
             this.productName = productName;
             this.productDescription = productDescription;
@@ -67,7 +76,12 @@ public class ProductDetail {
             this.subCategory = subCategory;
             this.subSubCategory = subSubCategory;
             OfferPrice = offerPrice;
+            this.productInformation = productInformation;
         }
+
+
+
+
 
 
 
@@ -235,16 +249,66 @@ public class ProductDetail {
         }
 
 
+        
+
+
+        public String getModelNumber() {
+            return modelNumber;
+        }
+
+
+
+
+
+
+
+        public void setModelNumber(String modelNumber) {
+            this.modelNumber = modelNumber;
+        }
+
+
+
+
+
+
+
+        public HashMap<String, HashMap<String, String>> getProductInformation() {
+            return productInformation;
+        }
+
+
+
+
+
+
+
+        public void setProductInformation(HashMap<String, HashMap<String, String>> productInformation) {
+            this.productInformation = productInformation;
+        }
+
+
+
+
+
+
 
         @Override
         public String toString() {
             return "ProductDetail [OfferPrice=" + OfferPrice + ", category=" + category + ", modelNumber=" + modelNumber
                     + ", productDescription=" + productDescription + ", productImage1=" + productImage1
                     + ", productImage2=" + productImage2 + ", productImage3=" + productImage3 + ", productImage4="
-                    + productImage4 + ", productImage5=" + productImage5 + ", productName=" + productName
-                    + ", productPrice=" + productPrice  + ", productVideoLink="
+                    + productImage4 + ", productImage5=" + productImage5 + ", productInformation=" + productInformation
+                    + ", productName=" + productName + ", productPrice=" + productPrice + ", productVideoLink="
                     + productVideoLink + ", subCategory=" + subCategory + ", subSubCategory=" + subSubCategory + "]";
         }
+
+
+
+
+
+
+
+        
 
            
         

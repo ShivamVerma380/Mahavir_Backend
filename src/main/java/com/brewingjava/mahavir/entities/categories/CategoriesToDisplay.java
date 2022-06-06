@@ -7,8 +7,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
-import com.brewingjava.mahavir.entities.product.ProductInformationItem;
-
 @Component
 @Document(collection = "categories_to_display")
 public class CategoriesToDisplay {

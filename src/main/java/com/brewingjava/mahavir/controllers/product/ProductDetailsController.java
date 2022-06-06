@@ -1,7 +1,11 @@
 package com.brewingjava.mahavir.controllers.product;
 
+import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 import com.brewingjava.mahavir.services.product.ProductDetailsService;
+
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +35,17 @@ public class ProductDetailsController {
     @RequestParam("productPrice") String productPrice ,@RequestParam("category") String category,@RequestParam("subCategory") String subCategory,@RequestParam("subSubCategory") String subSubCategory  ,@RequestHeader("Authorization") String authorization){
         try {
             return productDetailsService.addProductDetail(modelNumber,productName, productDescription, productPrice, productImage1, productImage2, productImage3, productImage4, productImage5, category, subCategory, subSubCategory, authorization);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @PostMapping("/add-product-information/{ModelNumber}")
+    public ResponseEntity<?> addProductDetails(@PathVariable("ModelNumber")String modelNumber, @RequestBody HashMap<String,HashMap<String,String>> productDetail){
+        try {
+            return ResponseEntity.ok().body(productDetail.get("Display"));
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

@@ -1,4 +1,4 @@
-package com.brewingjava.mahavir.entities.product;
+package com.brewingjava.mahavir.entities.categories;
 
 import java.util.List;
 
