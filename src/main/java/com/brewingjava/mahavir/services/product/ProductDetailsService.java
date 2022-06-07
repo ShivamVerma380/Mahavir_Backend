@@ -67,18 +67,14 @@ public class ProductDetailsService {
     @Autowired
     public Review review;
     public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productDescription,
-            String productPrice, MultipartFile productImage1, MultipartFile productImage2, MultipartFile productImage3,
+            String productPrice,String offerPrice, MultipartFile productImage1, MultipartFile productImage2, MultipartFile productImage3,
             MultipartFile productImage4, MultipartFile productImage5, String category,
             String subCategory, String subSubCategory,ArrayList<String> items ,String authorization) {
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
             admin = adminDao.findByEmail(email);
-            ProductDetail productDetail1 = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
-            if(productDetail1!=null){
-                responseMessage.setMessage("Product already exists");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
-            }
+            
             if (admin != null) {
                 // Find category that matches with input category
                 CategoriesToDisplay existingCategoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
@@ -121,10 +117,6 @@ public class ProductDetailsService {
 
                                     } else {
                                         HashSet<String> product_name = existingSubSubCategories.get(j).getmodelNumber();
-                                        if(product_name.contains(modelNumber)){
-                                            responseMessage.setMessage("Model already exists");
-                                            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-                                        }
                                         product_name.add(modelNumber);
                                         existingSubSubCategories.get(j).setmodelNumber(product_name);
                                         existingSubCategories.get(i).setSubSubCategories(existingSubSubCategories);
@@ -151,7 +143,7 @@ public class ProductDetailsService {
                                     productDetail.setSubCategory(subCategory);
                                     productDetail.setSubSubCategory(subSubCategory);
                                     productDetail.setProductName(productName);
-                                    productDetail.setOfferPrice("0");
+                                    productDetail.setOfferPrice(offerPrice);
                                     
                                     productDetail.setSubItems(new ArrayList<>());
                                     productDetail.setItems(items);
