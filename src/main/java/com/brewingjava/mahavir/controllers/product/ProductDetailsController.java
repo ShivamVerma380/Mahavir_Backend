@@ -35,9 +35,9 @@ public class ProductDetailsController {
     @PostMapping("/add-product")
     public ResponseEntity<?> addProductDetails(@RequestParam("modelNumber") String modelNumber,@RequestParam("productName") String productName, @RequestParam("productDesc") String productDescription,@RequestParam("productImage1") MultipartFile productImage1,
     @RequestParam("productImage2")MultipartFile productImage2,@RequestParam("productImage3") MultipartFile productImage3,@RequestParam("productImage4") MultipartFile productImage4,@RequestParam("productImage5") MultipartFile productImage5,
-    @RequestParam("productPrice") String productPrice ,@RequestParam("offerPrice") String offerPrice,@RequestParam("category") String category,@RequestParam("Items") ArrayList<String> items, @RequestHeader("Authorization") String authorization){
+    @RequestParam("productPrice") String productPrice ,@RequestParam("offerPrice") String offerPrice,@RequestParam("category") String category, @RequestHeader("Authorization") String authorization){
         try {
-            return productDetailsService.addProductDetail(modelNumber,productName, productDescription, productPrice,offerPrice, productImage1, productImage2, productImage3, productImage4, productImage5, category,items, authorization);
+            return productDetailsService.addProductDetail(modelNumber,productName, productDescription, productPrice,offerPrice, productImage1, productImage2, productImage3, productImage4, productImage5, category, authorization);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

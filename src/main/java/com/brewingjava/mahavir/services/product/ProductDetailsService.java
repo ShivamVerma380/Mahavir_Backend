@@ -71,7 +71,7 @@ public class ProductDetailsService {
     public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productDescription,
             String productPrice,String offerPrice, MultipartFile productImage1, MultipartFile productImage2, MultipartFile productImage3,
             MultipartFile productImage4, MultipartFile productImage5, String category,
-            ArrayList<String> items ,String authorization) {
+            String authorization) {
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
