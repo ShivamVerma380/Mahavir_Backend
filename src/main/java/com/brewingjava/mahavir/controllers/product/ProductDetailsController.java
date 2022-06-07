@@ -57,7 +57,7 @@ public class ProductDetailsController {
     }   
 
     @PostMapping("/add-product-information/{ModelNumber}")
-    public ResponseEntity<?> addProductDetails(@RequestHeader("Authorization") String authorization,@PathVariable("ModelNumber")String modelNumber, @RequestBody ArrayList<HashMap<String,String>> subItems){
+    public ResponseEntity<?> addProductDetails(@RequestHeader("Authorization") String authorization,@PathVariable("ModelNumber")String modelNumber, @RequestBody HashMap<String,HashMap<String,String>> subItems){
         try {
 
             

@@ -44,18 +44,18 @@ public class ProductDetail {
         private String OfferPrice; 
 
 
-        private ArrayList<String> items;
-        private ArrayList<HashMap<String,String>> subItems;
+        private HashMap<String,HashMap<String,String>> productInformation;
 
         public ProductDetail() {
 
         }
 
+        
+
         public ProductDetail(String modelNumber, String productName, String productDescription, Binary productImage1,
                 Binary productImage2, Binary productImage3, Binary productImage4, Binary productImage5,
-                String productPrice, String productVideoLink, String category,
-                HashMap<String, String> subCategoryMap, String offerPrice, ArrayList<String> items,
-                ArrayList<HashMap<String, String>> subItems) {
+                String productPrice, String productVideoLink, String category, HashMap<String, String> subCategoryMap,
+                String offerPrice, HashMap<String, HashMap<String, String>> productInformation) {
             this.modelNumber = modelNumber;
             this.productName = productName;
             this.productDescription = productDescription;
@@ -69,9 +69,10 @@ public class ProductDetail {
             this.category = category;
             this.subCategoryMap = subCategoryMap;
             OfferPrice = offerPrice;
-            this.items = items;
-            this.subItems = subItems;
+            this.productInformation = productInformation;
         }
+
+
 
         public String getModelNumber() {
             return modelNumber;
@@ -177,34 +178,32 @@ public class ProductDetail {
         public void setOfferPrice(String offerPrice) {
             OfferPrice = offerPrice;
         }
-        public ArrayList<String> getItems() {
-            return items;
+
+
+        
+
+        public HashMap<String, HashMap<String, String>> getProductInformation() {
+            return productInformation;
         }
 
-        public void setItems(ArrayList<String> items) {
-            this.items = items;
-        }
 
-        public ArrayList<HashMap<String, String>> getSubItems() {
-            return subItems;
-        }
 
-        public void setSubItems(ArrayList<HashMap<String, String>> subItems) {
-            this.subItems = subItems;
+        public void setProductInformation(HashMap<String, HashMap<String, String>> productInformation) {
+            this.productInformation = productInformation;
         }
 
 
 
         @Override
         public String toString() {
-            return "ProductDetail [OfferPrice=" + OfferPrice + ", category=" + category + ", items=" + items
-                    + ", modelNumber=" + modelNumber + ", productDescription=" + productDescription + ", productImage1="
-                    + productImage1 + ", productImage2=" + productImage2 + ", productImage3=" + productImage3
-                    + ", productImage4=" + productImage4 + ", productImage5=" + productImage5 + ", productName="
-                    + productName + ", productPrice=" + productPrice + ", productVideoLink=" + productVideoLink
-                    + ", subCategoryMap=" + subCategoryMap + ", subItems=" + subItems + "]";
+            return "ProductDetail [OfferPrice=" + OfferPrice + ", category=" + category + ", modelNumber=" + modelNumber
+                    + ", productDescription=" + productDescription + ", productImage1=" + productImage1
+                    + ", productImage2=" + productImage2 + ", productImage3=" + productImage3 + ", productImage4="
+                    + productImage4 + ", productImage5=" + productImage5 + ", productInformation=" + productInformation
+                    + ", productName=" + productName + ", productPrice=" + productPrice + ", productVideoLink="
+                    + productVideoLink + ", subCategoryMap=" + subCategoryMap + "]";
         }
-
+        
         
 
         

@@ -104,8 +104,7 @@ public class ProductDetailsService {
             productDetail.setProductName(productName);
             productDetail.setOfferPrice(offerPrice);
             
-            productDetail.setSubItems(new ArrayList<>());
-            productDetail.setItems(items);
+            productDetail.setProductInformation(new HashMap<>());
             productDetail.setSubCategoryMap(new HashMap<String,String>());
             productDetailsDao.save(productDetail);
             responseMessage.setMessage("Model saved successfully");
@@ -116,7 +115,6 @@ public class ProductDetailsService {
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
-        
     }
 
     public ResponseEntity<?> addProductSubCategories(String authorization,String modelNumber,HashMap<String,String> subCategoriesMap){
@@ -417,7 +415,7 @@ public class ProductDetailsService {
 
     // Add Product Information By Model Number
     public ResponseEntity<?> addProductInformationByModelNumber(String authorization, String modelNumber,
-            ArrayList<HashMap<String, String>> subItems) {
+            HashMap<String, HashMap<String,String>> productInformation) {
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -426,7 +424,7 @@ public class ProductDetailsService {
                 responseMessage.setMessage("Only admin can add product information");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
-            if (subItems == null) {
+            if (productInformation == null) {
                 responseMessage.setMessage("Product Information is Empty");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
@@ -438,7 +436,8 @@ public class ProductDetailsService {
             // existingProductDetail.setProductInformation(productDetail);
             try {
                 // existingProductDetail.setProductInformation(productDetail);
-                existingProductDetail.setSubItems(subItems);
+                //existingProductDetail.setSubItems(subItems);
+                existingProductDetail.setProductInformation(productInformation);
             } catch (Exception e) {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
