@@ -14,10 +14,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Document(collection = "products_details")
 public class ProductDetail {
-    
         
         //private List<String> modelNumber; //can keep this in inventory management database?
-
         @Id
         private String modelNumber;
         
@@ -41,10 +39,8 @@ public class ProductDetail {
         
         private String category;
 
-        private String subCategory;
-
-        private String subSubCategory;
-
+        private HashMap<String,String> subCategoryMap;  // SubCat, SubSubCat
+        
         private String OfferPrice; 
 
 
@@ -55,13 +51,10 @@ public class ProductDetail {
 
         }
 
-        
-
-        
         public ProductDetail(String modelNumber, String productName, String productDescription, Binary productImage1,
                 Binary productImage2, Binary productImage3, Binary productImage4, Binary productImage5,
-                String productPrice, String productVideoLink, String category, String subCategory,
-                String subSubCategory, String offerPrice, ArrayList<String> items,
+                String productPrice, String productVideoLink, String category,
+                HashMap<String, String> subCategoryMap, String offerPrice, ArrayList<String> items,
                 ArrayList<HashMap<String, String>> subItems) {
             this.modelNumber = modelNumber;
             this.productName = productName;
@@ -74,15 +67,11 @@ public class ProductDetail {
             this.productPrice = productPrice;
             this.productVideoLink = productVideoLink;
             this.category = category;
-            this.subCategory = subCategory;
-            this.subSubCategory = subSubCategory;
+            this.subCategoryMap = subCategoryMap;
             OfferPrice = offerPrice;
             this.items = items;
             this.subItems = subItems;
         }
-
-
-
 
         public String getModelNumber() {
             return modelNumber;
@@ -173,20 +162,12 @@ public class ProductDetail {
             this.category = category;
         }
 
-        public String getSubCategory() {
-            return subCategory;
+        public HashMap<String, String> getSubCategoryMap() {
+            return subCategoryMap;
         }
 
-        public void setSubCategory(String subCategory) {
-            this.subCategory = subCategory;
-        }
-
-        public String getSubSubCategory() {
-            return subSubCategory;
-        }
-
-        public void setSubSubCategory(String subSubCategory) {
-            this.subSubCategory = subSubCategory;
+        public void setSubCategoryMap(HashMap<String, String> subCategoryMap) {
+            this.subCategoryMap = subCategoryMap;
         }
 
         public String getOfferPrice() {
@@ -212,6 +193,8 @@ public class ProductDetail {
             this.subItems = subItems;
         }
 
+
+
         @Override
         public String toString() {
             return "ProductDetail [OfferPrice=" + OfferPrice + ", category=" + category + ", items=" + items
@@ -219,9 +202,10 @@ public class ProductDetail {
                     + productImage1 + ", productImage2=" + productImage2 + ", productImage3=" + productImage3
                     + ", productImage4=" + productImage4 + ", productImage5=" + productImage5 + ", productName="
                     + productName + ", productPrice=" + productPrice + ", productVideoLink=" + productVideoLink
-                    + ", subCategory=" + subCategory + ", subItems=" + subItems + ", subSubCategory=" + subSubCategory
-                    + "]";
+                    + ", subCategoryMap=" + subCategoryMap + ", subItems=" + subItems + "]";
         }
+
+        
 
         
 }
