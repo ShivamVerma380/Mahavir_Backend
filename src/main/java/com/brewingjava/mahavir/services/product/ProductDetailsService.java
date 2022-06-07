@@ -173,25 +173,55 @@ public class ProductDetailsService {
         }
     }
 
-    // public ResponseEntity<?> removeProductDetails(String authorization,String modelNumber){
-    //     try {
-    //         String token = authorization.substring(7);
-    //         String email = jwtUtil.extractUsername(token);
-    //         admin = adminDao.findByEmail(email);
-    //         if(admin==null){
-    //             responseMessage.setMessage("Only admins can remove product");
-    //             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-    //         }
-    //         ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
-    //         CategoriesToDisplay categoriesToDisplay = categoriesToDisplayDao.findBycategory(productDetail.getCategory());
+    public ResponseEntity<?> removeProductDetails(String authorization,String modelNumber){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can remove product");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+            CategoriesToDisplay categoriesToDisplay = categoriesToDisplayDao.findBycategory(productDetail.getCategory());
+            if(categoriesToDisplay==null){
+                responseMessage.setMessage("Sorry!! No Category Found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
 
+            HashMap<String,String> subCategoriesMap = productDetail.getSubCategoryMap();
+            
+            List<SubCategories> subCategories = categoriesToDisplay.getSubCategories();
+            
+            for(int i=0;i<subCategories.size();i++){
+                if(subCategoriesMap.containsKey(subCategories.get(i).getSubCategoryName())){
+                    List<SubSubCategories> subSubCategories = subCategories.get(i).getSubSubCategories();
+                    for(int j=0;j<subSubCategories.size();j++){
+                        if(subCategoriesMap.get(subCategories.get(i).getSubCategoryName()).equals(subSubCategories.get(j).getSubSubCategoryName())){
+                            SubSubCategories updatedSubSubCategories = subSubCategories.get(j);
+                            HashSet<String> updatedModelNumbers = updatedSubSubCategories.getmodelNumber();
+                            updatedModelNumbers.remove(modelNumber);
+                            subSubCategories.get(j).setmodelNumber(updatedModelNumbers);
+                            subCategories.get(i).setSubSubCategories(subSubCategories);
+                            break;
+                        }
+                    }
+                }
+            }
+            categoriesToDisplay.setSubCategories(subCategories);
+            categoriesToDisplayDao.save(categoriesToDisplay);
 
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         responseMessage.setMessage(e.getMessage());
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-    //     }
-    // }
+            productDetailsDao.deleteById(modelNumber);
+
+            responseMessage.setMessage("Product Removed Successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 
 
     // public ResponseEntity<?> removeProductDetails(String authorization, String modelNumber) {

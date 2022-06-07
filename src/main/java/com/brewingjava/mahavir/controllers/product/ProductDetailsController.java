@@ -98,16 +98,16 @@ public class ProductDetailsController {
         }
     }
 
-    // @DeleteMapping("/remove-product")
-    // public ResponseEntity<?> removeProductDetails(@RequestHeader("Authorization") String authorization,@RequestParam("productName")String productName){
-    //     try {
-    //         return productDetailsService.removeProductDetails(authorization, productName);
+    @DeleteMapping("/remove-product/{modelNumber}")
+    public ResponseEntity<?> removeProductDetails(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber){
+        try {
+            return productDetailsService.removeProductDetails(authorization, modelNumber);
             
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-    //     }
-    // }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 
     @GetMapping("/get-products")
     public ResponseEntity<?> getAllProducts(){
