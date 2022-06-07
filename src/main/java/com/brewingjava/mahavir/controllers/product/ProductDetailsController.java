@@ -133,6 +133,17 @@ public class ProductDetailsController {
         }
     }
 
+    @GetMapping("/get-products-by-subCategory/{Category}/{SubCategory}/{SubSubCategory}")
+    public ResponseEntity<?> getProductBySubCategory(@PathVariable("Category") String category,@PathVariable("SubCategory")String subCategory,@PathVariable("SubSubCategory") String subSubCategory){
+        try {
+            return productDetailsService.getProductsBySubCategory(category, subCategory, subSubCategory);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 
 }
 

@@ -223,93 +223,48 @@ public class ProductDetailsService {
         }
     }
 
+    public ResponseEntity<?> getProductsBySubCategory(String category,String subCategory,String subSubCategory){
+        try {
+            CategoriesToDisplay existingCategoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
+            if(existingCategoriesToDisplay==null){
+                responseMessage.setMessage("Category Not Found!!");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            List<SubCategories> subCategories = existingCategoriesToDisplay.getSubCategories();
+            
+            for(int i=0;i<subCategories.size();i++){
+                if(subCategories.get(i).getSubCategoryName().equals(subCategory)){
+                    List<SubSubCategories> subSubCategories = subCategories.get(i).getSubSubCategories();
+                    for(int j=0;j<subSubCategories.size();j++){
+                        if(subSubCategories.get(j).getSubSubCategoryName().equals(subSubCategory)){
+                            HashSet<String> modelNumbers = subSubCategories.get(j).getmodelNumber();
+                            List<ProductDetail> productDetails = new ArrayList<>();
+                            Iterator modelNumbersIterator = modelNumbers.iterator();
+                            while(modelNumbersIterator.hasNext()){
+                                try {
+                                    ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber((String)modelNumbersIterator.next());
+                                    productDetails.add(productDetail);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            responseMessage.setMessage("Products fetched successfully");
+                            return ResponseEntity.status(HttpStatus.OK).body(productDetails);
+                        }
+                    }
+                    responseMessage.setMessage("SubSubCategory not found!!");
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                }
+            }
+            responseMessage.setMessage("SubCategory Not Found");
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
 
-    // public ResponseEntity<?> removeProductDetails(String authorization, String modelNumber) {
-    //     try {
-    //         String token = authorization.substring(7);
-    //         String email = jwtUtil.extractUsername(token);
-    //         admin = adminDao.findByEmail(email);
-    //         if (admin != null) {
-    //             // Remove product from Product database
-    //             ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
-    //             if (productDetail != null) {
-    //                 try {
-    //                     productDetailsDao.delete(productDetail);
-    //                     // Remove product Name from subSubCategory arraylist
-    //                     String category = productDetail.getCategory();
-    //                     String subCategory = productDetail.getSubCategory();
-    //                     String subSubCategory = productDetail.getSubSubCategory();
-
-    //                     CategoriesToDisplay existingCategory = categoriesToDisplayDao.findBycategory(category);
-    //                     List<SubCategories> existingSubCategories = existingCategory.getSubCategories();
-    //                     int i = 0;
-    //                     ListIterator<SubCategories> listIterator = existingSubCategories.listIterator();
-    //                     if (listIterator == null) {
-    //                         responseMessage.setMessage("Product Not deleted");
-    //                         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
-    //                     }
-    //                     while (listIterator.hasNext()) {
-    //                         if (existingSubCategories.get(i).getSubCategoryName().equals(subCategory)) {
-    //                             List<SubSubCategories> existingSubSubCategories = existingSubCategories.get(i)
-    //                                     .getSubSubCategories();
-    //                             ListIterator<SubSubCategories> ssCListIterator = existingSubSubCategories
-    //                                     .listIterator();
-    //                             int j = 0;
-    //                             while (ssCListIterator.hasNext()) {
-    //                                 if (existingSubSubCategories.get(j).getSubSubCategoryName()
-    //                                         .equals(subSubCategory)) {
-    //                                     System.out.println("Inside subSubCategories");
-    //                                     HashSet<String> existingmodelNumber = existingSubSubCategories.get(j)
-    //                                             .getmodelNumber();
-    //                                     existingmodelNumber.remove(modelNumber);
-    //                                     System.out.println("Removed from hashset");
-    //                                     // SubSubCategories new_SubSubCategories = new SubSubCategories();
-    //                                     // new_SubSubCategories.setSubSubCategoryName(subSubCategory);
-    //                                     // new_SubSubCategories.setmodelNumber(existingmodelNumber);
-
-    //                                     existingSubSubCategories.get(j).setmodelNumber(existingmodelNumber);
-    //                                     System.out.println("Product Name set");
-    //                                     existingSubCategories.get(i).setSubSubCategories(existingSubSubCategories);
-    //                                     System.out.println("SubSub Categories set");
-    //                                     existingCategory.setSubCategories(existingSubCategories);
-    //                                     System.out.println("Categories set");
-    //                                     categoriesToDisplayDao.save(existingCategory);
-    //                                     System.out.println("Saved In Dao");
-    //                                     responseMessage.setMessage("Product Removed successfully");
-    //                                     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-
-    //                                 }
-    //                                 j++;
-    //                             }
-    //                         }
-
-    //                         i++;
-    //                     }
-    //                     responseMessage.setMessage("Product Not deleted");
-    //                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
-    //                 } catch (Exception e) {
-    //                     e.printStackTrace();
-    //                     responseMessage.setMessage(e.getMessage());
-    //                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-    //                 }
-
-    //             } else {
-    //                 responseMessage.setMessage("Product does not exist");
-    //                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
-    //             }
-
-    //             // Also remove from subSubCategory
-
-    //         } else {
-    //             responseMessage.setMessage("You do not have permission to remove a product");
-    //             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-    //         }
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         responseMessage.setMessage(e.getMessage());
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-    //     }
-    // }
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 
     public ResponseEntity<?> addReview(String modelNumber, String rating, String review, String authorization) {
         try {
