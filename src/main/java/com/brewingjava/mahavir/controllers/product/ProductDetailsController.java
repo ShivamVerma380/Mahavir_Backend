@@ -4,6 +4,7 @@ import com.brewingjava.mahavir.entities.categories.ProductInformationItem;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 import com.brewingjava.mahavir.services.product.ProductDetailsService;
+import com.brewingjava.mahavir.services.product.ProductVariantService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +32,9 @@ public class ProductDetailsController {
 
     @Autowired
     public ProductDetailsService productDetailsService;
+
+    @Autowired
+    public ProductVariantService productVariantService;
     
     @PostMapping("/add-product")
     public ResponseEntity<?> addProductDetails(@RequestParam("modelNumber") String modelNumber,@RequestParam("productName") String productName, @RequestParam("productHighlights") String productHighlights,@RequestParam("productImage1") MultipartFile productImage1,
@@ -88,8 +92,44 @@ public class ProductDetailsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
-    
 
+    @PostMapping("/add-product-variant-factor/{ModelNumber}")
+    public ResponseEntity<?> addProductVariantFactor(@RequestHeader("Authorization")String authorization,@RequestParam("FactorName") String factorName,@PathVariable("ModelNumber")String ModelNumber){
+        try {
+            return productVariantService.addProductVariantFactor(authorization, factorName, ModelNumber);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+    
+    //ModelNumber,FactorName,  keytoChange => non img values
+    @PostMapping("/add-product-variant-factor/{ModelNumber}/{FactorName}")
+    public ResponseEntity<?> addNonImgFactorsAffected(@RequestHeader("Authorization")String authorization,@PathVariable("FactorName") String factorName,@PathVariable("ModelNumber")String modelNumber,@RequestBody HashMap<String,String> nonImgFactors){
+        try {
+
+            return productVariantService.addNonImgFactorsAffected(authorization, factorName, modelNumber, nonImgFactors);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @PostMapping("/add-product-variant-factor/image/{ModelNumber}/{FactorName}")
+    public ResponseEntity<?> addImgFactorsAffected(@RequestHeader("Authorization")String authorization,@PathVariable("FactorName") String factorName,@PathVariable("ModelNumber")String modelNumber,@RequestParam("ProductImage1") MultipartFile image1,@RequestParam("ProductImage2") MultipartFile image2,@RequestParam("ProductImage3") MultipartFile image3,@RequestParam("ProductImage4") MultipartFile image4,@RequestParam("ProductImage5") MultipartFile image5){
+        try {
+
+            return productVariantService.addImgFactorsAffected(authorization, factorName, modelNumber, image1,image2,image3,image4,image5);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 
     @GetMapping("/get-reviews/{modelNumber}")
     public ResponseEntity<?> getReviews(@PathVariable("modelNumber") String modelNumber){

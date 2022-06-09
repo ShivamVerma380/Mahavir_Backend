@@ -4,6 +4,7 @@ package com.brewingjava.mahavir.entities.product;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
@@ -46,20 +47,19 @@ public class ProductDetail {
 
         private HashMap<String,HashMap<String,String>> productInformation;
 
-        private HashMap<String,ArrayList<String>> variants;
+        private HashMap<String,ArrayList<String>> variants;				
+
+        private List<ProductVariants> ProductVariants; // store product variants
 
         public ProductDetail() {
-
         }
-
-        
-
 
         public ProductDetail(String modelNumber, String productName, String productHighlights, Binary productImage1,
                 Binary productImage2, Binary productImage3, Binary productImage4, Binary productImage5,
                 String productPrice, String productVideoLink, String category, HashMap<String, String> subCategoryMap,
                 String offerPrice, HashMap<String, HashMap<String, String>> productInformation,
-                HashMap<String, ArrayList<String>> variants) {
+                HashMap<String, ArrayList<String>> variants,
+                List<com.brewingjava.mahavir.entities.product.ProductVariants> productVariants) {
             this.modelNumber = modelNumber;
             this.productName = productName;
             this.productHighlights = productHighlights;
@@ -75,10 +75,8 @@ public class ProductDetail {
             OfferPrice = offerPrice;
             this.productInformation = productInformation;
             this.variants = variants;
+            ProductVariants = productVariants;
         }
-
-
-
 
         public String getModelNumber() {
             return modelNumber;
@@ -193,14 +191,11 @@ public class ProductDetail {
         }
 
 
-
         public void setProductInformation(HashMap<String, HashMap<String, String>> productInformation) {
             this.productInformation = productInformation;
         }
 
         
-
-
         public String getProductHighlights() {
             return productHighlights;
         }
@@ -226,23 +221,27 @@ public class ProductDetail {
             this.variants = variants;
         }
 
+        
 
 
+
+        public List<ProductVariants> getProductVariants() {
+            return ProductVariants;
+        }
+
+        public void setProductVariants(List<ProductVariants> productVariants) {
+            ProductVariants = productVariants;
+        }
 
         @Override
         public String toString() {
-            return "ProductDetail [OfferPrice=" + OfferPrice + ", category=" + category + ", modelNumber=" + modelNumber
-                    + ", productHighlights=" + productHighlights + ", productImage1=" + productImage1
-                    + ", productImage2=" + productImage2 + ", productImage3=" + productImage3 + ", productImage4="
-                    + productImage4 + ", productImage5=" + productImage5 + ", productInformation=" + productInformation
-                    + ", productName=" + productName + ", productPrice=" + productPrice + ", productVideoLink="
-                    + productVideoLink + ", subCategoryMap=" + subCategoryMap + ", variants=" + variants + "]";
+            return "ProductDetail [OfferPrice=" + OfferPrice + ", ProductVariants=" + ProductVariants + ", category="
+                    + category + ", modelNumber=" + modelNumber + ", productHighlights=" + productHighlights
+                    + ", productImage1=" + productImage1 + ", productImage2=" + productImage2 + ", productImage3="
+                    + productImage3 + ", productImage4=" + productImage4 + ", productImage5=" + productImage5
+                    + ", productInformation=" + productInformation + ", productName=" + productName + ", productPrice="
+                    + productPrice + ", productVideoLink=" + productVideoLink + ", subCategoryMap=" + subCategoryMap
+                    + ", variants=" + variants + "]";
         }
-
-
-        
-        
-        
-
         
 }

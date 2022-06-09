@@ -106,6 +106,7 @@ public class ProductDetailsService {
             
             productDetail.setProductInformation(new HashMap<>());
             productDetail.setSubCategoryMap(new HashMap<String,String>());
+            productDetail.setProductVariants(new ArrayList<>());
             productDetail.setVariants(new HashMap<>());
             productDetailsDao.save(productDetail);
             responseMessage.setMessage("Model saved successfully");
