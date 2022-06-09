@@ -21,7 +21,7 @@ public class ProductDetail {
         
         private String productName;
 
-        private String productDescription;
+        private String productHighlights;
         
         private Binary productImage1;
         
@@ -52,13 +52,13 @@ public class ProductDetail {
 
         
 
-        public ProductDetail(String modelNumber, String productName, String productDescription, Binary productImage1,
+        public ProductDetail(String modelNumber, String productName, String productHighlights, Binary productImage1,
                 Binary productImage2, Binary productImage3, Binary productImage4, Binary productImage5,
                 String productPrice, String productVideoLink, String category, HashMap<String, String> subCategoryMap,
                 String offerPrice, HashMap<String, HashMap<String, String>> productInformation) {
             this.modelNumber = modelNumber;
             this.productName = productName;
-            this.productDescription = productDescription;
+            this.productHighlights = productHighlights;
             this.productImage1 = productImage1;
             this.productImage2 = productImage2;
             this.productImage3 = productImage3;
@@ -90,12 +90,12 @@ public class ProductDetail {
             this.productName = productName;
         }
 
-        public String getProductDescription() {
-            return productDescription;
+        public String getproductHighlights() {
+            return productHighlights;
         }
 
-        public void setProductDescription(String productDescription) {
-            this.productDescription = productDescription;
+        public void setproductHighlights(String productHighlights) {
+            this.productHighlights = productHighlights;
         }
 
         public Binary getProductImage1() {
@@ -197,7 +197,7 @@ public class ProductDetail {
         @Override
         public String toString() {
             return "ProductDetail [OfferPrice=" + OfferPrice + ", category=" + category + ", modelNumber=" + modelNumber
-                    + ", productDescription=" + productDescription + ", productImage1=" + productImage1
+                    + ", productHighlights=" + productHighlights + ", productImage1=" + productImage1
                     + ", productImage2=" + productImage2 + ", productImage3=" + productImage3 + ", productImage4="
                     + productImage4 + ", productImage5=" + productImage5 + ", productInformation=" + productInformation
                     + ", productName=" + productName + ", productPrice=" + productPrice + ", productVideoLink="

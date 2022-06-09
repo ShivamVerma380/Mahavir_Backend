@@ -4,15 +4,31 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Review {
-    String review;
-    String rating;
+    
+    public String reviewer_name;
+
+    public String review;
+
+    public String date;
+
+    public long rating;
+
+    public Review(String reviewer_name, String review, String date, long rating) {
+        this.reviewer_name = reviewer_name;
+        this.review = review;
+        this.date = date;
+        this.rating = rating;
+    }
 
     public Review() {
     }
 
-    public Review(String review, String rating) {
-        this.review = review;
-        this.rating = rating;
+    public String getReviewer_name() {
+        return reviewer_name;
+    }
+
+    public void setReviewer_name(String reviewer_name) {
+        this.reviewer_name = reviewer_name;
     }
 
     public String getReview() {
@@ -23,17 +39,25 @@ public class Review {
         this.review = review;
     }
 
-    public String getRating() {
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public long getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(long rating) {
         this.rating = rating;
     }
 
     @Override
     public String toString() {
-        return "Review [rating=" + rating + ", review=" + review + "]";
+        return "Review [date=" + date + ", rating=" + rating + ", review=" + review + ", reviewer_name=" + reviewer_name
+                + "]";
     }
-    
 }

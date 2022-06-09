@@ -68,7 +68,7 @@ public class ProductDetailsService {
     @Autowired
     public Review review;
 
-    public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productDescription,
+    public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productHighlights,
             String productPrice,String offerPrice, MultipartFile productImage1, MultipartFile productImage2, MultipartFile productImage3,
             MultipartFile productImage4, MultipartFile productImage5, String category,
             String authorization) {
@@ -87,7 +87,7 @@ public class ProductDetailsService {
             }
             ProductDetail productDetail = new ProductDetail();
             productDetail.setModelNumber(modelNumber);
-            productDetail.setProductDescription(productDescription);
+            productDetail.setproductHighlights(productHighlights);
             productDetail.setProductImage1(
                     new Binary(BsonBinarySubType.BINARY, productImage1.getBytes()));
             productDetail.setProductImage2(
@@ -263,7 +263,7 @@ public class ProductDetailsService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
-
+/*
     public ResponseEntity<?> addReview(String modelNumber, String rating, String review, String authorization) {
         try {
             String token = authorization.substring(7);
@@ -370,18 +370,19 @@ public class ProductDetailsService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+    */
 
-    public ResponseEntity<?> getReviewsByModelNumber(String modelNumber) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(productReviewsDao.findProductReviewsBymodelNumber(modelNumber));
+    // public ResponseEntity<?> getReviewsByModelNumber(String modelNumber) {
+    //     try {
+    //         return ResponseEntity.status(HttpStatus.OK)
+    //                 .body(productReviewsDao.findProductReviewsBymodelNumber(modelNumber));
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         responseMessage.setMessage(e.getMessage());
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+    //     }
+    // }
 
     public ResponseEntity<?> getAllProducts() {
         try {

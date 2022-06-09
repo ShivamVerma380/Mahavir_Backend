@@ -33,11 +33,11 @@ public class ProductDetailsController {
     public ProductDetailsService productDetailsService;
     
     @PostMapping("/add-product")
-    public ResponseEntity<?> addProductDetails(@RequestParam("modelNumber") String modelNumber,@RequestParam("productName") String productName, @RequestParam("productDesc") String productDescription,@RequestParam("productImage1") MultipartFile productImage1,
+    public ResponseEntity<?> addProductDetails(@RequestParam("modelNumber") String modelNumber,@RequestParam("productName") String productName, @RequestParam("productHighlights") String productHighlights,@RequestParam("productImage1") MultipartFile productImage1,
     @RequestParam("productImage2")MultipartFile productImage2,@RequestParam("productImage3") MultipartFile productImage3,@RequestParam("productImage4") MultipartFile productImage4,@RequestParam("productImage5") MultipartFile productImage5,
     @RequestParam("productPrice") String productPrice ,@RequestParam("offerPrice") String offerPrice,@RequestParam("category") String category, @RequestHeader("Authorization") String authorization){
         try {
-            return productDetailsService.addProductDetail(modelNumber,productName, productDescription, productPrice,offerPrice, productImage1, productImage2, productImage3, productImage4, productImage5, category, authorization);
+            return productDetailsService.addProductDetail(modelNumber,productName, productHighlights, productPrice,offerPrice, productImage1, productImage2, productImage3, productImage4, productImage5, category, authorization);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
@@ -59,33 +59,26 @@ public class ProductDetailsController {
     @PostMapping("/add-product-information/{ModelNumber}")
     public ResponseEntity<?> addProductDetails(@RequestHeader("Authorization") String authorization,@PathVariable("ModelNumber")String modelNumber, @RequestBody HashMap<String,HashMap<String,String>> subItems){
         try {
-
-            
-                // System.out.println(productDetail.getitemName());
-                // System.out.println(productDetail.getSubitemNames());
-                //List<HashMap<String,String>> list = productDetail.get(i).getSubitemNames();
-                
-            
             return productDetailsService.addProductInformationByModelNumber(authorization, modelNumber, subItems);
-
-            //return productDetailsService.addProductInformationByModelNumber(authorization, modelNumber, productDetail);
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
 
-    @PostMapping("/add-review")
-    public ResponseEntity<?> addReview(@RequestParam("modelNumber") String modelNumber,@RequestParam("rating")String rating, @RequestParam("review") String review, @RequestHeader("Authorization") String authorization){
+    @PostMapping("/add-review/{modelNumber}")
+    public ResponseEntity<?> addReview(@PathVariable("modelNumber") String modelNumber, @RequestHeader("Authorization") String authorization ,@RequestParam("Review")String review,@RequestParam("Rating") long rating,@RequestParam("Date") String date){
         try {
-            return productDetailsService.addReview(modelNumber,rating, review, authorization);
+            return productDetailsService.addReview(authorization,modelNumber,rating, review, date);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+    
+/*
 
     @GetMapping("/get-reviews/{modelNumber}")
     public ResponseEntity<?> getReviews(@PathVariable("modelNumber") String modelNumber){
@@ -97,6 +90,7 @@ public class ProductDetailsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+     */
 
     @DeleteMapping("/remove-product/{modelNumber}")
     public ResponseEntity<?> removeProductDetails(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber){
@@ -143,6 +137,8 @@ public class ProductDetailsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+
 
 
 }
