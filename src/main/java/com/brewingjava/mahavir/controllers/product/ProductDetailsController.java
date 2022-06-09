@@ -189,6 +189,18 @@ public class ProductDetailsController {
         }
     }
 
+    @GetMapping("/get-products/{modelNumber}/{factorName}")
+    public ResponseEntity<?> getProductDetailsByFactor(@PathVariable("modelNumber")String modelNumber,@PathVariable("factorName")String factorName){
+        try {
+            return productDetailsService.getProductDetailsByFactors(modelNumber, factorName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+
+    }
+
 
 
 

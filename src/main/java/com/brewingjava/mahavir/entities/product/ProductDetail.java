@@ -94,13 +94,7 @@ public class ProductDetail {
             this.productName = productName;
         }
 
-        public String getproductHighlights() {
-            return productHighlights;
-        }
-
-        public void setproductHighlights(String productHighlights) {
-            this.productHighlights = productHighlights;
-        }
+        
 
         public Binary getProductImage1() {
             return productImage1;

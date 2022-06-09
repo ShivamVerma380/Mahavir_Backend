@@ -19,8 +19,10 @@ import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.categories.ProductInformationItem;
 import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
+import com.brewingjava.mahavir.entities.product.Factors;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.entities.product.ProductReviews;
+import com.brewingjava.mahavir.entities.product.ProductVariants;
 import com.brewingjava.mahavir.entities.product.Review;
 import com.brewingjava.mahavir.entities.user.Orders;
 import com.brewingjava.mahavir.entities.user.UserRequest;
@@ -87,7 +89,7 @@ public class ProductDetailsService {
             }
             ProductDetail productDetail = new ProductDetail();
             productDetail.setModelNumber(modelNumber);
-            productDetail.setproductHighlights(productHighlights);
+            productDetail.setProductHighlights(productHighlights);
             productDetail.setProductImage1(
                     new Binary(BsonBinarySubType.BINARY, productImage1.getBytes()));
             productDetail.setProductImage2(
@@ -394,6 +396,50 @@ public class ProductDetailsService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    public ResponseEntity<?> getProductDetailsByFactors(String modelNumber,String factorName){
+        try {
+            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+            if(productDetail==null){
+                responseMessage.setMessage("Product Not Found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            List<ProductVariants> list = productDetail.getProductVariants();
+            for(int i=0;i<list.size();i++){
+                if(list.get(i).getFactorName().equals(factorName)){
+                    List<Factors> factors = list.get(i).getFactorsAffected();
+                    for(int j=0;j<factors.size();j++){
+                        if(factors.get(j).getFactorname().equals("productName"))
+                            productDetail.setProductName(factors.get(j).getFactorValueNonImg());
+                        else if(factors.get(j).getFactorname().equals("productHighlights"))
+                            productDetail.setProductHighlights(factors.get(j).getFactorValueNonImg());
+                        else if(factors.get(j).getFactorname().equals("productImage1"))
+                            productDetail.setProductImage1(factors.get(j).getFactorValueImg());
+                        else if(factors.get(j).getFactorname().equals("productImage2"))
+                            productDetail.setProductImage2(factors.get(j).getFactorValueImg());
+                        else if(factors.get(j).getFactorname().equals("productImage3"))
+                            productDetail.setProductImage3(factors.get(j).getFactorValueImg());
+                        else if(factors.get(j).getFactorname().equals("productImage4"))
+                            productDetail.setProductImage4(factors.get(j).getFactorValueImg());
+                        else if(factors.get(j).getFactorname().equals("productImage5"))
+                            productDetail.setProductImage5(factors.get(j).getFactorValueImg());
+                        else if(factors.get(j).getFactorname().equals("productPrice"))
+                            productDetail.setProductPrice(factors.get(j).getFactorValueNonImg());
+                        else if(factors.get(j).getFactorname().equals("OfferPrice"))
+                            productDetail.setOfferPrice(factors.get(j).getFactorValueNonImg());
+                    }
+                    return ResponseEntity.status(HttpStatus.OK).body(productDetail);
+                }
+            }
+            responseMessage.setMessage("Factor Not Found");
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }    
+
 /*
     public ResponseEntity<?> addReview(String modelNumber, String rating, String review, String authorization) {
         try {
