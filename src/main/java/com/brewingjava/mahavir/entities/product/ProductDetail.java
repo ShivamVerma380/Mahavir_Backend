@@ -46,16 +46,20 @@ public class ProductDetail {
 
         private HashMap<String,HashMap<String,String>> productInformation;
 
+        private HashMap<String,ArrayList<String>> variants;
+
         public ProductDetail() {
 
         }
 
         
 
+
         public ProductDetail(String modelNumber, String productName, String productHighlights, Binary productImage1,
                 Binary productImage2, Binary productImage3, Binary productImage4, Binary productImage5,
                 String productPrice, String productVideoLink, String category, HashMap<String, String> subCategoryMap,
-                String offerPrice, HashMap<String, HashMap<String, String>> productInformation) {
+                String offerPrice, HashMap<String, HashMap<String, String>> productInformation,
+                HashMap<String, ArrayList<String>> variants) {
             this.modelNumber = modelNumber;
             this.productName = productName;
             this.productHighlights = productHighlights;
@@ -70,7 +74,9 @@ public class ProductDetail {
             this.subCategoryMap = subCategoryMap;
             OfferPrice = offerPrice;
             this.productInformation = productInformation;
+            this.variants = variants;
         }
+
 
 
 
@@ -192,6 +198,35 @@ public class ProductDetail {
             this.productInformation = productInformation;
         }
 
+        
+
+
+        public String getProductHighlights() {
+            return productHighlights;
+        }
+
+
+
+
+        public void setProductHighlights(String productHighlights) {
+            this.productHighlights = productHighlights;
+        }
+
+
+
+
+        public HashMap<String, ArrayList<String>> getVariants() {
+            return variants;
+        }
+
+
+
+
+        public void setVariants(HashMap<String, ArrayList<String>> variants) {
+            this.variants = variants;
+        }
+
+
 
 
         @Override
@@ -201,8 +236,11 @@ public class ProductDetail {
                     + ", productImage2=" + productImage2 + ", productImage3=" + productImage3 + ", productImage4="
                     + productImage4 + ", productImage5=" + productImage5 + ", productInformation=" + productInformation
                     + ", productName=" + productName + ", productPrice=" + productPrice + ", productVideoLink="
-                    + productVideoLink + ", subCategoryMap=" + subCategoryMap + "]";
+                    + productVideoLink + ", subCategoryMap=" + subCategoryMap + ", variants=" + variants + "]";
         }
+
+
+        
         
         
 

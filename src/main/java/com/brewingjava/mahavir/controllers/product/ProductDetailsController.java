@@ -67,6 +67,17 @@ public class ProductDetailsController {
         }
     }
 
+    @PostMapping("/add-product-variants/{ModelNumber}")
+    public ResponseEntity<?> addProductVariants(@RequestHeader("Authorization") String authorization,@PathVariable("ModelNumber")String modelNumber,@RequestBody HashMap<String,ArrayList<String>> variants){
+        try {
+            return productDetailsService.addProductVariants(authorization,modelNumber,variants);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @PostMapping("/add-review/{modelNumber}")
     public ResponseEntity<?> addReview(@PathVariable("modelNumber") String modelNumber, @RequestHeader("Authorization") String authorization ,@RequestParam("Review")String review,@RequestParam("Rating") long rating,@RequestParam("Date") String date){
         try {

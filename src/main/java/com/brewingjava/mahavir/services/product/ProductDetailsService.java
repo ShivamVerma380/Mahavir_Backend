@@ -106,6 +106,7 @@ public class ProductDetailsService {
             
             productDetail.setProductInformation(new HashMap<>());
             productDetail.setSubCategoryMap(new HashMap<String,String>());
+            productDetail.setVariants(new HashMap<>());
             productDetailsDao.save(productDetail);
             responseMessage.setMessage("Model saved successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
@@ -164,6 +165,32 @@ public class ProductDetailsService {
             responseMessage.setMessage("Product Details updated successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> addProductVariants(String auth,String modelNumber,HashMap<String,ArrayList<String>> variants){
+        try {
+            String token = auth.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can add product variants");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+            if(productDetail==null){
+                responseMessage.setMessage("Product Not Found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            productDetail.setVariants(variants);
+            productDetailsDao.save(productDetail);
+            responseMessage.setMessage("Product Variants added Successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+            
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
