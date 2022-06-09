@@ -78,7 +78,7 @@ public class ProductDetailsController {
         }
     }
     
-/*
+
 
     @GetMapping("/get-reviews/{modelNumber}")
     public ResponseEntity<?> getReviews(@PathVariable("modelNumber") String modelNumber){
@@ -90,7 +90,7 @@ public class ProductDetailsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
-     */
+     
 
     @DeleteMapping("/remove-product/{modelNumber}")
     public ResponseEntity<?> removeProductDetails(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber){

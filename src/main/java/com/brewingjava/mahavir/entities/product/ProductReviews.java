@@ -26,7 +26,7 @@ public class ProductReviews {
 
     private long totalReviews;
 
-    private long averageRatings;
+    private double averageRatings;
 
     public List<Review> reviews;
 
@@ -34,7 +34,7 @@ public class ProductReviews {
     }
 
     public ProductReviews(String modelNumber, long nosOfOneStars, long nosOfTwoStars, long nosOfThreeStars,
-            long nosOfFourStars, long nosOfFiveStars, long totalRatings, long totalReviews, long averageRatings,
+            long nosOfFourStars, long nosOfFiveStars, long totalRatings, long totalReviews, double averageRatings,
             List<Review> reviews) {
         this.modelNumber = modelNumber;
         this.nosOfOneStars = nosOfOneStars;
@@ -112,11 +112,11 @@ public class ProductReviews {
         this.totalReviews = totalReviews;
     }
 
-    public long getAverageRatings() {
+    public double getAverageRatings() {
         return averageRatings;
     }
 
-    public void setAverageRatings(long averageRatings) {
+    public void setAverageRatings(double averageRatings) {
         this.averageRatings = averageRatings;
     }
 
