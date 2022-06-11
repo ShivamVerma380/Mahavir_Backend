@@ -634,11 +634,20 @@ public class ProductDetailsService {
     public ResponseEntity<?> getProductByCategory(String category){
         try {
             CategoriesToDisplay categoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
+
             if(categoriesToDisplay==null){
                 responseMessage.setMessage("Category not found");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
-            List<ProductDetail> productDetails = productDetailsDao.findProductDetailBycategory(category);
+
+            List<ProductDetail> productDetails = productDetailsDao.findProductDetailsBycategory(category);
+            // if(productDetails==null || productDetails.isEmpty()){
+            //     responseMessage.setMessage("Empty");
+            //     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+            // }
+            for(int i=0;i<productDetails.size();i++){
+                System.out.println(productDetails.get(i).getModelNumber());
+            }
             return ResponseEntity.status(HttpStatus.OK).body(productDetails);
         } catch (Exception e) {
             e.printStackTrace();

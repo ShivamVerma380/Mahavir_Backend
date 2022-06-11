@@ -202,7 +202,7 @@ public class ProductDetailsController {
 
     }
 
-    @GetMapping("/get-products/{Category}")
+    @GetMapping("/get-products-by-category/{Category}")
     public ResponseEntity<?> getProductsByCategory(@PathVariable("Category") String category){
         try {
             return productDetailsService.getProductByCategory(category);
