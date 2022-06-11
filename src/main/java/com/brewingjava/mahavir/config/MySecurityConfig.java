@@ -36,7 +36,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/add-user","/add-admin","/verify-email/{email}","/login-user","/get-categories","/get-sub-categories","/get-cart-details","/get-products","/get-products/{modelNumber}","/get-reviews/{modelNumber}","/add-to-cart","/get-offers","/get-offers-by-category/{category}","/get-products-by-subCategory/{Category}/{SubCategory}/{SubSubCategory}","/get-products/{modelNumber}/{factorName}","/add-review/{modelNumber}").permitAll() //one doubt of image returning
+                .antMatchers("/add-user","/add-admin","/verify-email/{email}","/login-user","/get-categories","/get-sub-categories","/get-cart-details","/get-products","/get-products/{modelNumber}","/get-reviews/{modelNumber}","/add-to-cart","/get-offers","/get-offers-by-category/{category}","/get-products-by-subCategory/{Category}/{SubCategory}/{SubSubCategory}","/get-products/{modelNumber}/{factorName}","/get-products/{Category}").permitAll() //one doubt of image returning
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
