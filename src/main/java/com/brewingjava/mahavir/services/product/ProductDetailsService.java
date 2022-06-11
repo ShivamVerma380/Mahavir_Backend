@@ -631,4 +631,19 @@ public class ProductDetailsService {
         }
     }
 
+    public ResponseEntity<?> getProductByCategory(String category){
+        try {
+            CategoriesToDisplay categoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
+            if(categoriesToDisplay==null){
+                responseMessage.setMessage("Category not found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            List<ProductDetail> productDetails = productDetailsDao.findProductDetailBycategory(category);
+            return ResponseEntity.status(HttpStatus.OK).body(productDetails);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 }
