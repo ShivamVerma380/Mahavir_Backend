@@ -75,13 +75,22 @@ public class CategoriesToDisplayController {
         }
     }
 
-
+    @GetMapping("/get-sub-categories-detail/{Category}")
+    public ResponseEntity<?> getSubCategoriesInDetail(@PathVariable("Category") String category){
+        try {
+            return categoriesToDisplayService.getSubCategoriesDetail(category);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
     
 
     @GetMapping("/get-sub-categories")
     public ResponseEntity<?> getSubCategories(@RequestParam("Category")String category){
         try {
-            return categoriesToDisplayService.getSubCategories( category);
+            return categoriesToDisplayService.getSubCategories(category);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);

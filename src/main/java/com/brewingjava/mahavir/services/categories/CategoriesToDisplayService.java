@@ -289,6 +289,23 @@ public class CategoriesToDisplayService {
 
     }
 
+    public ResponseEntity<?> getSubCategoriesDetail(String category){
+        try {
+            CategoriesToDisplay categoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
+            if(categoriesToDisplay==null){
+                responseMessage.setMessage("Category not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            List<SubCategories> existingSubCategories = categoriesToDisplay.getSubCategories();
+            return ResponseEntity.status(HttpStatus.OK).body(existingSubCategories);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 
     public ResponseEntity<?> getSubSubCategories(String category,String subCategory){
         try {
