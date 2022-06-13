@@ -551,8 +551,12 @@ public class ProductDetailsService {
 
     public ResponseEntity<?> getReviewsByModelNumber(String modelNumber) {
         try {
+            ProductReviews reviews = productReviewsDao.findProductReviewsBymodelNumber(modelNumber);
+            if(reviews==null){
+                return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
+            }
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(productReviewsDao.findProductReviewsBymodelNumber(modelNumber));
+                    .body(reviews);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -616,6 +620,48 @@ public class ProductDetailsService {
                 // existingProductDetail.setProductInformation(productDetail);
                 //existingProductDetail.setSubItems(subItems);
                 existingProductDetail.setProductInformation(productInformation);
+                //1. get ProductFilters from category Name.
+                //2. Iterate Hashmap "Operating System":{"OS":"IOS"}
+                //3. Check OS key in productfilters if not add it.
+                //4. Also add IOS in HashSet<String>
+                String categoryName = existingProductDetail.getCategory();
+                CategoriesToDisplay category = categoriesToDisplayDao.findBycategory(categoryName);
+                HashMap<String,HashSet<String>> filters = category.getProductFilters();
+                if(filters==null){
+                    HashMap<String,HashSet<String>> hMap = new HashMap<String,HashSet<String>>();
+                    for(String key:productInformation.keySet()){
+                        HashMap<String,String> hm = productInformation.get(key);
+                        for(String feature:hm.keySet()){
+                            HashSet<String> values=new HashSet<String>();
+                            values.add(hm.get(feature));
+                            hMap.put(feature, values);
+                        }
+                    }
+                    category.setProductFilters(hMap);
+                    categoriesToDisplayDao.save(category);
+                    productDetailsDao.save(existingProductDetail);
+                    responseMessage.setMessage("Product Information Saved Successfully");
+                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                }
+                for(String key:productInformation.keySet()){
+                    HashMap<String,String> hm = productInformation.get(key);
+                    for(String feature:hm.keySet()){
+                        if(filters.containsKey(feature)){
+                            // HashSet<String> values = filters.get(feature);
+                            HashSet<String> values = filters.get(feature);
+                            values.add(hm.get(feature));
+                            // filters.(feature,values);
+                            filters.put(feature, values);
+                        }
+                        else{
+                            HashSet<String> values=new HashSet<String>();
+                            values.add(hm.get(feature));
+                            filters.put(feature, values);
+                        }
+                    }
+                }
+                category.setProductFilters(filters);
+                categoriesToDisplayDao.save(category);
             } catch (Exception e) {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);

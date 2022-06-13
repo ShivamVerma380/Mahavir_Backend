@@ -1,5 +1,7 @@
 package com.brewingjava.mahavir.entities.categories;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.bson.types.Binary;
@@ -23,6 +25,8 @@ public class CategoriesToDisplay {
 
     
     private List<ProductInformationItem> productInformationItemList;
+
+    private HashMap<String,HashSet<String>> productFilters; //For storing filters
 
     public CategoriesToDisplay() {
     }
@@ -78,12 +82,19 @@ public class CategoriesToDisplay {
         this.productInformationItemList = productInformationItemList;
     }
 
-    @Override
-    public String toString() {
-        return "CategoriesToDisplay [category=" + category + ", category_image=" + category_image
-                + ", productInformationItemList=" + productInformationItemList + ", subCategories=" + subCategories
-                + "]";
+    public HashMap<String, HashSet<String>> getProductFilters() {
+        return productFilters;
     }
 
+    public void setProductFilters(HashMap<String, HashSet<String>> productFilters) {
+        this.productFilters = productFilters;
+    }
+
+    @Override
+    public String toString() {
+        return "CategoriesToDisplay [category=" + category + ", category_image=" + category_image + ", productFilters="
+                + productFilters + ", productInformationItemList=" + productInformationItemList + ", subCategories="
+                + subCategories + "]";
+    }
     
 }

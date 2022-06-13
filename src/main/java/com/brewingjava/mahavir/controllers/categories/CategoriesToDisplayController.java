@@ -1,5 +1,7 @@
 package com.brewingjava.mahavir.controllers.categories;
 
+import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
+import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 import com.brewingjava.mahavir.services.categories.CategoriesToDisplayService;
 
@@ -19,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins  = "*")
 public class CategoriesToDisplayController {
     
     @Autowired
@@ -28,6 +30,9 @@ public class CategoriesToDisplayController {
 
     @Autowired
     public CategoriesToDisplayService categoriesToDisplayService;
+
+    @Autowired
+    public CategoriesToDisplayDao categoriesToDisplayDao;
 
     @PostMapping("/add-category")
     public ResponseEntity<?> addCategory(@RequestHeader("Authorization")String authorization,@RequestParam("CategoryName")String category,@RequestParam("CategoryImage")MultipartFile multipartFile){
@@ -68,6 +73,23 @@ public class CategoriesToDisplayController {
     public ResponseEntity<?> getCategories(){
         try {
             return categoriesToDisplayService.getCategories();
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @GetMapping("/get-categories/{Category}")
+    public ResponseEntity<?> getCategory(@PathVariable("Category") String category){
+        try {
+            
+            CategoriesToDisplay categoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
+            if(categoriesToDisplay==null){
+                responseMessage.setMessage("Category not found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(categoriesToDisplay);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
