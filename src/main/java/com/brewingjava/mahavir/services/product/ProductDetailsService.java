@@ -625,23 +625,39 @@ public class ProductDetailsService {
                 HashMap<String,HashSet<String>> filters = category.getProductFilters();
                 if(filters==null){
                     HashMap<String,HashSet<String>> hMap = new HashMap<String,HashSet<String>>();
-                
+                    for(String key:productInformation.keySet()){
+                        HashMap<String,String> hm = productInformation.get(key);
+                        for(String feature:hm.keySet()){
+                            HashSet<String> values=new HashSet<String>();
+                            values.add(hm.get(feature));
+                            hMap.put(feature, values);
+                        }
+                    }
+                    category.setProductFilters(hMap);
+                    categoriesToDisplayDao.save(category);
+                    productDetailsDao.save(existingProductDetail);
+                    responseMessage.setMessage("Product Information Saved Successfully");
+                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                }
                 for(String key:productInformation.keySet()){
                     HashMap<String,String> hm = productInformation.get(key);
-                    
                     for(String feature:hm.keySet()){
-                        if(hMap.containsKey(feature)){
+                        if(filters.containsKey(feature)){
                             // HashSet<String> values = filters.get(feature);
-                            HashSet<String> values = hMap.get(feature);
+                            HashSet<String> values = filters.get(feature);
                             values.add(hm.get(feature));
                             // filters.(feature,values);
+                            filters.put(feature, values);
+                        }
+                        else{
+                            HashSet<String> values=new HashSet<String>();
+                            values.add(hm.get(feature));
                             filters.put(feature, values);
                         }
                     }
                 }
                 category.setProductFilters(filters);
                 categoriesToDisplayDao.save(category);
-            }
             } catch (Exception e) {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
