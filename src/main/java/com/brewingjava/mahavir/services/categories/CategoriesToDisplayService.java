@@ -9,12 +9,16 @@ import java.util.ListIterator;
 
 import com.brewingjava.mahavir.daos.admin.AdminDao;
 import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
+import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
 import com.brewingjava.mahavir.entities.admin.Admin;
 import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.categories.ProductInformationItem;
 import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
+import com.brewingjava.mahavir.entities.product.ProductDetail;
+import com.brewingjava.mahavir.helper.AddToCompareResponse;
 import com.brewingjava.mahavir.helper.JwtUtil;
+import com.brewingjava.mahavir.helper.ModelResponse;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 
 import org.bson.BsonBinarySubType;
@@ -42,6 +46,9 @@ public class CategoriesToDisplayService {
 
     @Autowired
     public AdminDao adminDao;
+
+    @Autowired
+    public ProductDetailsDao productDetailsDao;
 
     @Autowired
     public CategoriesToDisplayDao categoriesToDisplayDao;
@@ -366,6 +373,86 @@ public class CategoriesToDisplayService {
 
     }
 
+
+    public ResponseEntity<?> getAddToCompareSubCat(String category,String subCategory){
+        try {
+            
+
+            CategoriesToDisplay categoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
+            if(categoriesToDisplay==null){
+                responseMessage.setMessage("Category not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            
+            
+
+            List<SubCategories> existingSubCategories = categoriesToDisplay.getSubCategories();
+            
+            if(existingSubCategories==null){
+                responseMessage.setMessage("Sub Category Not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+
+            ListIterator<SubCategories> listIterator = existingSubCategories.listIterator();
+            
+            
+            int j=0;
+            while(listIterator.hasNext()){
+                //System.out.print(listIterator.next());
+                if(subCategory.equalsIgnoreCase(listIterator.next().getSubCategoryName())){
+                    //List<SubSubCategories> existingSubSubCategories = listIterator.next().getSubSubCategories();
+                    System.out.println(existingSubCategories.get(j).getSubCategoryName());
+                    List<SubSubCategories> list = existingSubCategories.get(j).getSubSubCategories();
+                    //ArrayList<Class>  ==> Class={subSubCategoryName,Array<modelNumber,modelName>}
+                    List<AddToCompareResponse> addToCompareResponses = new ArrayList<>();
+                    for(int i=0;i<list.size();i++){
+                        HashSet<String> modelNumber = list.get(i).getmodelNumber();
+                        Iterator<String> iterator = modelNumber.iterator();
+                        AddToCompareResponse addToCompareResponse = new AddToCompareResponse();
+                        addToCompareResponse.setSubSubCategoryName(list.get(i).getSubSubCategoryName());
+                        ArrayList<ModelResponse> modelResponses = new ArrayList<>();
+                        while(iterator.hasNext()){
+                            String mNo = iterator.next();
+                            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(mNo);
+                            ModelResponse modelResponse = new ModelResponse();
+                            
+                            modelResponse.setModelName(productDetail.getProductName());
+                            modelResponse.setModelNumber(mNo);
+                            modelResponses.add(modelResponse);
+                            
+                        }
+                        addToCompareResponse.setModelResponses(modelResponses);
+                        addToCompareResponses.add(addToCompareResponse);
+                    }
+                    return ResponseEntity.status(HttpStatus.OK).body(addToCompareResponses);
+                    // List<SubSubCategories> existingSubSubCategories = existingSubCategories.get(j).getSubSubCategories();
+                    // List<String> subSubCategories = new ArrayList<>();
+                    // if(existingSubSubCategories==null){
+                    //     System.out.println("existing Sub Sub Categories is null");
+                    //     return ResponseEntity.status(HttpStatus.OK).body(subSubCategories);
+                    // }
+                    // ListIterator<SubSubCategories> ssCListIterator = existingSubSubCategories.listIterator();
+                    // int k=0;
+                    // while(ssCListIterator.hasNext()){
+                    //     if(ssCListIterator.next().getSubSubCategoryName().)
+                    //     subSubCategories.add(existingSubSubCategories.get(k).getSubSubCategoryName());
+                    //     k++;
+                    // }
+                    // return ResponseEntity.status(HttpStatus.OK).body(subSubCategories);
+                }
+                j++;
+
+            } 
+            responseMessage.setMessage("Sub Category Not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+
+    }
 
     public ResponseEntity<?> addProductInformationItems(String authorization,String category,String itemName,List<String> subItemsList){
         try {

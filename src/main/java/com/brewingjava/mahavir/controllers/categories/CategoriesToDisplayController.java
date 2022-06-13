@@ -119,14 +119,24 @@ public class CategoriesToDisplayController {
         }
     }
 
-    @GetMapping("/get-sub-sub-categories")
-    public ResponseEntity<?> getSubSubCategories(@RequestParam("Category")String category,@RequestParam("SubCategory")String subCategory){
+    @GetMapping("/get-sub-sub-categories/{Category}/{SubCategory}")
+    public ResponseEntity<?> getSubSubCategories(@PathVariable("Category")String category,@PathVariable("SubCategory")String subCategory){
         try {
             return categoriesToDisplayService.getSubSubCategories(category, subCategory);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }   
+    }
+
+    @GetMapping("/get-add-to-compare-subcat/{Category}/{SubCategory}")
+    public ResponseEntity<?> getSubSubCategoriesDetail(@PathVariable("Category")String category,@PathVariable("SubCategory")String subCategory){
+        try {
+            return categoriesToDisplayService.getAddToCompareSubCat(category,subCategory);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
     }
 
 
