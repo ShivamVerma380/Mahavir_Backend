@@ -553,7 +553,9 @@ public class ProductDetailsService {
         try {
             ProductReviews reviews = productReviewsDao.findProductReviewsBymodelNumber(modelNumber);
             if(reviews==null){
-                return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
+                ProductReviews review = new ProductReviews();
+                review.setReviews(new ArrayList<>());
+                return ResponseEntity.status(HttpStatus.OK).body(review);
             }
             return ResponseEntity.status(HttpStatus.OK)
                     .body(reviews);
