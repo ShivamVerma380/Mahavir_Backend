@@ -616,6 +616,32 @@ public class ProductDetailsService {
                 // existingProductDetail.setProductInformation(productDetail);
                 //existingProductDetail.setSubItems(subItems);
                 existingProductDetail.setProductInformation(productInformation);
+                //1. get ProductFilters from category Name.
+                //2. Iterate Hashmap "Operating System":{"OS":"IOS"}
+                //3. Check OS key in productfilters if not add it.
+                //4. Also add IOS in HashSet<String>
+                String categoryName = existingProductDetail.getCategory();
+                CategoriesToDisplay category = categoriesToDisplayDao.findBycategory(categoryName);
+                HashMap<String,HashSet<String>> filters = category.getProductFilters();
+                if(filters==null){
+                    HashMap<String,HashSet<String>> hMap = new HashMap<String,HashSet<String>>();
+                
+                for(String key:productInformation.keySet()){
+                    HashMap<String,String> hm = productInformation.get(key);
+                    
+                    for(String feature:hm.keySet()){
+                        if(hMap.containsKey(feature)){
+                            // HashSet<String> values = filters.get(feature);
+                            HashSet<String> values = hMap.get(feature);
+                            values.add(hm.get(feature));
+                            // filters.(feature,values);
+                            filters.put(feature, values);
+                        }
+                    }
+                }
+                category.setProductFilters(filters);
+                categoriesToDisplayDao.save(category);
+            }
             } catch (Exception e) {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);

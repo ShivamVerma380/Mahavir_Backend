@@ -1,6 +1,7 @@
 package com.brewingjava.mahavir.services.categories;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -61,6 +62,7 @@ public class CategoriesToDisplayService {
                 CategoriesToDisplay categoriesToDisplay = new CategoriesToDisplay(category,new Binary(BsonBinarySubType.BINARY,multipartFile.getBytes()));
                 categoriesToDisplay.setSubCategories(new ArrayList<>());
                 categoriesToDisplay.setProductInformationItemList(new ArrayList<>());
+                categoriesToDisplay.setProductFilters(new HashMap<>());
                 
                 categoriesToDisplayDao.save(categoriesToDisplay);
                 responseMessage.setMessage("Category added successfully");
