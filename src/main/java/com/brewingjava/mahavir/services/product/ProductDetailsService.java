@@ -551,8 +551,12 @@ public class ProductDetailsService {
 
     public ResponseEntity<?> getReviewsByModelNumber(String modelNumber) {
         try {
+            ProductReviews reviews = productReviewsDao.findProductReviewsBymodelNumber(modelNumber);
+            if(reviews==null){
+                return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
+            }
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(productReviewsDao.findProductReviewsBymodelNumber(modelNumber));
+                    .body(reviews);
 
         } catch (Exception e) {
             e.printStackTrace();
