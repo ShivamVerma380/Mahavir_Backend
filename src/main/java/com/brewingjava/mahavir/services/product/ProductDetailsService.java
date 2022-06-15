@@ -28,6 +28,7 @@ import com.brewingjava.mahavir.entities.user.Orders;
 import com.brewingjava.mahavir.entities.user.UserRequest;
 import com.brewingjava.mahavir.helper.JwtUtil;
 import com.brewingjava.mahavir.helper.ResponseMessage;
+import com.brewingjava.mahavir.helper.SearchResponse;
 
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
@@ -576,6 +577,22 @@ public class ProductDetailsService {
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
 
+        }
+    }
+
+    public ResponseEntity<?> getSearchProducts(){
+        try {
+            List<ProductDetail> productDetails = productDetailsDao.findAll();
+            List<SearchResponse> list = new ArrayList<>();
+            for(int i=0;i<productDetails.size();i++){
+                SearchResponse searchResponse = new SearchResponse(productDetails.get(i).getModelNumber(),productDetails.get(i).getProductName());
+                list.add(searchResponse);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
 

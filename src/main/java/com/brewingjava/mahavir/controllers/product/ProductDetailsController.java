@@ -167,6 +167,17 @@ public class ProductDetailsController {
 
     }
 
+    @GetMapping("/get-search-products")
+    public ResponseEntity<?> getSearchProducts(){
+        try {
+            return productDetailsService.getSearchProducts();
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @GetMapping("/get-products/{modelNumber}")
     @CrossOrigin(origins = "*")
     public ResponseEntity<?> getProductByModelNumber(@PathVariable("modelNumber") String modelNumber){
