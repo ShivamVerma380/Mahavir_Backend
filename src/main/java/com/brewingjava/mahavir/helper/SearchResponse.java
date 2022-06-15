@@ -1,49 +1,89 @@
 package com.brewingjava.mahavir.helper;
 
+import java.util.ArrayList;
+
 public class SearchResponse {
 
-    public String modelNumber;
+    public String id;
 
-    public String productName;
+    public String name;
+
+    public String price;
+
+    public String highlights;
+
+    public String category;
 
     public SearchResponse() {
     }
 
+    public SearchResponse(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     
 
-    public SearchResponse(String modelNumber, String productName) {
-        this.modelNumber = modelNumber;
-        this.productName = productName;
+    
+    public String getPrice() {
+        return price;
     }
 
-
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     
+    
 
-    public String getModelNumber() {
-        return modelNumber;
+    
+
+    public String gethightlights() {
+        return highlights;
     }
 
-
-
-    public void setModelNumber(String modelNumber) {
-        this.modelNumber = modelNumber;
+    public void sethightlights(String hightlights) {
+        this.highlights = hightlights;
     }
 
+    public String getCategory() {
+        return category;
+    }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     @Override
     public String toString() {
-        return "SearchResponse [modelNumber=" + modelNumber + ", productName=" + productName + "]";
+        return "SearchResponse [hightlights=" + highlights + ", id=" + id + ", name=" + name + ", price=" + price
+                + "]";
     }
+
+    
+
+    
+
+    
+    
+
+    
 
 
     

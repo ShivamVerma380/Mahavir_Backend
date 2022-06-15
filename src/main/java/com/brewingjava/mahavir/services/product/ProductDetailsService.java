@@ -1,6 +1,7 @@
 package com.brewingjava.mahavir.services.product;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -586,6 +587,14 @@ public class ProductDetailsService {
             List<SearchResponse> list = new ArrayList<>();
             for(int i=0;i<productDetails.size();i++){
                 SearchResponse searchResponse = new SearchResponse(productDetails.get(i).getModelNumber(),productDetails.get(i).getProductName());
+                searchResponse.setCategory(productDetails.get(i).getCategory());
+                String[] highlights = productDetails.get(i).getProductHighlights().split(";");
+                String str="";
+                for(int j=0;j<highlights.length;j++){
+                    str+=highlights[j]+" ";
+                }
+                searchResponse.sethightlights(str);
+                searchResponse.setPrice(productDetails.get(i).getProductPrice());
                 list.add(searchResponse);
             }
             return ResponseEntity.status(HttpStatus.OK).body(list);
