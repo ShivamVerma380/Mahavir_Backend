@@ -15,6 +15,7 @@ public class OfferPosters {
 
     private List<String> modelNumbers;
 
+    public String isMegaPoster;
     
     public String category;  //Display mobile offers on mobile click
 
@@ -44,8 +45,6 @@ public class OfferPosters {
         this.modelNumbers = modelNumbers;
     }
 
-    
-
     public String getCategory() {
         return category;
     }
@@ -54,15 +53,20 @@ public class OfferPosters {
         this.category = category;
     }
 
-    @Override
-    public String toString() {
-        return "OfferPosters [category=" + category + ", image=" + image + ", modelNumbers=" + modelNumbers + "]";
+
+    public String getIsMegaPoster() {
+        return isMegaPoster;
     }
 
-    
-    
+    public void setIsMegaPoster(String isMegaPoster) {
+        this.isMegaPoster = isMegaPoster;
+    }
 
-    
+    @Override
+    public String toString() {
+        return "OfferPosters [category=" + category + ", image=" + image + ", isMegaPoster=" + isMegaPoster
+                + ", modelNumbers=" + modelNumbers + "]";
+    }   
     
     
 }

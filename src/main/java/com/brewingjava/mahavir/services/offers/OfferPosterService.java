@@ -50,7 +50,7 @@ public class OfferPosterService{
     public AdminDao adminDao;
     
 
-    public ResponseEntity<?> addOffer(String authorization,MultipartFile multipartFile, List<String> modelNumber, String category){
+    public ResponseEntity<?> addOffer(String authorization,MultipartFile multipartFile, List<String> modelNumber, String category,String isMegaPoster){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -74,6 +74,7 @@ public class OfferPosterService{
             }
             offerPosters.setCategory(category);
             offerPosters.setModelNumbers(new ArrayList<>(hashSet));
+            offerPosters.setIsMegaPoster(isMegaPoster);
             offerPosterDao.save(offerPosters);
             responseMessage.setMessage("Offer saved successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
