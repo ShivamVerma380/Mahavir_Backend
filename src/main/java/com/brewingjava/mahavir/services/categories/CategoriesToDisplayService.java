@@ -17,9 +17,11 @@ import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.helper.AddToCompareResponse;
+import com.brewingjava.mahavir.helper.CategoriesAdminResponse;
 import com.brewingjava.mahavir.helper.JwtUtil;
 import com.brewingjava.mahavir.helper.ModelResponse;
 import com.brewingjava.mahavir.helper.ResponseMessage;
+import com.brewingjava.mahavir.helper.SubCategoriesAdminResponse;
 
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
@@ -124,6 +126,41 @@ public class CategoriesToDisplayService {
             
 
             return ResponseEntity.status(HttpStatus.OK).body(allCategories);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getCategoriesAdmin(){
+        try {
+            List<CategoriesToDisplay> list = categoriesToDisplayDao.findAll();
+            List<CategoriesAdminResponse> categoriesAdminResponses = new ArrayList<>();
+            for(int i=0;i<list.size();i++){
+                String category = list.get(i).getCategory();
+                List<SubCategories> subCatList = list.get(i).getSubCategories();
+                ArrayList<SubCategoriesAdminResponse> subCategoriesAdminResponses = new ArrayList<>();
+                for(int j=0;j<subCatList.size();j++){
+                    SubCategoriesAdminResponse subCategoriesAdminResponse = new SubCategoriesAdminResponse();
+                    subCategoriesAdminResponse.setSubCategoryName(subCatList.get(j).getSubCategoryName());
+
+                    String subCat = subCatList.get(j).getSubCategoryName();
+                    List<SubSubCategories> subSubCategoriesList = subCatList.get(j).getSubSubCategories();
+                    ArrayList<String> subSubCatName = new ArrayList<>();
+                    for(int k=0;k<subSubCategoriesList.size();k++){
+                        subSubCatName.add(subSubCategoriesList.get(k).getSubSubCategoryName());
+                    }
+                    subCategoriesAdminResponse.setSubSubCategories(subSubCatName);
+                    subCategoriesAdminResponses.add(subCategoriesAdminResponse);
+                }
+                CategoriesAdminResponse categoriesAdminResponse = new CategoriesAdminResponse();
+                categoriesAdminResponse.setCategoryName(category);
+                categoriesAdminResponse.setSubCategories(subCategoriesAdminResponses);
+                categoriesAdminResponses.add(categoriesAdminResponse);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(categoriesAdminResponses);
+
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

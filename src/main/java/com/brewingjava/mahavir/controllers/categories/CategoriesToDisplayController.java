@@ -80,6 +80,17 @@ public class CategoriesToDisplayController {
         }
     }
 
+    @GetMapping("/get-categories/admin")
+    public ResponseEntity<?> getAdminCategories(){
+        try {
+            return categoriesToDisplayService.getCategoriesAdmin();
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @GetMapping("/get-categories/{Category}")
     public ResponseEntity<?> getCategory(@PathVariable("Category") String category){
         try {
