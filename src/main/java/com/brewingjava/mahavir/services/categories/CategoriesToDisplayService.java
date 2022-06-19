@@ -141,6 +141,12 @@ public class CategoriesToDisplayService {
                 String category = list.get(i).getCategory();
                 List<SubCategories> subCatList = list.get(i).getSubCategories();
                 ArrayList<SubCategoriesAdminResponse> subCategoriesAdminResponses = new ArrayList<>();
+                // SubCategoriesAdminResponse obj = new SubCategoriesAdminResponse();
+                // obj.setSubCategoryName("Choose subCategory....");
+                // ArrayList<String> al = new ArrayList<>();
+                // al.add("Choose....");
+                // obj.setSubSubCategories(al);
+                // subCategoriesAdminResponses.add(obj);
                 for(int j=0;j<subCatList.size();j++){
                     SubCategoriesAdminResponse subCategoriesAdminResponse = new SubCategoriesAdminResponse();
                     subCategoriesAdminResponse.setSubCategoryName(subCatList.get(j).getSubCategoryName());
