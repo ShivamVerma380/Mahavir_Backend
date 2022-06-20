@@ -61,6 +61,7 @@ public class UserController {
     
 
     @GetMapping("/get-bought-products")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<?> getProduct(@RequestHeader("Authorization")String authorization){
         try {
              return userService.getBoughtProducts(authorization);  
@@ -104,6 +105,7 @@ public class UserController {
     }
 
     @PostMapping("/login-user")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<?> userLogin( @RequestParam("Email") String email,@RequestParam("Password") String password){
         try {
             return userService.loginUser(email, password);
