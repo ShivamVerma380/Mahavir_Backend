@@ -29,6 +29,8 @@ public class UserRequest {
     
     private HashSet<String> userCartProducts;
 
+    private String token;
+
     private List<String> addToCompare;  //String of model Numbers
 
     
@@ -133,13 +135,28 @@ public class UserRequest {
     }
 
 
+    
+
+    public String getToken() {
+        return token;
+    }
+
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+
     @Override
     public String toString() {
         return "UserRequest [addToCompare=" + addToCompare + ", email=" + email + ", firstName=" + firstName
                 + ", lastName=" + lastName + ", password=" + password + ", phoneNo=" + phoneNo
-                + ", productsBoughtByUser=" + productsBoughtByUser + ", userCartProducts=" + userCartProducts + "]";
+                + ", productsBoughtByUser=" + productsBoughtByUser + ", token=" + token + ", userCartProducts="
+                + userCartProducts + "]";
     }
 
+
+   
     
     
 

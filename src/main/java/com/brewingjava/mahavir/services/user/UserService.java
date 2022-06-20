@@ -101,8 +101,10 @@ public class UserService {
             //User is authenticated successfully
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
             String token = jwtUtil.generateToken(userDetails);
-
+           
             jwtResponse.setToken(token);
+            new_user.setToken(token);
+            this.userDao.save(new_user);
 
             jwtResponse.setMessage("User registered  successfully");
             return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
@@ -183,14 +185,18 @@ public class UserService {
     
     public ResponseEntity<?> loginUser(String email,String password){
         try {
+            
             UserRequest fetch_user = userDao.findByEmail(email);
             if(fetch_user!=null){
                 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 
                 
                 if(bCryptPasswordEncoder.matches(password,fetch_user.getPassword())){
-                    responseMessage.setMessage("User Logged In Successfully");
-                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                    jwtResponse.setMessage(fetch_user.getFirstName()+" "+fetch_user.getLastName());
+                    //String token = fetch_user.getToken();
+
+                    jwtResponse.setToken(fetch_user.getToken());
+                    return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
                 }
                 responseMessage.setMessage("Bad Credentials");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
@@ -201,7 +207,7 @@ public class UserService {
             
         } catch (Exception e) {
             e.printStackTrace();
-            responseMessage.setMessage("User logged in successfully");
+            responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
         
