@@ -22,6 +22,7 @@ import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
 import com.brewingjava.mahavir.entities.product.Factors;
 import com.brewingjava.mahavir.entities.product.FreeItem;
+import com.brewingjava.mahavir.entities.product.ProductDescription;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.entities.product.ProductReviews;
 import com.brewingjava.mahavir.entities.product.ProductVariants;
@@ -412,11 +413,43 @@ public class ProductDetailsService {
             ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);    
             if(productDetail==null){
                 responseMessage.setMessage("Product Not found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
             FreeItem freeItem = new FreeItem(name,price,new Binary(BsonBinarySubType.BINARY,image.getBytes()));
             productDetail.setFreeItem(freeItem);
             productDetailsDao.save(productDetail);
             responseMessage.setMessage("Free Item added successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> addDescription(String authorization,String modelNumber,String title,String description,MultipartFile image){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admin can add free item");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+            if(productDetail==null){
+                responseMessage.setMessage("Product Not found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            ArrayList<ProductDescription> list = productDetail.getProductDescriptions();
+            if(list==null){
+                list = new ArrayList<>();
+            }
+            ProductDescription productDescription = new ProductDescription(title, description, new Binary(BsonBinarySubType.BINARY, image.getBytes()));
+            list.add(productDescription);
+            productDetail.setProductDescriptions(list);
+            productDetailsDao.save(productDetail);
+            responseMessage.setMessage("Product Details updated Successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
             e.printStackTrace();

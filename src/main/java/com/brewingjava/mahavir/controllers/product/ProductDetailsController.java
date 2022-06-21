@@ -146,6 +146,17 @@ public class ProductDetailsController {
         }
     }   
 
+    @PostMapping("/description/{modelNumber}")
+    public ResponseEntity<?> addDescription(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber,@RequestParam("title") String title, @RequestParam("description") String description,@RequestParam("image") MultipartFile image){
+        try {
+            return productDetailsService.addDescription(authorization, modelNumber, title, description, image);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @GetMapping("/get-reviews/{modelNumber}")
     public ResponseEntity<?> getReviews(@PathVariable("modelNumber") String modelNumber){
         try {

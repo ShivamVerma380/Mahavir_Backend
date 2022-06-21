@@ -53,6 +53,8 @@ public class ProductDetail {
 
         private FreeItem freeItem;
 
+        private ArrayList<ProductDescription> productDescriptions;
+
 
         public ProductDetail() {
         }
@@ -238,17 +240,27 @@ public class ProductDetail {
             this.freeItem = freeItem;
         }
 
+        public ArrayList<ProductDescription> getProductDescriptions() {
+            return productDescriptions;
+        }
+
+        public void setProductDescriptions(ArrayList<ProductDescription> productDescriptions) {
+            this.productDescriptions = productDescriptions;
+        }
+
         @Override
         public String toString() {
             return "ProductDetail [OfferPrice=" + OfferPrice + ", ProductVariants=" + ProductVariants + ", category="
-                    + category + ", freeItem=" + freeItem + ", modelNumber=" + modelNumber + ", productHighlights="
-                    + productHighlights + ", productImage1=" + productImage1 + ", productImage2=" + productImage2
-                    + ", productImage3=" + productImage3 + ", productImage4=" + productImage4 + ", productImage5="
-                    + productImage5 + ", productInformation=" + productInformation + ", productName=" + productName
-                    + ", productPrice=" + productPrice + ", productVideoLink=" + productVideoLink + ", subCategoryMap="
-                    + subCategoryMap + ", variants=" + variants + "]";
+                    + category + ", freeItem=" + freeItem + ", modelNumber=" + modelNumber + ", productDescriptions="
+                    + productDescriptions + ", productHighlights=" + productHighlights + ", productImage1="
+                    + productImage1 + ", productImage2=" + productImage2 + ", productImage3=" + productImage3
+                    + ", productImage4=" + productImage4 + ", productImage5=" + productImage5 + ", productInformation="
+                    + productInformation + ", productName=" + productName + ", productPrice=" + productPrice
+                    + ", productVideoLink=" + productVideoLink + ", subCategoryMap=" + subCategoryMap + ", variants="
+                    + variants + "]";
         }
 
+       
         
         
 }
