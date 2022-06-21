@@ -115,7 +115,7 @@ public class EmailVerificationService {
                 MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name());
 
-        // helper.addAttachment("OTP.png", new ClassPathResource("OTP.png"));
+        helper.addAttachment("OTP.png", new ClassPathResource("OTP.png"));
 
         Template t = freemarkerConfig.getTemplate("email-template.ftlh");
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, mail.getModel());
