@@ -15,6 +15,7 @@ import com.brewingjava.mahavir.entities.admin.Admin;
 import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.entities.user.Orders;
+import com.brewingjava.mahavir.entities.user.UserAddress;
 import com.brewingjava.mahavir.entities.user.UserRequest;
 import com.brewingjava.mahavir.helper.JwtResponse;
 import com.brewingjava.mahavir.helper.JwtUtil;
@@ -32,6 +33,7 @@ import org.springframework.security.config.annotation.web.configurers.oauth2.cli
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import ch.qos.logback.core.pattern.util.AsIsEscapeUtil;
 
@@ -108,6 +110,36 @@ public class UserService {
 
             jwtResponse.setMessage("User registered  successfully");
             return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> addAddress(String authorization,UserAddress userAddress){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest userRequest = userDao.findByEmail(email);
+            if(userRequest==null){
+                responseMessage.setMessage("User Not found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            ArrayList<UserAddress> list = userRequest.getUserAdresses();
+            if(list ==null){
+                list = new ArrayList<>();
+            }
+            if(list.size()==3){
+                responseMessage.setMessage("More addresses can't be saved");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            list.add(userAddress);
+            userRequest.setUserAdresses(list);
+            userDao.save(userRequest);
+
+            responseMessage.setMessage("Address saved successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

@@ -1,5 +1,6 @@
 package com.brewingjava.mahavir.entities.user;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -32,6 +33,9 @@ public class UserRequest {
     private String token;
 
     private List<String> addToCompare;  //String of model Numbers
+
+    private ArrayList<UserAddress> userAdresses;
+
 
     
     public UserRequest() {
@@ -147,23 +151,22 @@ public class UserRequest {
     }
 
 
+    public ArrayList<UserAddress> getUserAdresses() {
+        return userAdresses;
+    }
+
+
+    public void setUserAdresses(ArrayList<UserAddress> userAdresses) {
+        this.userAdresses = userAdresses;
+    }
+
+
     @Override
     public String toString() {
         return "UserRequest [addToCompare=" + addToCompare + ", email=" + email + ", firstName=" + firstName
                 + ", lastName=" + lastName + ", password=" + password + ", phoneNo=" + phoneNo
-                + ", productsBoughtByUser=" + productsBoughtByUser + ", token=" + token + ", userCartProducts="
-                + userCartProducts + "]";
+                + ", productsBoughtByUser=" + productsBoughtByUser + ", token=" + token + ", userAdresses="
+                + userAdresses + ", userCartProducts=" + userCartProducts + "]";
     }
-
-
-   
-    
-    
-
-
-    
-
-    
-    
 
 }
