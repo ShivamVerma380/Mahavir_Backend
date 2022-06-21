@@ -51,6 +51,9 @@ public class ProductDetail {
 
         private List<ProductVariants> ProductVariants; // store product variants
 
+        private FreeItem freeItem;
+
+
         public ProductDetail() {
         }
 
@@ -227,15 +230,25 @@ public class ProductDetail {
             ProductVariants = productVariants;
         }
 
+        public FreeItem getFreeItem() {
+            return freeItem;
+        }
+
+        public void setFreeItem(FreeItem freeItem) {
+            this.freeItem = freeItem;
+        }
+
         @Override
         public String toString() {
             return "ProductDetail [OfferPrice=" + OfferPrice + ", ProductVariants=" + ProductVariants + ", category="
-                    + category + ", modelNumber=" + modelNumber + ", productHighlights=" + productHighlights
-                    + ", productImage1=" + productImage1 + ", productImage2=" + productImage2 + ", productImage3="
-                    + productImage3 + ", productImage4=" + productImage4 + ", productImage5=" + productImage5
-                    + ", productInformation=" + productInformation + ", productName=" + productName + ", productPrice="
-                    + productPrice + ", productVideoLink=" + productVideoLink + ", subCategoryMap=" + subCategoryMap
-                    + ", variants=" + variants + "]";
+                    + category + ", freeItem=" + freeItem + ", modelNumber=" + modelNumber + ", productHighlights="
+                    + productHighlights + ", productImage1=" + productImage1 + ", productImage2=" + productImage2
+                    + ", productImage3=" + productImage3 + ", productImage4=" + productImage4 + ", productImage5="
+                    + productImage5 + ", productInformation=" + productInformation + ", productName=" + productName
+                    + ", productPrice=" + productPrice + ", productVideoLink=" + productVideoLink + ", subCategoryMap="
+                    + subCategoryMap + ", variants=" + variants + "]";
         }
+
+        
         
 }

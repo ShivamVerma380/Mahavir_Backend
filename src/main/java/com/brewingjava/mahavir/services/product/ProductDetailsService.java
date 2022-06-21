@@ -21,6 +21,7 @@ import com.brewingjava.mahavir.entities.categories.ProductInformationItem;
 import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
 import com.brewingjava.mahavir.entities.product.Factors;
+import com.brewingjava.mahavir.entities.product.FreeItem;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.entities.product.ProductReviews;
 import com.brewingjava.mahavir.entities.product.ProductVariants;
@@ -398,6 +399,32 @@ public class ProductDetailsService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    public ResponseEntity<?> addFreeItem(String authorization,String modelNumber,String name,String price,MultipartFile image){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admin can add free item");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);    
+            if(productDetail==null){
+                responseMessage.setMessage("Product Not found");
+            }
+            FreeItem freeItem = new FreeItem(name,price,new Binary(BsonBinarySubType.BINARY,image.getBytes()));
+            productDetail.setFreeItem(freeItem);
+            productDetailsDao.save(productDetail);
+            responseMessage.setMessage("Free Item added successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 
     public ResponseEntity<?> getProductDetailsByFactors(String modelNumber,String factorName){
         try {
