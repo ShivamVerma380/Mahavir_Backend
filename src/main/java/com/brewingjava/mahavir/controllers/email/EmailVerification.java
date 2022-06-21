@@ -1,6 +1,10 @@
 package com.brewingjava.mahavir.controllers.email;
 
 import com.brewingjava.mahavir.services.email.EmailVerificationService;
+import com.brewingjava.mahavir.services.email.Mail;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +26,20 @@ public class EmailVerification {
     @GetMapping("/verify-email/{email}")
     public ResponseEntity<?> getOTP(@PathVariable("email")String email){
         try {
-            return emailVerificationService.getOtp(email); 
+            Mail mail = new Mail();
+            mail.setFrom("shivam380.testing@gmail.com");
+            mail.setTo(email);
+            mail.setSubject("Sending Email with Freemarker HTML Template Example");
+
+            Map model = new HashMap();
+            model.put("name", "Memorynotfound.com");
+            model.put("location", "Belgium");
+            model.put("signature", "https://memorynotfound.com");
+            mail.setModel(model);
+
+            emailVerificationService.sendSimpleMessage(mail);
+
+            return ResponseEntity.status(HttpStatus.OK).body("Email sent");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

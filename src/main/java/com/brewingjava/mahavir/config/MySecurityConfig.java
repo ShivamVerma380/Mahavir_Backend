@@ -64,18 +64,26 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
     
-    @Bean
-    public JavaMailSender javaMailSender() { 
-          return new JavaMailSenderImpl();
-    }
+    // @Bean
+    // public JavaMailSender javaMailSender() { 
+    //       return new JavaMailSenderImpl();
+    // }
     
+
+    // @Primary
+    // @Bean
+    // public FreeMarkerConfigurationFactoryBean factoryBean(){
+    //     FreeMarkerConfigurationFactoryBean bean = new FreeMarkerConfigurationFactoryBean();
+    //     bean.setTemplateLoaderPath("classpath:/templates");
+    //     return bean;
+    // }
+
 
     @Primary
     @Bean
-    public FreeMarkerConfigurationFactoryBean factoryBean(){
+    public FreeMarkerConfigurationFactoryBean getFreeMarkerConfiguration() {
         FreeMarkerConfigurationFactoryBean bean = new FreeMarkerConfigurationFactoryBean();
-        bean.setTemplateLoaderPath("classpath:/templates");
+        bean.setTemplateLoaderPath("classpath:templates/");
         return bean;
     }
-
 }

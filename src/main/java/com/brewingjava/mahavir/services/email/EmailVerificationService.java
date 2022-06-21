@@ -3,17 +3,28 @@ package com.brewingjava.mahavir.services.email;
 
 import com.brewingjava.mahavir.helper.OtpResponse;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.mail.PasswordAuthentication;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.Random;
 
 import javax.mail.Authenticator;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -47,7 +58,7 @@ public class EmailVerificationService {
             
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication(){
-                    return new PasswordAuthentication(from, "xzdiplmftkwjhlqy");
+                    return new PasswordAuthentication(from, "xzdiplmftkwjhlqy   ");
                 }
 
             });
@@ -90,5 +101,32 @@ public class EmailVerificationService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(otpResponse);
         }
     }
+
+
+    @Autowired
+    private JavaMailSender emailSender;
+
+    @Autowired
+    private Configuration freemarkerConfig;
+
+    public void sendSimpleMessage(Mail mail) throws MessagingException, IOException, TemplateException {
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message,
+                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                StandardCharsets.UTF_8.name());
+
+        // helper.addAttachment("OTP.png", new ClassPathResource("OTP.png"));
+
+        Template t = freemarkerConfig.getTemplate("email-template.ftlh");
+        String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, mail.getModel());
+
+        helper.setTo(mail.getTo());
+        helper.setText(html, true);
+        helper.setSubject(mail.getSubject());
+        helper.setFrom(mail.getFrom());
+
+        emailSender.send(message);
+    }
+
 
 }
