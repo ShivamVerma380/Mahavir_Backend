@@ -5,6 +5,7 @@ import com.brewingjava.mahavir.services.email.Mail;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,15 +27,22 @@ public class EmailVerification {
     @GetMapping("/verify-email/{email}")
     public ResponseEntity<?> getOTP(@PathVariable("email")String email){
         try {
+            Random random = new Random();
+            int number = random.nextInt(999999);
+
+            String otp = String.format("%06d", number);
+            
             Mail mail = new Mail();
             mail.setFrom("shivam380.testing@gmail.com");
             mail.setTo(email);
             mail.setSubject("Sending Email with Freemarker HTML Template Example");
 
+
             Map model = new HashMap();
-            model.put("name", "Memorynotfound.com");
+            model.put("name", email);
             model.put("location", "Belgium");
             model.put("signature", "https://memorynotfound.com");
+            model.put("otp", otp);
             mail.setModel(model);
 
             emailVerificationService.sendSimpleMessage(mail);
