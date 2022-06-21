@@ -37,9 +37,9 @@ public class UserController {
     }
 
     @PostMapping("/address")
-    public ResponseEntity<?> addAddress(@RequestHeader("Authorization") String authorization,@RequestBody UserAddress userAddress){
+    public ResponseEntity<?> addAddress(@RequestHeader("Authorization") String authorization,@RequestParam("name") String name,@RequestParam("pincode")String pincode,@RequestParam("locality") String locality,@RequestParam("address") String address,@RequestParam("city") String city,@RequestParam("state") String state,@RequestParam("landmark") String landmark,@RequestParam("alternateMobile") String alternateMobile,@RequestParam("addressType") String addressType ){
         try {
-            return userService.addAddress(authorization, userAddress);
+            return userService.addAddress(authorization, name,pincode,locality,address,city,state,landmark,alternateMobile,addressType);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

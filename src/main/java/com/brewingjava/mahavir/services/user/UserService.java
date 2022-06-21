@@ -117,7 +117,7 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> addAddress(String authorization,UserAddress userAddress){
+    public ResponseEntity<?> addAddress(String authorization, String name,String pincode,String locality,String address,String city,String state,String landmark,String alternateMobile,String addressType){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -134,6 +134,22 @@ public class UserService {
                 responseMessage.setMessage("More addresses can't be saved");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
+            UserAddress userAddress = new UserAddress();
+            userAddress.setName(name);
+            userAddress.setState(state);
+            userAddress.setAddress(address);
+            userAddress.setAddressType(addressType);
+            if(!alternateMobile.trim().isEmpty()){
+                userAddress.setAlternateMobile(alternateMobile);
+            }
+            if(!landmark.trim().isEmpty()){
+                userAddress.setLandmark(landmark);
+            }
+            userAddress.setMobileNumber(userRequest.getPhoneNo());
+            userAddress.setPincode(pincode);
+            userAddress.setLocality(locality);
+            userAddress.setCity(city);
+            
             list.add(userAddress);
             userRequest.setUserAdresses(list);
             userDao.save(userRequest);

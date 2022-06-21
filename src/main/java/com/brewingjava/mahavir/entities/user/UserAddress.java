@@ -7,7 +7,7 @@ public class UserAddress {
     
     private String name;
 
-    private String mobileNumber;
+    private String mobileNumber; //already from db
 
     private String pincode;
 
