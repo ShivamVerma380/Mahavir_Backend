@@ -27,9 +27,8 @@
         </tr>
         <tr>
             <td bgcolor="#FF6262"  style="padding: 40px 30px 40px 30px;">
-                <p bgcolor="#FFFFFF">Dear ${name},</p>
-                <p bgcolor="#FFFFFF"> Here is your OTP: <b>${otp}</b></p>
-                <p bgcolor="#FFFFFF">Thanks and keep shopping with Mahavir Electronics</p>
+                <p style="color:white">Dear ${name}<br></br>Here is your OTP:<b>${otp}</b><br></br>Thanks and keep shopping with Mahavir Electronics.</p>
+                
             </td>
         </tr>
     </table>

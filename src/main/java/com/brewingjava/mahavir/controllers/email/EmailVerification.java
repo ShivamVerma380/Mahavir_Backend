@@ -39,7 +39,7 @@ public class EmailVerification {
 
 
             Map model = new HashMap();
-            model.put("name", email);
+            model.put("name", "Customer,");
             model.put("location", "Belgium");
             model.put("signature", "https://memorynotfound.com");
             model.put("otp", otp);
