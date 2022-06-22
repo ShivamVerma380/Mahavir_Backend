@@ -13,6 +13,7 @@
         body {
             font-family: 'Roboto', sans-serif;
             font-size: 48px;
+            
         }
     </style>
 </head>
@@ -20,15 +21,15 @@
 
     <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
         <tr>
-            <td align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;">
-                <img src="https://github.com/ShivamVerma380/JwtRefreshToken/blob/master/OTP.png?raw=true"  style="width:600px"/>
+            <td align="center" bgcolor="#000000" style="padding: 40px 0 30px 0;">
+                <img src="https://github.com/ShivamVerma380/JwtRefreshToken/blob/master/OTP.png?raw=true"  style="width:600px ;height:300px"/>
             </td>
         </tr>
         <tr>
-            <td bgcolor="#eaeaea" style="padding: 40px 30px 40px 30px;">
-                <p>Dear ${name},</p>
-                <p> Here is your OTP: <b>${otp}</b></p>
-                <p>Thanks and keep shopping with Mahavir Electronics</p>
+            <td bgcolor="#FF6262"  style="padding: 40px 30px 40px 30px;">
+                <p bgcolor="#FFFFFF">Dear ${name},</p>
+                <p bgcolor="#FFFFFF"> Here is your OTP: <b>${otp}</b></p>
+                <p bgcolor="#FFFFFF">Thanks and keep shopping with Mahavir Electronics</p>
             </td>
         </tr>
     </table>
