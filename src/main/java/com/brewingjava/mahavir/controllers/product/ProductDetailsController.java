@@ -135,6 +135,19 @@ public class ProductDetailsController {
         }
     }
 
+    @PostMapping("/filter-criterias/{modelNumber}")
+    public ResponseEntity<?> addProductFilterCriterias(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber,@RequestBody HashMap<String,String> filterCriterias){
+        try {
+            return productDetailsService.addProductFilterCriterias(authorization, modelNumber, filterCriterias);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    
+
     @PostMapping("/free-item/{modelNumber}")
     public ResponseEntity<?> addFreeItem(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber, @RequestParam("name") String name,@RequestParam("price") String price , @RequestParam("image") MultipartFile image){
         try {

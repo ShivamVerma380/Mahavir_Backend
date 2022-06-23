@@ -789,4 +789,35 @@ public class ProductDetailsService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    public ResponseEntity<?> addProductFilterCriterias(String authorization, String modelNumber,
+            HashMap<String, String> filterCriterias) {
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findByEmail(email);
+            if (admin == null) {
+                responseMessage.setMessage("Only admin can add product information");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            if (filterCriterias == null) {
+                responseMessage.setMessage("Product Information is Empty");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            ProductDetail existingProductDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+            if (existingProductDetail == null) {
+                responseMessage.setMessage("Product Not Found!!");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            existingProductDetail.setFiltercriterias(filterCriterias);
+            productDetailsDao.save(existingProductDetail);
+            responseMessage.setMessage("Product Information Saved Successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+            // existingProductDetail.setProductInformation(productDetail);
+        }catch(Exception e){
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseMessage);
+        }
+    }
 }

@@ -55,16 +55,21 @@ public class ProductDetail {
 
         private ArrayList<ProductDescription> productDescriptions;
 
+        private HashMap<String,String> filtercriterias;
+
 
         public ProductDetail() {
         }
+
+        
 
         public ProductDetail(String modelNumber, String productName, String productHighlights, Binary productImage1,
                 Binary productImage2, Binary productImage3, Binary productImage4, Binary productImage5,
                 String productPrice, String productVideoLink, String category, HashMap<String, String> subCategoryMap,
                 String offerPrice, HashMap<String, HashMap<String, String>> productInformation,
                 HashMap<String, ArrayList<String>> variants,
-                List<com.brewingjava.mahavir.entities.product.ProductVariants> productVariants) {
+                List<com.brewingjava.mahavir.entities.product.ProductVariants> productVariants, FreeItem freeItem,
+                ArrayList<ProductDescription> productDescriptions, HashMap<String, String> filtercriterias) {
             this.modelNumber = modelNumber;
             this.productName = productName;
             this.productHighlights = productHighlights;
@@ -81,7 +86,12 @@ public class ProductDetail {
             this.productInformation = productInformation;
             this.variants = variants;
             ProductVariants = productVariants;
+            this.freeItem = freeItem;
+            this.productDescriptions = productDescriptions;
+            this.filtercriterias = filtercriterias;
         }
+
+
 
         public String getModelNumber() {
             return modelNumber;
@@ -248,19 +258,29 @@ public class ProductDetail {
             this.productDescriptions = productDescriptions;
         }
 
+        public HashMap<String, String> getFiltercriterias() {
+            return filtercriterias;
+        }
+
+        public void setFiltercriterias(HashMap<String, String> filtercriterias) {
+            this.filtercriterias = filtercriterias;
+        }
+
+
+
         @Override
         public String toString() {
             return "ProductDetail [OfferPrice=" + OfferPrice + ", ProductVariants=" + ProductVariants + ", category="
-                    + category + ", freeItem=" + freeItem + ", modelNumber=" + modelNumber + ", productDescriptions="
-                    + productDescriptions + ", productHighlights=" + productHighlights + ", productImage1="
-                    + productImage1 + ", productImage2=" + productImage2 + ", productImage3=" + productImage3
-                    + ", productImage4=" + productImage4 + ", productImage5=" + productImage5 + ", productInformation="
-                    + productInformation + ", productName=" + productName + ", productPrice=" + productPrice
-                    + ", productVideoLink=" + productVideoLink + ", subCategoryMap=" + subCategoryMap + ", variants="
-                    + variants + "]";
+                    + category + ", filtercriterias=" + filtercriterias + ", freeItem=" + freeItem + ", modelNumber="
+                    + modelNumber + ", productDescriptions=" + productDescriptions + ", productHighlights="
+                    + productHighlights + ", productImage1=" + productImage1 + ", productImage2=" + productImage2
+                    + ", productImage3=" + productImage3 + ", productImage4=" + productImage4 + ", productImage5="
+                    + productImage5 + ", productInformation=" + productInformation + ", productName=" + productName
+                    + ", productPrice=" + productPrice + ", productVideoLink=" + productVideoLink + ", subCategoryMap="
+                    + subCategoryMap + ", variants=" + variants + "]";
         }
 
-       
+        
         
         
 }
