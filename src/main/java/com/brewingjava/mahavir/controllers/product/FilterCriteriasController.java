@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import com.brewingjava.mahavir.helper.ResponseMessage;
 import com.brewingjava.mahavir.services.product.FilterCriteriasService;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FilterCriteriasController {
 
     @Autowired
@@ -36,6 +38,7 @@ public class FilterCriteriasController {
     }
 
     @GetMapping("/filtercriterias/{category}")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<?> getFilterCriterias(@PathVariable("category") String category){
         try {
             return filterCriteriasService.getFilterCriterias(category);

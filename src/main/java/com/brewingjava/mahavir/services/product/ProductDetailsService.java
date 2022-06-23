@@ -114,6 +114,7 @@ public class ProductDetailsService {
             productDetail.setSubCategoryMap(new HashMap<String,String>());
             productDetail.setProductVariants(new ArrayList<>());
             productDetail.setVariants(new HashMap<>());
+            productDetail.setFiltercriterias(new HashMap<>());
             productDetailsDao.save(productDetail);
             responseMessage.setMessage("Model saved successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
