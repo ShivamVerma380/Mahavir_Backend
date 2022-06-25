@@ -4,7 +4,7 @@ import org.bson.types.Binary;
 
 public class Factors {  // add-productvariant/modelNumber/factor i.e. 3GB (Non images data) Key Value title,subtitle ,price
                         //add-productvariantimages/modelNumber/factor i.e. 3GB(images data) Key value productImage 1,2,3,4,5 => MultipartFIle
-    private String factorname;  //title
+    private String factorname;  //title 
 
     //Color title price images
 
