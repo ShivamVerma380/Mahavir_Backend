@@ -309,12 +309,17 @@ public class ExcelHelper {
                             value = formatter.formatCellValue(cell);
                             if(value.trim().equals("")) break;
                             productDetail = productDetailsDao.findProductDetailBymodelNumber(value);
-                            productVariants = productDetail.getProductVariants();
+                            productVariants =  productDetail.getProductVariants();
                             break;
                         case 1:
                             if(productDetail==null) break;
                             value = formatter.formatCellValue(cell);
                             if(value.trim().equals("")) break;
+                            for(int i=0;i<productVariants.size();i++){
+                                if(productVariants.get(i).getFactorName().equals(value)){
+                                    productVariants.remove(productVariants.get(i));
+                                }
+                            }
                             obj.setFactorName(value);
                             break;
                         case 2:
@@ -441,6 +446,7 @@ public class ExcelHelper {
                 productVariants.add(obj);
                 System.out.println(obj.getFactorName()+"\n"+obj.getFactorsAffected());
                 // System.out.println("productVariants="+productVariants);
+                productDetail.setProductVariants(productVariants);
                 productDetailsDao.save(productDetail);
                 // productDetailsDao.save(productDetail);               
             }
