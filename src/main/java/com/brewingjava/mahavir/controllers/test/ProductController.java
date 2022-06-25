@@ -54,39 +54,17 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
-    @PostMapping("/excel/subCategories")
-    public ResponseEntity<?> addSubCategories(@RequestParam("file") MultipartFile file){
-        try {
-            if(excelHelper.checkFileType(file)){
-                List<ProductDetail> products = excelHelper.addSubCategories(file.getInputStream());
-                productDao.saveAll(products);
 
-                // products = excelHelper.addSubCategories(file.getInputStream());
-                // productDao.saveAll(products);
-                // return ResponseEntity.ok(products);
-                responseMessage.setMessage("Excel data added successfully");
-                return new ResponseEntity<>(responseMessage, HttpStatus.OK);
-            }else{
-                responseMessage.setMessage("File not acceptable");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
-
-    @GetMapping("/excel")
-    public ResponseEntity<?> getProducts(){
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(productDao.findAll());
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
+    // @GetMapping("/excel")
+    // public ResponseEntity<?> getProducts(){
+    //     try {
+    //         return ResponseEntity.status(HttpStatus.OK).body(productDao.findAll());
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         responseMessage.setMessage(e.getMessage());
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+    //     }
+    // }
 
 }
 

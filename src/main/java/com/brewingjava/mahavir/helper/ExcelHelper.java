@@ -164,6 +164,20 @@ public class ExcelHelper {
                             value = formatter.formatCellValue(cell);
                             productDetail.setProductHighlights(value);
                             break;
+                        case 11:
+                            value = formatter.formatCellValue(cell);
+                            if(value.trim().equals("")){
+                                productDetail.setSubCategoryMap(new HashMap<>());
+                                break;
+                            } 
+                            HashMap<String,String> map = new HashMap<>();
+                            String arr[]= value.split(",");
+                            for(int i=0;i<arr.length;i++){
+                                String subCat[] = arr[i].split(":");
+                                map.put(subCat[0],subCat[1]);
+                            }
+                            productDetail.setSubCategoryMap(map);
+                            break;
                         default:
                             break;
                             
@@ -172,7 +186,7 @@ public class ExcelHelper {
                     rowNumber++;
                 }
                 if(!productDetail.getModelNumber().trim().equals("")){
-                    productDetail.setSubCategoryMap(new HashMap<>());
+                    // productDetail.setSubCategoryMap(new HashMap<>());
                     productDetail.setFiltercriterias(new HashMap<>());
                     productDetail.setFreeItem(new FreeItem());
                     productDetail.setProductInformation(new HashMap<>());
@@ -189,67 +203,6 @@ public class ExcelHelper {
         }
         return list;
 
-    }
-
-    @Autowired
-    public ProductDetailsDao productDetailsDao;
-
-    public List<ProductDetail> addSubCategories(InputStream is){
-
-        List<ProductDetail> list = new ArrayList<>();
-        
-        DataFormatter formatter = new DataFormatter();
-        String value;
-        try {
-            XSSFWorkbook workbook =  new XSSFWorkbook(is);
-            XSSFSheet sheet = workbook.getSheet("SubCategories");
-            int rowNumber=0;
-
-            Iterator<Row> iterator = sheet.iterator();
-            while(iterator.hasNext()){
-                Row row = iterator.next();
-                if(rowNumber<=1){
-                    rowNumber++;
-                    continue;
-                }
-                Iterator<Cell> cells = row.iterator();
-                int cid=0;
-                ProductDetail productDetail = null;
-                while(cells.hasNext()){
-                    Cell cell = cells.next();
-                    switch(cid){
-                        case 0:
-                            value = formatter.formatCellValue(cell);
-                            productDetail = productDetailsDao.findProductDetailBymodelNumber(value);
-                            break;
-                        case 1:
-                            value = formatter.formatCellValue(cell);
-                            String arr[]= value.split(",");
-                            if(productDetail!=null){
-                                HashMap<String,String> map = new HashMap<>();
-                                for(int i=0;i<arr.length;i++){
-                                    String subCat[] = arr[i].split(":");
-                                    map.put(subCat[0],subCat[1]);
-                                }
-                                productDetail.setSubCategoryMap(map);
-                                list.add(productDetail);
-                            }
-                            break;
-                        default:
-                            break;
-                            
-                    }
-                    cid++;
-                    rowNumber++;
-                }
-            
-            }
-
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
     }
     
 }
