@@ -22,7 +22,7 @@
     <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
         <tr>
             <td align="center" bgcolor="#000000" style="padding: 40px 0 30px 0;">
-                <img src="https://github.com/ShivamVerma380/JwtRefreshToken/blob/master/OTP.png?raw=true"  style="width:600px ;height:300px"/>
+                <img src="https://i.ibb.co/WPYhjYf/OTP-bg.jpg"  style="width:600px ;height:300px"/>
             </td>
         </tr>
         <tr>

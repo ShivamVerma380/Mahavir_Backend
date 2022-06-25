@@ -9,18 +9,16 @@ import java.util.List;
 
 import org.apache.poi.sl.usermodel.PictureData;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFPicture;
-import org.apache.poi.xssf.usermodel.XSSFPictureData;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.bson.BsonBinarySubType;
-import org.bson.types.Binary;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.brewingjava.mahavir.entities.product.ProductDetail;
-import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
+import com.brewingjava.mahavir.entities.test.ProductDetail;
+
+import lombok.val;
 
 @Component
 public class ExcelHelper {
@@ -37,128 +35,78 @@ public class ExcelHelper {
 
     public List<ProductDetail> convertExcelToListOfProductDetails(InputStream is){
         List<ProductDetail> list = new ArrayList<>();
+
+        DataFormatter formatter = new DataFormatter();
         PictureData pict;
         byte[] data;
 
         try {
             XSSFWorkbook workbook =  new XSSFWorkbook(is);
-            List<XSSFPictureData> pictures= workbook.getAllPictures();
             XSSFSheet sheet = workbook.getSheet("Excel automation");
             int rowNumber=0;
 
             Iterator<Row> iterator = sheet.iterator();
             while(iterator.hasNext()){
                 Row row = iterator.next();
-                if(rowNumber==0){
+                if(rowNumber<=1){
                     rowNumber++;
                     continue;
                 }
                 Iterator<Cell> cells = row.iterator();
                 int cid=0;
                 ProductDetail productDetail = new ProductDetail();
+                String value;
                 while(cells.hasNext()){
                     Cell cell = cells.next();
 
                     switch(cid){
                         case 0:
                             // int s = (int)cell.getNumericCellValue();
-                            productDetail.setModelNumber(Double.toString(cell.getNumericCellValue()));
+                            value = formatter.formatCellValue(cell);
+                            productDetail.setModelNumber(value);
                             break;
                         case 1:
-                            productDetail.setProductName(cell.getStringCellValue());
+                            value = formatter.formatCellValue(cell);
+                            productDetail.setProductName(value);
                             break;
                         
                         
                         case 2:
-                            // pict = pictures.get(0);
-                            //String ext = pict.g
-                            data = pictures.get(0).getData();
-                            // try{
-                            //     OutputStream out = new FileOutputStream("pict.jpg");
-                            //     out.write(data);
-                            
-                            // }catch(Exception e){
-                            //     e.printStackTrace();
-                            // }
-                            productDetail.setProductImage1(new Binary(BsonBinarySubType.BINARY, data));
+                            value = formatter.formatCellValue(cell);
+                            productDetail.setImg1(value);
                             break;
                         case 3:
-                            // //continue;
-                            // pict = (PictureData)cell;
-                            // //String ext = pict.g
-                            // data = pict.getData();
-                            // pict = pictures.get(0);
-                            //String ext = pict.g
-                            data = pictures.get(0).getData();
-                            // try{
-                            //     OutputStream out = new FileOutputStream("pict.jpg");
-                            //     out.write(data);
-                            
-                            // }catch(Exception e){
-                            //     e.printStackTrace();
-                            // }
-                        productDetail.setProductImage2(new Binary(BsonBinarySubType.BINARY, data));
-                        break;
+                            value = formatter.formatCellValue(cell);
+                            productDetail.setImg2(value);
+                            break;
                         case 4:
-                        // pict = (PictureData)cell;
-                        // //String ext = pict.g
-                        // data = pict.getData();
-                        // pict = pictures.get(0);
-                            //String ext = pict.g
-                            data = pictures.get(0).getData();
-                        // try{
-                        //     OutputStream out = new FileOutputStream("pict.jpg");
-                        //     out.write(data);
-                        
-                        // }catch(Exception e){
-                        //     e.printStackTrace();
-                        // }
-                        productDetail.setProductImage3(new Binary(BsonBinarySubType.BINARY, data));
-                        break;
+                            value = formatter.formatCellValue(cell);
+                            productDetail.setImg3(value);
+                            break;
                         case 5:
-                        // pict = (PictureData)cell;
-                        // //String ext = pict.g
-                        // data = pict.getData();
-                            // pict = pictures.get(0);
-                            //String ext = pict.g
-                            data = pictures.get(0).getData();
-                        // try{
-                        //     OutputStream out = new FileOutputStream("pict.jpg");
-                        //     out.write(data);
-                        
-                        // }catch(Exception e){
-                        //     e.printStackTrace();
-                        // }
-                        productDetail.setProductImage4(new Binary(BsonBinarySubType.BINARY, data));
-                        break;
+                            value = formatter.formatCellValue(cell);
+                            productDetail.setImg4(value);
+                            break;
                         case 6:
-                        // pict = (PictureData)cell;
-                        // //String ext = pict.g
-                        // data = pict.getData();
-                        // pict = pictures.get(0);
-                            //String ext = pict.g
-                            data = pictures.get(0).getData();
-                        // try{
-                        //     OutputStream out = new FileOutputStream("pict.jpg");
-                        //     out.write(data);
-                        
-                        // }catch(Exception e){
-                        //     e.printStackTrace();
-                        // }
-                        productDetail.setProductImage5(new Binary(BsonBinarySubType.BINARY, data));
-                        break;
+                            value = formatter.formatCellValue(cell);
+                            productDetail.setImg5(value); 
+                            break;
                         
                         case 7:
-                            productDetail.setProductPrice(Double.toString(cell.getNumericCellValue()));
+                            value = formatter.formatCellValue(cell);
+                            productDetail.setProductPrice(value);
                             break;
                         case 8:
-                            productDetail.setOfferPrice(Double.toString(cell.getNumericCellValue()));
+                            value = formatter.formatCellValue(cell);
+                            productDetail.setOfferPrice(value);
                             break;
                         case 9:
-                            productDetail.setCategory(cell.getStringCellValue());
+                            value = formatter.formatCellValue(cell);
+                            productDetail.setCategory(value);
                             break;
                         case 10:
-                            productDetail.setProductHighlights(cell.getStringCellValue());
+                            value = formatter.formatCellValue(cell);
+                            productDetail.setProductHighlights(value);
                             break;
                         default:
                             break;
