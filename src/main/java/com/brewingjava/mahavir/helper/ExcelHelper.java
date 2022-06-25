@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.bson.BsonBinary;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
@@ -28,8 +30,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.image.BufferedImage;
 
-
-import com.brewingjava.mahavir.entities.test.ProductDetail;
+import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
+import com.brewingjava.mahavir.entities.product.FreeItem;
+import com.brewingjava.mahavir.entities.product.ProductDetail;
 
 import lombok.val;
 
@@ -37,6 +40,8 @@ import lombok.val;
 public class ExcelHelper {
 
     
+   
+
 
     //check file is excel or not
     public static boolean checkFileType(MultipartFile multipartFile){
@@ -166,8 +171,16 @@ public class ExcelHelper {
                     cid++;
                     rowNumber++;
                 }
-                if(!productDetail.getModelNumber().trim().equals(""))
+                if(!productDetail.getModelNumber().trim().equals("")){
+                    productDetail.setSubCategoryMap(new HashMap<>());
+                    productDetail.setFiltercriterias(new HashMap<>());
+                    productDetail.setFreeItem(new FreeItem());
+                    productDetail.setProductInformation(new HashMap<>());
+                    productDetail.setProductVariants(new ArrayList<>());
+                    productDetail.setVariants(new HashMap<>());
                     list.add(productDetail);
+                }
+                    
 
             }   
             
@@ -176,6 +189,67 @@ public class ExcelHelper {
         }
         return list;
 
+    }
+
+    @Autowired
+    public ProductDetailsDao productDetailsDao;
+
+    public List<ProductDetail> addSubCategories(InputStream is){
+
+        List<ProductDetail> list = new ArrayList<>();
+        
+        DataFormatter formatter = new DataFormatter();
+        String value;
+        try {
+            XSSFWorkbook workbook =  new XSSFWorkbook(is);
+            XSSFSheet sheet = workbook.getSheet("SubCategories");
+            int rowNumber=0;
+
+            Iterator<Row> iterator = sheet.iterator();
+            while(iterator.hasNext()){
+                Row row = iterator.next();
+                if(rowNumber<=1){
+                    rowNumber++;
+                    continue;
+                }
+                Iterator<Cell> cells = row.iterator();
+                int cid=0;
+                ProductDetail productDetail = null;
+                while(cells.hasNext()){
+                    Cell cell = cells.next();
+                    switch(cid){
+                        case 0:
+                            value = formatter.formatCellValue(cell);
+                            productDetail = productDetailsDao.findProductDetailBymodelNumber(value);
+                            break;
+                        case 1:
+                            value = formatter.formatCellValue(cell);
+                            String arr[]= value.split(",");
+                            if(productDetail!=null){
+                                HashMap<String,String> map = new HashMap<>();
+                                for(int i=0;i<arr.length;i++){
+                                    String subCat[] = arr[i].split(":");
+                                    map.put(subCat[0],subCat[1]);
+                                }
+                                productDetail.setSubCategoryMap(map);
+                                list.add(productDetail);
+                            }
+                            break;
+                        default:
+                            break;
+                            
+                    }
+                    cid++;
+                    rowNumber++;
+                }
+            
+            }
+
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
     
 }
