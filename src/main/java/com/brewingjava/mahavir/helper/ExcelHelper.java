@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,6 +37,7 @@ import com.brewingjava.mahavir.entities.product.FreeItem;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 
 import lombok.val;
+import lombok.var;
 
 @Component
 public class ExcelHelper {
@@ -188,19 +190,19 @@ public class ExcelHelper {
                             }
                             String array[] = value.split("#");
                             for(int i=0;i<array.length;i++){
-                                System.out.println(array[i]);
+                                //System.out.println(array[i]);
                                 String subSplit[] = array[i].split("\\[");
                                 HashMap<String,String> mp = new HashMap<>();
-                                System.out.println(subSplit.length);
+                               // System.out.println(subSplit.length);
                                 String x = subSplit[1];
                                 String innermap = x.substring(0,x.length()-1);
-                                System.out.println("0:"+subSplit[0]+"\t1:"+innermap);
+                                //System.out.println("0:"+subSplit[0]+"\t1:"+innermap);
                                 String keyValue[] = innermap.split(";");
                                 for(int j=0;j<keyValue.length;j++){
-                                    System.out.println("KeyValue:"+keyValue[j]);
+                                    //System.out.println("KeyValue:"+keyValue[j]);
                                     String pair[] = keyValue[j].split("=");
                                     try {
-                                        System.out.println("pair[0]="+pair[0]+"\tpair[1]="+pair[1]);
+                                        //System.out.println("pair[0]="+pair[0]+"\tpair[1]="+pair[1]);
                                         mp.put(pair[0],pair[1]);
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -209,6 +211,28 @@ public class ExcelHelper {
                                 productInfo.put(subSplit[0],mp);
                             }
                             productDetail.setProductInformation(productInfo);
+                            break;
+                        case 13:
+                            HashMap<String,ArrayList<String>> productVariants = new HashMap<>();
+                            value = formatter.formatCellValue(cell);
+                            if(value.trim().equals("")){
+                                System.out.println("Empty");
+                                productDetail.setVariants(new HashMap<>());
+                                break;
+                            }
+                            System.out.println(value);
+                            String variants[] = value.split("#");
+                            for(int i=0;i<variants.length;i++){
+                                System.out.println(variants[i]);
+                                String factors[] = variants[i].split("\\[");
+                                String x = factors[1].substring(0,factors[1].length()-1);  
+                                String values[] = x.split(";");
+                                System.out.println("key:"+factors[0]+"\tvalues:"+x);
+                                ArrayList<String> arrayList = new ArrayList<>();
+                                for(int j=0;j<values.length;j++) arrayList.add(values[j]);
+                                productVariants.put(factors[0], arrayList);
+                            }
+                            productDetail.setVariants(productVariants);
                             break;
                         default:
                             break;
@@ -221,8 +245,8 @@ public class ExcelHelper {
                     productDetail.setFiltercriterias(new HashMap<>());
                     productDetail.setFreeItem(new FreeItem());
                     //productDetail.setProductInformation(new HashMap<>());
-                    productDetail.setProductVariants(new ArrayList<>());
-                    productDetail.setVariants(new HashMap<>());
+                    // productDetail.setProductVariants(new ArrayList<>());
+                    // productDetail.setVariants(new HashMap<>());
                     list.add(productDetail);
                 }
                     
@@ -235,5 +259,6 @@ public class ExcelHelper {
         return list;
 
     }
+    
     
 }
