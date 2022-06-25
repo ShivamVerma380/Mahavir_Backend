@@ -1,5 +1,6 @@
 package com.brewingjava.mahavir.entities.test;
 
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ public class ProductDetail {
 
     public String productName;
 
-    public String img1, img2, img3, img4, img5;
+    public Binary productImage1,productImage2,productImage3,productImage4,productImage5;
 
     public String productPrice;
     
@@ -26,15 +27,16 @@ public class ProductDetail {
     public ProductDetail() {
     }
 
-    public ProductDetail(String modelNumber, String productName, String img1, String img2, String img3, String img4,
-            String img5, String productPrice, String offerPrice, String category, String productHighlights) {
+    public ProductDetail(String modelNumber, String productName, Binary productImage1, Binary productImage2,
+            Binary productImage3, Binary productImage4, Binary productImage5, String productPrice, String offerPrice,
+            String category, String productHighlights) {
         this.modelNumber = modelNumber;
         this.productName = productName;
-        this.img1 = img1;
-        this.img2 = img2;
-        this.img3 = img3;
-        this.img4 = img4;
-        this.img5 = img5;
+        this.productImage1 = productImage1;
+        this.productImage2 = productImage2;
+        this.productImage3 = productImage3;
+        this.productImage4 = productImage4;
+        this.productImage5 = productImage5;
         this.productPrice = productPrice;
         this.offerPrice = offerPrice;
         this.category = category;
@@ -57,44 +59,44 @@ public class ProductDetail {
         this.productName = productName;
     }
 
-    public String getImg1() {
-        return img1;
+    public Binary getProductImage1() {
+        return productImage1;
     }
 
-    public void setImg1(String img1) {
-        this.img1 = img1;
+    public void setProductImage1(Binary productImage1) {
+        this.productImage1 = productImage1;
     }
 
-    public String getImg2() {
-        return img2;
+    public Binary getProductImage2() {
+        return productImage2;
     }
 
-    public void setImg2(String img2) {
-        this.img2 = img2;
+    public void setProductImage2(Binary productImage2) {
+        this.productImage2 = productImage2;
     }
 
-    public String getImg3() {
-        return img3;
+    public Binary getProductImage3() {
+        return productImage3;
     }
 
-    public void setImg3(String img3) {
-        this.img3 = img3;
+    public void setProductImage3(Binary productImage3) {
+        this.productImage3 = productImage3;
     }
 
-    public String getImg4() {
-        return img4;
+    public Binary getProductImage4() {
+        return productImage4;
     }
 
-    public void setImg4(String img4) {
-        this.img4 = img4;
+    public void setProductImage4(Binary productImage4) {
+        this.productImage4 = productImage4;
     }
 
-    public String getImg5() {
-        return img5;
+    public Binary getProductImage5() {
+        return productImage5;
     }
 
-    public void setImg5(String img5) {
-        this.img5 = img5;
+    public void setProductImage5(Binary productImage5) {
+        this.productImage5 = productImage5;
     }
 
     public String getProductPrice() {
@@ -131,11 +133,14 @@ public class ProductDetail {
 
     @Override
     public String toString() {
-        return "ProductDetail [category=" + category + ", img1=" + img1 + ", img2=" + img2 + ", img3=" + img3
-                + ", img4=" + img4 + ", img5=" + img5 + ", modelNumber=" + modelNumber + ", offerPrice=" + offerPrice
-                + ", productHighlights=" + productHighlights + ", productName=" + productName + ", productPrice="
-                + productPrice + "]";
+        return "ProductDetail [category=" + category + ", modelNumber=" + modelNumber + ", offerPrice=" + offerPrice
+                + ", productHighlights=" + productHighlights + ", productImage1=" + productImage1 + ", productImage2="
+                + productImage2 + ", productImage3=" + productImage3 + ", productImage4=" + productImage4
+                + ", productImage5=" + productImage5 + ", productName=" + productName + ", productPrice=" + productPrice
+                + "]";
     }
+
+   
 
 
     

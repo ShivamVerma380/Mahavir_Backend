@@ -1,11 +1,16 @@
 package com.brewingjava.mahavir.helper;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.apache.poi.sl.usermodel.PictureData;
 import org.apache.poi.ss.usermodel.Cell;
@@ -13,8 +18,16 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.bson.BsonBinary;
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
+import org.springframework.http.converter.BufferedImageHttpMessageConverter;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.awt.image.BufferedImage;
+
 
 import com.brewingjava.mahavir.entities.test.ProductDetail;
 
@@ -39,7 +52,13 @@ public class ExcelHelper {
         DataFormatter formatter = new DataFormatter();
         PictureData pict;
         byte[] data;
-
+        String value;
+        URL imageUrl;
+        String fileName;
+        MultipartFile multipartFile;
+        BufferedImage image;
+        ByteArrayOutputStream byteArrayOutputStream;
+        
         try {
             XSSFWorkbook workbook =  new XSSFWorkbook(is);
             XSSFSheet sheet = workbook.getSheet("Excel automation");
@@ -55,7 +74,9 @@ public class ExcelHelper {
                 Iterator<Cell> cells = row.iterator();
                 int cid=0;
                 ProductDetail productDetail = new ProductDetail();
-                String value;
+                
+                String destinationFile = "sample.jpg";
+
                 while(cells.hasNext()){
                     Cell cell = cells.next();
                     switch(cid){
@@ -71,24 +92,55 @@ public class ExcelHelper {
                         
                         
                         case 2:
+                            
                             value = formatter.formatCellValue(cell);
-                            productDetail.setImg1(value);
+                            imageUrl = new URL(value);
+                            image = ImageIO.read(imageUrl);
+                            byteArrayOutputStream = new ByteArrayOutputStream();
+                            ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            fileName = "sample.jpg";
+                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            productDetail.setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             break;
                         case 3:
                             value = formatter.formatCellValue(cell);
-                            productDetail.setImg2(value);
+                            imageUrl = new URL(value);
+                            image = ImageIO.read(imageUrl);
+                            byteArrayOutputStream = new ByteArrayOutputStream();
+                            ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            fileName = "sample.jpg";
+                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            productDetail.setProductImage2(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             break;
                         case 4:
                             value = formatter.formatCellValue(cell);
-                            productDetail.setImg3(value);
+                            imageUrl = new URL(value);
+                            image = ImageIO.read(imageUrl);
+                            byteArrayOutputStream = new ByteArrayOutputStream();
+                            ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            fileName = "sample.jpg";
+                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            productDetail.setProductImage3(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             break;
                         case 5:
                             value = formatter.formatCellValue(cell);
-                            productDetail.setImg4(value);
+                            imageUrl = new URL(value);
+                            image = ImageIO.read(imageUrl);
+                            byteArrayOutputStream = new ByteArrayOutputStream();
+                            ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            fileName = "sample.jpg";
+                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            productDetail.setProductImage4(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             break;
                         case 6:
                             value = formatter.formatCellValue(cell);
-                            productDetail.setImg5(value); 
+                            imageUrl = new URL(value);
+                            image = ImageIO.read(imageUrl);
+                            byteArrayOutputStream = new ByteArrayOutputStream();
+                            ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            fileName = "sample.jpg";
+                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            productDetail.setProductImage5(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes())); 
                             break;
                         
                         case 7:

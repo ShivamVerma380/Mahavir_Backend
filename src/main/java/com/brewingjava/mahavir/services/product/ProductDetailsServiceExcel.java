@@ -28,18 +28,18 @@ public class ProductDetailsServiceExcel {
     public ResponseMessage responseMessage;
 
     
-    public ResponseEntity<?> save(MultipartFile multipartFile){
-        try {
-            List<ProductDetail> list =  excelHelper.convertExcelToListOfProductDetails(multipartFile.getInputStream());
-            this.productDetailsDao.saveAll(list);
-            responseMessage.setMessage("Products saved successfully");
-            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
+    // public ResponseEntity<?> save(MultipartFile multipartFile){
+    //     try {
+    //         List<ProductDetail> list =  excelHelper.convertExcelToListOfProductDetails(multipartFile.getInputStream());
+    //         this.productDetailsDao.saveAll(list);
+    //         responseMessage.setMessage("Products saved successfully");
+    //         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         responseMessage.setMessage(e.getMessage());
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+    //     }
+    // }
 
 
     

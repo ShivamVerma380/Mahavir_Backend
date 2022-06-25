@@ -34,22 +34,22 @@ public class ProductDetailExcelController {
     @Autowired
     public JwtUtil jwtUtil;
 
-    @PostMapping("/add-product/excel")
-    public ResponseEntity<?> addProductFromExcel(@RequestHeader("Authorization")String authorization, @RequestParam("Products") MultipartFile multipartFile){
-        try {
-            String token = authorization.substring(7);
-            String email = jwtUtil.extractUsername(token);
-            admin = adminDao.findByEmail(email);
-            if(admin==null){
-                responseMessage.setMessage("Only admin can add products");
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-            }
-            return productDetailsServiceExcel.save(multipartFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
+    // @PostMapping("/add-product/excel")
+    // public ResponseEntity<?> addProductFromExcel(@RequestHeader("Authorization")String authorization, @RequestParam("Products") MultipartFile multipartFile){
+    //     try {
+    //         String token = authorization.substring(7);
+    //         String email = jwtUtil.extractUsername(token);
+    //         admin = adminDao.findByEmail(email);
+    //         if(admin==null){
+    //             responseMessage.setMessage("Only admin can add products");
+    //             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+    //         }
+    //         return productDetailsServiceExcel.save(multipartFile);
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         responseMessage.setMessage(e.getMessage());
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+    //     }
+    // }
 
 }

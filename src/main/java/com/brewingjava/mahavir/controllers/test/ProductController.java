@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,6 +45,17 @@ public class ProductController {
                 responseMessage.setMessage("File not acceptable");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @GetMapping("/excel")
+    public ResponseEntity<?> getProducts(){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(productDao.findAll());
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
