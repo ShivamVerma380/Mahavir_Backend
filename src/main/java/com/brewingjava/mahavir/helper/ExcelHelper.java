@@ -17,6 +17,7 @@ import org.apache.poi.sl.usermodel.PictureData;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xslf.model.ParagraphPropertyFetcher.ParaPropFetcher;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.bson.BsonBinary;
@@ -178,9 +179,39 @@ public class ExcelHelper {
                             }
                             productDetail.setSubCategoryMap(map);
                             break;
+                        case 12:
+                            HashMap<String,HashMap<String,String>> productInfo = new HashMap<>();
+                            value = formatter.formatCellValue(cell);
+                            if(value.trim().equals("")){
+                                productDetail.setProductInformation(new HashMap<>());
+                                break;
+                            }
+                            String array[] = value.split("#");
+                            for(int i=0;i<array.length;i++){
+                                System.out.println(array[i]);
+                                String subSplit[] = array[i].split("\\[");
+                                HashMap<String,String> mp = new HashMap<>();
+                                System.out.println(subSplit.length);
+                                String x = subSplit[1];
+                                String innermap = x.substring(0,x.length()-1);
+                                System.out.println("0:"+subSplit[0]+"\t1:"+innermap);
+                                String keyValue[] = innermap.split(";");
+                                for(int j=0;j<keyValue.length;j++){
+                                    System.out.println("KeyValue:"+keyValue[j]);
+                                    String pair[] = keyValue[j].split("=");
+                                    try {
+                                        System.out.println("pair[0]="+pair[0]+"\tpair[1]="+pair[1]);
+                                        mp.put(pair[0],pair[1]);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                productInfo.put(subSplit[0],mp);
+                            }
+                            productDetail.setProductInformation(productInfo);
+                            break;
                         default:
                             break;
-                            
                     }
                     cid++;
                     rowNumber++;
@@ -189,7 +220,7 @@ public class ExcelHelper {
                     // productDetail.setSubCategoryMap(new HashMap<>());
                     productDetail.setFiltercriterias(new HashMap<>());
                     productDetail.setFreeItem(new FreeItem());
-                    productDetail.setProductInformation(new HashMap<>());
+                    //productDetail.setProductInformation(new HashMap<>());
                     productDetail.setProductVariants(new ArrayList<>());
                     productDetail.setVariants(new HashMap<>());
                     list.add(productDetail);
