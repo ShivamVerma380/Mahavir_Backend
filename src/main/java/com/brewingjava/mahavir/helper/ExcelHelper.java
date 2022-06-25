@@ -58,7 +58,6 @@ public class ExcelHelper {
                 String value;
                 while(cells.hasNext()){
                     Cell cell = cells.next();
-
                     switch(cid){
                         case 0:
                             // int s = (int)cell.getNumericCellValue();
@@ -115,7 +114,8 @@ public class ExcelHelper {
                     cid++;
                     rowNumber++;
                 }
-                list.add(productDetail);
+                if(!productDetail.getModelNumber().trim().equals(""))
+                    list.add(productDetail);
 
             }   
             
