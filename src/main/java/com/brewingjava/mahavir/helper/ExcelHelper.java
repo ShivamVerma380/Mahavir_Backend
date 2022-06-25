@@ -436,10 +436,11 @@ public class ExcelHelper {
                     cid++;
                 }
                 rowNumber++;
-                System.out.println("list="+list);
+                // System.out.println("list="+list);
                 obj.setFactorsAffected(list);
                 productVariants.add(obj);
-                System.out.println("productVariants="+productVariants);
+                System.out.println(obj.getFactorName()+"\n"+obj.getFactorsAffected());
+                // System.out.println("productVariants="+productVariants);
                 productDetailsDao.save(productDetail);
                 // productDetailsDao.save(productDetail);               
             }
