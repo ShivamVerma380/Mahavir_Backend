@@ -73,6 +73,19 @@ public class ProductController {
         }
     }
 
+    @PostMapping("/excel/Categories")
+    public ResponseEntity<?> addCategories(@RequestParam("file") MultipartFile file){
+        try {
+            String message = excelHelper.addCategories(file.getInputStream());
+            responseMessage.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     // @GetMapping("/excel")
     // public ResponseEntity<?> getProducts(){
     //     try {

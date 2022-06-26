@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,7 +36,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.image.BufferedImage;
 
+import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
+import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
+import com.brewingjava.mahavir.entities.categories.SubCategories;
+import com.brewingjava.mahavir.entities.categories.SubSubCategories;
 import com.brewingjava.mahavir.entities.product.Factors;
 import com.brewingjava.mahavir.entities.product.FreeItem;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
@@ -463,6 +468,135 @@ public class ExcelHelper {
             e.printStackTrace();
             // responseMessage.setMessage(e.getMessage());
             return false;
+        }
+    }
+
+    @Autowired
+    public CategoriesToDisplayDao categoriesToDisplayDao;
+
+
+    public String addCategories(InputStream is){
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook(is);
+            XSSFSheet sheet = workbook.getSheet("Categories");
+            int rowNumber=0;
+            DataFormatter formatter = new DataFormatter();
+            String value;
+            Iterator<Row> iterator = sheet.iterator();
+            URL imageUrl;
+            String fileName;
+            MultipartFile multipartFile;
+            BufferedImage image;
+            ByteArrayOutputStream byteArrayOutputStream;
+            List<SubSubCategories> subSubCategoriesList = new ArrayList<>();
+            while(iterator.hasNext()){
+                Row row = iterator.next();
+                if(rowNumber<1){
+                    rowNumber++;
+                    continue;
+                }
+                Iterator<Cell> cells = row.iterator();
+                int cid=0;
+                CategoriesToDisplay categoriesToDisplay = null;
+                List<SubCategories> subCategoriesList = new ArrayList<>();
+                SubCategories subCat = null;
+                SubSubCategories subSubCategories = null;
+                // subSubCategoriesList = new ArrayList<>();
+                while(cells.hasNext()){
+                    Cell cell = cells.next();
+                    switch(cid){
+                        case 0:
+                            value = formatter.formatCellValue(cell);
+                            if(value.trim().equals("")) break;
+                            categoriesToDisplay = new CategoriesToDisplay();
+                            categoriesToDisplay.setCategory(value);
+                            CategoriesToDisplay existingCat = categoriesToDisplayDao.findBycategory(value);
+                            if(existingCat!=null){
+                                categoriesToDisplay = existingCat;
+                                subCategoriesList = existingCat.getSubCategories();
+                            }
+                            // }else{
+                            //     subCategoriesList = new ArrayList<>();
+                            // }
+                            
+                        break;
+                        case 1:
+                            if(categoriesToDisplay==null) break;
+                            value = formatter.formatCellValue(cell);
+                            System.out.println(value);
+                            if(value.trim().equals("")) break;
+                            imageUrl = new URL(value);
+                            System.out.println("imageUrl="+imageUrl);
+                            image = ImageIO.read(imageUrl);
+                            byteArrayOutputStream = new ByteArrayOutputStream();
+                            ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            fileName = "sample.jpg";
+                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            categoriesToDisplay.setCategory_image(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                        break;
+                        case 2:
+                            if(categoriesToDisplay==null) break;
+                            value = formatter.formatCellValue(cell);
+                            System.out.println(value); //subCat  name
+                            if(value.trim().equals("")) break;
+                            //already subCategory exists will be removed
+                            for(int i=0;i<subCategoriesList.size();i++){
+                                if(subCategoriesList.get(i).getSubCategoryName().equals(value)){
+                                    subCategoriesList.remove(i);
+                                }
+                            }
+                            subCat = new SubCategories();
+                            subCat.setSubCategoryName(value);      //Brand set as subCategory                       
+                        break;
+                        case 3:
+                            if(categoriesToDisplay==null || subCat==null) break;
+                            value = formatter.formatCellValue(cell);
+                            System.out.println(value); //subSubCat  name
+                            if(value.trim().equals("")) break;
+                            subSubCategories = new SubSubCategories();
+                            subSubCategories.setSubSubCategoryName(value); //MI
+                            subSubCategories.setmodelNumber(new HashSet<>());
+                        break;
+                        case 4:
+                            if(categoriesToDisplay==null || subSubCategories==null) break;
+                            value = formatter.formatCellValue(cell);
+                            System.out.println(value); //Model nos
+                            if(value.trim().equals("")) break;
+                            String[] modelNos = value.split(";");
+                            HashSet<String> modelNoSet = new HashSet<>();
+                            for(int i=0;i<modelNos.length;i++){
+                                modelNoSet.add(modelNos[i]);
+                            }
+                            subSubCategories.setmodelNumber(modelNoSet);
+                            subSubCategoriesList.add(subSubCategories);
+                            subCat.setSubSubCategories(subSubCategoriesList);   
+                            subCategoriesList.add(subCat);
+                            categoriesToDisplay.setSubCategories(subCategoriesList);
+                            categoriesToDisplayDao.save(categoriesToDisplay);
+                            subSubCategoriesList.clear();
+                            subCategoriesList.clear();
+                            
+                        break;
+
+                        default:
+                        break;
+                    }
+                    cid++;
+                    
+                }
+                // if(categoriesToDisplay!=null){
+
+                //     // subCat.setSubSubCategories(subSubCategoriesList);
+                //     // subCategorisList.add(subCat);
+                    
+                // }
+                rowNumber++;
+            }
+
+            return "Categories added successfully";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return e.getMessage();
         }
     }
     
