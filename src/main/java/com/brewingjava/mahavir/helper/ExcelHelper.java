@@ -83,6 +83,7 @@ public class ExcelHelper {
             int rowNumber=0;
 
             Iterator<Row> iterator = sheet.iterator();
+            FreeItem freeItem=null;
             while(iterator.hasNext()){
                 Row row = iterator.next();
                 if(rowNumber<=1){
@@ -94,7 +95,7 @@ public class ExcelHelper {
                 ProductDetail productDetail = new ProductDetail();
                 
                 String destinationFile = "sample.jpg";
-
+                
                 while(cells.hasNext()){
                     Cell cell = cells.next();
                     switch(cid){
@@ -244,6 +245,27 @@ public class ExcelHelper {
                             }
                             productDetail.setVariants(productVariants);
                             break;
+                        case 14:
+                            value = formatter.formatCellValue(cell);
+                            if(value.trim().equals("")){    
+                                System.out.println("In if free item"); 
+                                freeItem = null; 
+                                break;
+                            }
+                            freeItem = new FreeItem();
+                            String arrays[] = value.split(";");
+                            freeItem.setName(arrays[0]);
+                            freeItem.setPrice(arrays[1]);
+                            imageUrl = new URL(arrays[2]);
+                            image = ImageIO.read(imageUrl);
+                            byteArrayOutputStream = new ByteArrayOutputStream();
+                            ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            fileName = "sample.jpg";
+
+                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            freeItem.setImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                            System.out.println(freeItem.toString());
+                            break;
                         default:
                             break;
                     }
@@ -253,7 +275,11 @@ public class ExcelHelper {
                 if(!productDetail.getModelNumber().trim().equals("")){
                     // productDetail.setSubCategoryMap(new HashMap<>());
                     productDetail.setFiltercriterias(new HashMap<>());
-                    productDetail.setFreeItem(new FreeItem());
+                    if(freeItem!=null){
+                        System.out.println("out"+freeItem.toString());
+                        productDetail.setFreeItem(freeItem);
+                    }
+                       
                     //productDetail.setProductInformation(new HashMap<>());
                     productDetail.setProductVariants(new ArrayList<>());
                     // productDetail.setVariants(new HashMap<>());
@@ -451,8 +477,11 @@ public class ExcelHelper {
                 productVariants.add(obj);
                 System.out.println(obj.getFactorName()+"\n"+obj.getFactorsAffected());
                 // System.out.println("productVariants="+productVariants);
-                productDetail.setProductVariants(productVariants);
-                productDetailsDao.save(productDetail);
+                if(productDetail!=null){
+                    productDetail.setProductVariants(productVariants);
+                    productDetailsDao.save(productDetail);
+                }
+                
                 // productDetailsDao.save(productDetail);               
             }
             
