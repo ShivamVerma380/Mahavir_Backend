@@ -477,6 +477,7 @@ public class ExcelHelper {
 
     public String addCategories(InputStream is){
         try {
+            categoriesToDisplayDao.deleteAll();
             XSSFWorkbook workbook = new XSSFWorkbook(is);
             XSSFSheet sheet = workbook.getSheet("Categories");
             int rowNumber=0;
@@ -542,6 +543,7 @@ public class ExcelHelper {
                             //already subCategory exists will be removed
                             for(int i=0;i<subCategoriesList.size();i++){
                                 if(subCategoriesList.get(i).getSubCategoryName().equals(value)){
+                                    subSubCategoriesList = subCategoriesList.get(i).getSubSubCategories();
                                     subCategoriesList.remove(i);
                                 }
                             }
