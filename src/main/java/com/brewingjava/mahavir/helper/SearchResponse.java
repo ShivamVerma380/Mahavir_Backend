@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class SearchResponse {
 
-    public String id;
+    public String id; 
 
     public String name;
 
@@ -19,6 +19,10 @@ public class SearchResponse {
 
     public String subSubCategory;
 
+    public String type;
+
+    public ArrayList<String> modelNumbers;
+
     public SearchResponse() {
     }
 
@@ -29,10 +33,10 @@ public class SearchResponse {
         this.name = name;
     }
 
-
+    
 
     public SearchResponse(String id, String name, String price, String highlights, String category, String subCategory,
-            String subSubCategory) {
+            String subSubCategory, String type, ArrayList<String> modelNumbers) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -40,7 +44,11 @@ public class SearchResponse {
         this.category = category;
         this.subCategory = subCategory;
         this.subSubCategory = subSubCategory;
+        this.type = type;
+        this.modelNumbers = modelNumbers;
     }
+
+
 
     public String getId() {
         return id;
@@ -98,9 +106,39 @@ public class SearchResponse {
         this.subSubCategory = subSubCategory;
     }
 
+
+
+    public String getType() {
+        return type;
+    }
+
+
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+
+
+    public ArrayList<String> getModelNumbers() {
+        return modelNumbers;
+    }
+
+
+
+    public void setModelNumbers(ArrayList<String> modelNumbers) {
+        this.modelNumbers = modelNumbers;
+    }
+
+
+
     @Override
     public String toString() {
-        return "SearchResponse [category=" + category + ", highlights=" + highlights + ", id=" + id + ", name=" + name
-                + ", price=" + price + ", subCategory=" + subCategory + ", subSubCategory=" + subSubCategory + "]";
+        return "SearchResponse [category=" + category + ", highlights=" + highlights + ", id=" + id + ", modelNumbers="
+                + modelNumbers + ", name=" + name + ", price=" + price + ", subCategory=" + subCategory
+                + ", subSubCategory=" + subSubCategory + ", type=" + type + "]";
     }
+
+    
+    
 }

@@ -205,6 +205,17 @@ public class ProductDetailsController {
 
     }
 
+    @GetMapping("/products/{Category}")
+    public ResponseEntity<?> getProductsCategory(@PathVariable("Category") String category){
+        try {
+            return productDetailsService.getProductByCategory(category);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @GetMapping("/get-search-products")
     public ResponseEntity<?> getSearchProducts(){
         try {

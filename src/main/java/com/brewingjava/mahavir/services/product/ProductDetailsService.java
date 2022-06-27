@@ -675,9 +675,75 @@ public class ProductDetailsService {
                 searchResponse.setPrice(productDetails.get(i).getProductPrice());
                 HashMap<String,String> subCategoryMap = productDetails.get(i).getSubCategoryMap();
                 searchResponse.setSubSubCategory(subCategoryMap.get("BRAND"));
+                ArrayList<String> modelNumbers = new ArrayList<>();
+                modelNumbers.add(productDetails.get(i).getModelNumber());
+                searchResponse.setModelNumbers(modelNumbers);
+                searchResponse.setType("product");
                 list.add(searchResponse);
             }
+            List<CategoriesToDisplay> existingCategoriesToDisplay = categoriesToDisplayDao.findAll();
+            //Add all categories
+            for(int i=0;i<existingCategoriesToDisplay.size();i++){
+                SearchResponse searchResponse = new SearchResponse(existingCategoriesToDisplay.get(i).getCategory(),existingCategoriesToDisplay.get(i).getCategory());
+                searchResponse.setType("category");
+                searchResponse.setModelNumbers(new ArrayList<>());        
+                list.add(searchResponse);
+            }
+            //Add all SubSubCategories
+            for(int i=0;i<existingCategoriesToDisplay.size();i++){
+                List<SubCategories> existingSubCategories = existingCategoriesToDisplay.get(i).getSubCategories();
+                for(int j=0;j<existingSubCategories.size();j++){
+                    List<SubSubCategories> existingSubSubCategories = existingSubCategories.get(j).getSubSubCategories();
+                    for(int k=0;k<existingSubSubCategories.size();k++){
+                        String name = existingSubSubCategories.get(k).getSubSubCategoryName()+" in  "+existingCategoriesToDisplay.get(i).getCategory();
+                        SearchResponse searchResponse = new SearchResponse(name,name);
+                        searchResponse.setType("subSubCategory");
+                        HashSet<String> modelNos = existingSubSubCategories.get(k).getmodelNumber();
+                        
+                        searchResponse.setModelNumbers(new ArrayList<>(modelNos));
+                        list.add(searchResponse);
+                    }
+                }
+            }
+            
             return ResponseEntity.status(HttpStatus.OK).body(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getProductsByCategory(String category){
+        try {
+            CategoriesToDisplay existingCategoriesToDisplay = categoriesToDisplayDao.findBycategory(category);
+            if(existingCategoriesToDisplay==null){
+                responseMessage.setMessage("Category not found");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
+            }
+            List<SubCategories> subCategories = existingCategoriesToDisplay.getSubCategories();
+            List<ProductsDetailsResponse> list = new ArrayList<>();
+            for(int i=0;i<subCategories.size();i++){
+                List<SubSubCategories> subSubCategories = subCategories.get(i).getSubSubCategories();
+                for(int j=0;j<subSubCategories.size();j++){
+                    HashSet<String> modelNums = subSubCategories.get(j).getmodelNumber();
+                    for(String mNo:modelNums){
+                        ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(mNo);
+                        ProductsDetailsResponse productsDetailsResponse = new ProductsDetailsResponse();
+                        productsDetailsResponse.setModelNumber(productDetail.getModelNumber());
+                        productsDetailsResponse.setProductName(productDetail.getProductName());
+                        productsDetailsResponse.setOfferPrice(productDetail.getOfferPrice());
+                        productsDetailsResponse.setProductPrice(productDetail.getProductPrice());
+                        productsDetailsResponse.setProductImage1(productDetail.getProductImage1());
+                        productsDetailsResponse.setProductHighlights(productDetail.getProductHighlights());
+                        productsDetailsResponse.setSubCategoryMap(productDetail.getSubCategoryMap());
+                        productsDetailsResponse.setCategory(productDetail.getCategory());
+                        list.add(productsDetailsResponse);
+                    }
+                }
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(list);
+
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
