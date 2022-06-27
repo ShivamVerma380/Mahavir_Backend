@@ -272,7 +272,7 @@ public class ProductDetailsService {
                     for(int j=0;j<subSubCategories.size();j++){
                         if(subSubCategories.get(j).getSubSubCategoryName().equals(subSubCategory)){
                             HashSet<String> modelNumbers = subSubCategories.get(j).getmodelNumber();
-                            
+
                             List<ProductDetail> productDetails = new ArrayList<>();
                             Iterator modelNumbersIterator = modelNumbers.iterator();
                             while(modelNumbersIterator.hasNext()){
@@ -644,6 +644,7 @@ public class ProductDetailsService {
                 productsDetailsResponse.setProductPrice(productDetails.get(i).getProductPrice());
                 productsDetailsResponse.setProductImage1(productDetails.get(i).getProductImage1());
                 productsDetailsResponse.setProductHighlights(productDetails.get(i).getProductHighlights());
+                productsDetailsResponse.setSubCategoryMap(productDetails.get(i).getSubCategoryMap());
                 productsDetailsResponses.add(productsDetailsResponse);
             }
             return ResponseEntity.status(HttpStatus.OK).body(productsDetailsResponses);
@@ -864,6 +865,7 @@ public class ProductDetailsService {
                                 productsDetailsResponse.setProductHighlights(productDetail.getProductHighlights());
                                 productsDetailsResponse.setProductImage1(productDetail.getProductImage1());
                                 productsDetailsResponse.setProductPrice(productDetail.getProductPrice());
+                                productsDetailsResponse.setSubCategoryMap(productDetail.getSubCategoryMap());
                                 list.add(productsDetailsResponse);
                             }
                             if(list.size()>18){
@@ -889,6 +891,7 @@ public class ProductDetailsService {
                         productsDetailsResponse.setProductHighlights(productDetail.getProductHighlights());
                         productsDetailsResponse.setProductImage1(productDetail.getProductImage1());
                         productsDetailsResponse.setProductPrice(productDetail.getProductPrice());
+                        productsDetailsResponse.setSubCategoryMap(productDetail.getSubCategoryMap());
                         list.add(productsDetailsResponse);
                     }
                     if(list.size()>=18){
