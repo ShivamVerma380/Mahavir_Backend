@@ -663,6 +663,35 @@ public class ProductDetailsService {
         try {
             List<ProductDetail> productDetails = productDetailsDao.findAll();
             List<SearchResponse> list = new ArrayList<>();
+            
+            List<CategoriesToDisplay> existingCategoriesToDisplay = categoriesToDisplayDao.findAll();
+            //Add all categories
+            for(int i=0;i<existingCategoriesToDisplay.size();i++){
+                SearchResponse searchResponse = new SearchResponse(existingCategoriesToDisplay.get(i).getCategory(),existingCategoriesToDisplay.get(i).getCategory());
+                searchResponse.setType("category");
+                searchResponse.setCategory(existingCategoriesToDisplay.get(i).getCategory());
+                searchResponse.setModelNumbers(new ArrayList<>());        
+                list.add(searchResponse);
+            }
+            //Add all SubSubCategories
+            for(int i=0;i<existingCategoriesToDisplay.size();i++){
+                List<SubCategories> existingSubCategories = existingCategoriesToDisplay.get(i).getSubCategories();
+                for(int j=0;j<existingSubCategories.size();j++){
+                    List<SubSubCategories> existingSubSubCategories = existingSubCategories.get(j).getSubSubCategories();
+                    for(int k=0;k<existingSubSubCategories.size();k++){
+                        String name = existingSubSubCategories.get(k).getSubSubCategoryName()+" in  "+existingCategoriesToDisplay.get(i).getCategory();
+                        SearchResponse searchResponse = new SearchResponse(name,name);
+                        searchResponse.setType("subSubCategory");
+                        searchResponse.setCategory(existingCategoriesToDisplay.get(i).getCategory());
+                        searchResponse.setSubSubCategory(existingSubSubCategories.get(k).getSubSubCategoryName());
+                        HashSet<String> modelNos = existingSubSubCategories.get(k).getmodelNumber();
+                        
+                        searchResponse.setModelNumbers(new ArrayList<>(modelNos));
+                        list.add(searchResponse);
+                    }
+                }
+            }
+
             for(int i=0;i<productDetails.size();i++){
                 SearchResponse searchResponse = new SearchResponse(productDetails.get(i).getModelNumber(),productDetails.get(i).getProductName());
                 searchResponse.setCategory(productDetails.get(i).getCategory());
@@ -680,30 +709,6 @@ public class ProductDetailsService {
                 searchResponse.setModelNumbers(modelNumbers);
                 searchResponse.setType("product");
                 list.add(searchResponse);
-            }
-            List<CategoriesToDisplay> existingCategoriesToDisplay = categoriesToDisplayDao.findAll();
-            //Add all categories
-            for(int i=0;i<existingCategoriesToDisplay.size();i++){
-                SearchResponse searchResponse = new SearchResponse(existingCategoriesToDisplay.get(i).getCategory(),existingCategoriesToDisplay.get(i).getCategory());
-                searchResponse.setType("category");
-                searchResponse.setModelNumbers(new ArrayList<>());        
-                list.add(searchResponse);
-            }
-            //Add all SubSubCategories
-            for(int i=0;i<existingCategoriesToDisplay.size();i++){
-                List<SubCategories> existingSubCategories = existingCategoriesToDisplay.get(i).getSubCategories();
-                for(int j=0;j<existingSubCategories.size();j++){
-                    List<SubSubCategories> existingSubSubCategories = existingSubCategories.get(j).getSubSubCategories();
-                    for(int k=0;k<existingSubSubCategories.size();k++){
-                        String name = existingSubSubCategories.get(k).getSubSubCategoryName()+" in  "+existingCategoriesToDisplay.get(i).getCategory();
-                        SearchResponse searchResponse = new SearchResponse(name,name);
-                        searchResponse.setType("subSubCategory");
-                        HashSet<String> modelNos = existingSubSubCategories.get(k).getmodelNumber();
-                        
-                        searchResponse.setModelNumbers(new ArrayList<>(modelNos));
-                        list.add(searchResponse);
-                    }
-                }
             }
             
             return ResponseEntity.status(HttpStatus.OK).body(list);
