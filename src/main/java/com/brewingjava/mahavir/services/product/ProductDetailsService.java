@@ -645,6 +645,7 @@ public class ProductDetailsService {
                 productsDetailsResponse.setProductImage1(productDetails.get(i).getProductImage1());
                 productsDetailsResponse.setProductHighlights(productDetails.get(i).getProductHighlights());
                 productsDetailsResponse.setSubCategoryMap(productDetails.get(i).getSubCategoryMap());
+                productsDetailsResponse.setCategory(productDetails.get(i).getCategory());
                 productsDetailsResponses.add(productsDetailsResponse);
             }
             return ResponseEntity.status(HttpStatus.OK).body(productsDetailsResponses);
@@ -670,8 +671,10 @@ public class ProductDetailsService {
                 for(int j=0;j<highlights.length;j++){
                     str+=highlights[j]+" ";
                 }
-                searchResponse.sethightlights(str);
+                searchResponse.setHighlights(str);
                 searchResponse.setPrice(productDetails.get(i).getProductPrice());
+                HashMap<String,String> subCategoryMap = productDetails.get(i).getSubCategoryMap();
+                searchResponse.setSubSubCategory(subCategoryMap.get("BRAND"));
                 list.add(searchResponse);
             }
             return ResponseEntity.status(HttpStatus.OK).body(list);
@@ -866,6 +869,7 @@ public class ProductDetailsService {
                                 productsDetailsResponse.setProductImage1(productDetail.getProductImage1());
                                 productsDetailsResponse.setProductPrice(productDetail.getProductPrice());
                                 productsDetailsResponse.setSubCategoryMap(productDetail.getSubCategoryMap());
+                                productsDetailsResponse.setCategory(productDetail.getCategory());
                                 list.add(productsDetailsResponse);
                             }
                             if(list.size()>18){

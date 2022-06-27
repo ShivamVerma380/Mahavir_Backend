@@ -22,12 +22,14 @@ public class ProductsDetailsResponse {
 
     private HashMap<String,String> subCategoryMap;
 
+    private String category;
+
 
     public ProductsDetailsResponse() {
     }
 
     public ProductsDetailsResponse(String modelNumber, String productName, String productHighlights,
-            Binary productImage1, String offerPrice, String productPrice, HashMap<String, String> subCategoryMap) {
+            Binary productImage1, String offerPrice, String productPrice, HashMap<String, String> subCategoryMap,String category) {
         this.modelNumber = modelNumber;
         this.productName = productName;
         this.productHighlights = productHighlights;
@@ -35,6 +37,7 @@ public class ProductsDetailsResponse {
         OfferPrice = offerPrice;
         this.productPrice = productPrice;
         this.subCategoryMap = subCategoryMap;
+        this.category = category;
     }
 
     public String getModelNumber() {
@@ -106,13 +109,23 @@ public class ProductsDetailsResponse {
         this.subCategoryMap = subCategoryMap;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     @Override
     public String toString() {
-        return "ProductsDetailsResponse [OfferPrice=" + OfferPrice + ", modelNumber=" + modelNumber
-                + ", productHighlights=" + productHighlights + ", productImage1=" + productImage1 + ", productName="
-                + productName + ", productPrice=" + productPrice + ", subCategoryMap=" + subCategoryMap + "]";
+        return "ProductsDetailsResponse [OfferPrice=" + OfferPrice + ", category=" + category + ", modelNumber="
+                + modelNumber + ", productHighlights=" + productHighlights + ", productImage1=" + productImage1
+                + ", productName=" + productName + ", productPrice=" + productPrice + ", subCategoryMap="
+                + subCategoryMap + "]";
     }
 
     
+    
+
 }

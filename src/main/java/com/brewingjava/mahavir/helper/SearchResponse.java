@@ -1,6 +1,7 @@
 package com.brewingjava.mahavir.helper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SearchResponse {
 
@@ -14,12 +15,31 @@ public class SearchResponse {
 
     public String category;
 
+    public String subCategory = "BRAND";
+
+    public String subSubCategory;
+
     public SearchResponse() {
     }
+
+    
 
     public SearchResponse(String id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+
+
+    public SearchResponse(String id, String name, String price, String highlights, String category, String subCategory,
+            String subSubCategory) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.highlights = highlights;
+        this.category = category;
+        this.subCategory = subCategory;
+        this.subSubCategory = subSubCategory;
     }
 
     public String getId() {
@@ -38,9 +58,6 @@ public class SearchResponse {
         this.name = name;
     }
 
-    
-
-    
     public String getPrice() {
         return price;
     }
@@ -49,17 +66,12 @@ public class SearchResponse {
         this.price = price;
     }
 
-    
-    
-
-    
-
-    public String gethightlights() {
+    public String getHighlights() {
         return highlights;
     }
 
-    public void sethightlights(String hightlights) {
-        this.highlights = hightlights;
+    public void setHighlights(String highlights) {
+        this.highlights = highlights;
     }
 
     public String getCategory() {
@@ -70,28 +82,25 @@ public class SearchResponse {
         this.category = category;
     }
 
-    @Override
-    public String toString() {
-        return "SearchResponse [hightlights=" + highlights + ", id=" + id + ", name=" + name + ", price=" + price
-                + "]";
+    public String getSubCategory() {
+        return subCategory;
     }
 
-    
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
+    }
 
-    
+    public String getSubSubCategory() {
+        return subSubCategory;
+    }
 
-    
-    
+    public void setSubSubCategory(String subSubCategory) {
+        this.subSubCategory = subSubCategory;
+    }
 
-    
-
-
-    
-
-    
-
-    
-    
-    
-
+    @Override
+    public String toString() {
+        return "SearchResponse [category=" + category + ", highlights=" + highlights + ", id=" + id + ", name=" + name
+                + ", price=" + price + ", subCategory=" + subCategory + ", subSubCategory=" + subSubCategory + "]";
+    }
 }
