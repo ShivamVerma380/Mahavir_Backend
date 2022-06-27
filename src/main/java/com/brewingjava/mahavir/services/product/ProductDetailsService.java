@@ -30,6 +30,7 @@ import com.brewingjava.mahavir.entities.product.Review;
 import com.brewingjava.mahavir.entities.user.Orders;
 import com.brewingjava.mahavir.entities.user.UserRequest;
 import com.brewingjava.mahavir.helper.JwtUtil;
+import com.brewingjava.mahavir.helper.ProductsDetailsResponse;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 import com.brewingjava.mahavir.helper.SearchResponse;
 
@@ -271,6 +272,7 @@ public class ProductDetailsService {
                     for(int j=0;j<subSubCategories.size();j++){
                         if(subSubCategories.get(j).getSubSubCategoryName().equals(subSubCategory)){
                             HashSet<String> modelNumbers = subSubCategories.get(j).getmodelNumber();
+                            
                             List<ProductDetail> productDetails = new ArrayList<>();
                             Iterator modelNumbersIterator = modelNumbers.iterator();
                             while(modelNumbersIterator.hasNext()){
@@ -632,7 +634,20 @@ public class ProductDetailsService {
 
     public ResponseEntity<?> getAllProducts() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(productDetailsDao.findAll());
+            List<ProductDetail> productDetails = productDetailsDao.findAll();
+            List<ProductsDetailsResponse> productsDetailsResponses = new ArrayList<>();
+            for(int i = 0; i < productDetails.size(); i++){
+                ProductsDetailsResponse productsDetailsResponse = new ProductsDetailsResponse();
+                productsDetailsResponse.setModelNumber(productDetails.get(i).getModelNumber());
+                productsDetailsResponse.setProductName(productDetails.get(i).getProductName());
+                productsDetailsResponse.setOfferPrice(productDetails.get(i).getOfferPrice());
+                productsDetailsResponse.setProductPrice(productDetails.get(i).getProductPrice());
+                productsDetailsResponse.setProductImage1(productDetails.get(i).getProductImage1());
+                productsDetailsResponse.setProductHighlights(productDetails.get(i).getProductHighlights());
+                productsDetailsResponses.add(productsDetailsResponse);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(productsDetailsResponses);
+            // return ResponseEntity.status(HttpStatus.OK).body(productDetailsDao.findAll());
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -819,6 +834,76 @@ public class ProductDetailsService {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getSimilarProducts(String modelNumber,String subSubCategory,String subCategory,String Category){
+        try {
+            List<ProductsDetailsResponse> list = new ArrayList<>();
+            CategoriesToDisplay existingCategoriesToDisplay = categoriesToDisplayDao.findBycategory(Category);
+            if(existingCategoriesToDisplay==null){
+                responseMessage.setMessage("Category not found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            List<SubCategories> subCategories = existingCategoriesToDisplay.getSubCategories();
+            boolean flag = true;
+            List<SubSubCategories> subSubCategories = new ArrayList<>();
+            for(int i=0;i<subCategories.size();i++){
+                if(subCategories.get(i).getSubCategoryName().equals(subCategory)){
+                    subSubCategories = subCategories.get(i).getSubSubCategories();
+                    for(int j=0;j<subSubCategories.size();j++){
+                        if(subSubCategories.get(j).getSubSubCategoryName().equals(subSubCategory)){
+                            HashSet<String> modelNos = subSubCategories.get(j).getmodelNumber();
+                            modelNos.remove(modelNumber);
+                            for(String modelNo:modelNos){
+                                ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNo);
+                                ProductsDetailsResponse productsDetailsResponse = new ProductsDetailsResponse();
+                                productsDetailsResponse.setModelNumber(productDetail.getModelNumber());
+                                productsDetailsResponse.setProductName(productDetail.getProductName());
+                                productsDetailsResponse.setOfferPrice(productDetail.getOfferPrice());
+                                productsDetailsResponse.setProductHighlights(productDetail.getProductHighlights());
+                                productsDetailsResponse.setProductImage1(productDetail.getProductImage1());
+                                productsDetailsResponse.setProductPrice(productDetail.getProductPrice());
+                                list.add(productsDetailsResponse);
+                            }
+                            if(list.size()>18){
+                                flag = false;
+                                break;
+                            }
+                            subSubCategories.remove(subSubCategories.get(j));
+                            break;
+                        }
+                    }
+                }
+            }
+            if(flag){
+                for(int i=0;i<subSubCategories.size();i++){
+                    HashSet<String> modelNos = subSubCategories.get(i).getmodelNumber();
+                    //modelNos.remove(modelNumber);
+                    for(String modelNo:modelNos){
+                        ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNo);
+                        ProductsDetailsResponse productsDetailsResponse = new ProductsDetailsResponse();
+                        productsDetailsResponse.setModelNumber(productDetail.getModelNumber());
+                        productsDetailsResponse.setProductName(productDetail.getProductName());
+                        productsDetailsResponse.setOfferPrice(productDetail.getOfferPrice());
+                        productsDetailsResponse.setProductHighlights(productDetail.getProductHighlights());
+                        productsDetailsResponse.setProductImage1(productDetail.getProductImage1());
+                        productsDetailsResponse.setProductPrice(productDetail.getProductPrice());
+                        list.add(productsDetailsResponse);
+                    }
+                    if(list.size()>=18){
+                        // return ResponseEntity.ok(list);
+                        break;
+                    }    
+                }
+            }
+
+
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
 }

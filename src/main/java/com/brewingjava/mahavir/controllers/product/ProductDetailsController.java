@@ -262,6 +262,17 @@ public class ProductDetailsController {
         }
     }
 
+    @GetMapping("/similar-products/{modelNumber}/{SubsubCategory}/{SubCategory}/{Category}")
+    public ResponseEntity<?> getSimilarProducts(@PathVariable("modelNumber") String modelNumber,@PathVariable("SubsubCategory") String subSubCategory,@PathVariable("SubCategory") String subCategory,@PathVariable("Category") String category){
+        try {
+            return productDetailsService.getSimilarProducts(modelNumber, subSubCategory, subCategory, category);
+        } catch (Exception e) {
+            e.printStackTrace();
+           responseMessage.setMessage(e.getMessage());
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage); 
+        }
+    }
+
 
 }
 
