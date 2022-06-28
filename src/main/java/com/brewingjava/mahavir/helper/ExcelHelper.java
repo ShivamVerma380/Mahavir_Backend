@@ -37,11 +37,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.awt.image.BufferedImage;
 
 import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
+import com.brewingjava.mahavir.daos.product.FilterCriteriasDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
 import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
 import com.brewingjava.mahavir.entities.product.Factors;
+import com.brewingjava.mahavir.entities.product.FilterCriterias;
 import com.brewingjava.mahavir.entities.product.FreeItem;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.entities.product.ProductVariants;
@@ -266,6 +268,21 @@ public class ExcelHelper {
                             freeItem.setImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             System.out.println(freeItem.toString());
                             break;
+                        case 15:
+                            value = formatter.formatCellValue(cell);
+                            if(productDetail==null) break;
+                            if(value.trim().equals("")){
+                                productDetail.setFiltercriterias(new HashMap<>());
+                                break;
+                            }
+                            HashMap<String,String> filterCriterias = new HashMap<>();
+                            String keyValue[] = value.split(";");
+                            for(int i=0;i<keyValue.length;i++){
+                                String pair[] = keyValue[i].split("=");
+                                filterCriterias.put(pair[0],pair[1]);
+                            }
+                            productDetail.setFiltercriterias(filterCriterias);
+                            break;
                         default:
                             break;
                     }
@@ -274,7 +291,7 @@ public class ExcelHelper {
                 }
                 if(!productDetail.getModelNumber().trim().equals("")){
                     // productDetail.setSubCategoryMap(new HashMap<>());
-                    productDetail.setFiltercriterias(new HashMap<>());
+                    // productDetail.setFiltercriterias(new HashMap<>());
                     if(freeItem!=null){
                         System.out.println("out"+freeItem.toString());
                         productDetail.setFreeItem(freeItem);
@@ -631,5 +648,79 @@ public class ExcelHelper {
         }
     }
     
+    @Autowired
+    public FilterCriteriasDao filterCriteriasDao;
+
+    public ResponseEntity<?> addFilterCriterias(InputStream is){
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook(is);
+            XSSFSheet sheet = workbook.getSheet("Filter Criterias");
+            int rowNumber=0;
+            DataFormatter formatter = new DataFormatter();
+            String value;
+            Iterator<Row> iterator = sheet.iterator();
+            URL imageUrl;
+            String fileName;
+            MultipartFile multipartFile;
+            BufferedImage image;
+            ByteArrayOutputStream byteArrayOutputStream;
+            List<SubSubCategories> subSubCategoriesList = new ArrayList<>();
+            while(iterator.hasNext()){
+                Row row = iterator.next();
+                if(rowNumber<1){
+                    rowNumber++;
+                    continue;
+                }
+                Iterator<Cell> cells = row.iterator();
+                int cid=0;
+                FilterCriterias filterCriterias = new FilterCriterias();
+                while(cells.hasNext()){
+                    Cell cell = cells.next();
+                    switch(cid){
+                        case 0:
+                            value = formatter.formatCellValue(cell);
+                            if(value.trim().equals("")){
+                                filterCriterias = null;
+                                break;
+                            };
+                            filterCriterias = new FilterCriterias();
+                            filterCriterias.setCategory(value);
+                        break;
+                        case 1:
+                            value = formatter.formatCellValue(cell);
+                            if(value.trim().equals("") || filterCriterias==null) break;
+                            HashMap<String,ArrayList<String>> map = new HashMap<>();
+                            String values[] = value.split("#");
+                            for(int i=0;i<values.length;i++){
+                                System.out.println(values[i]);
+                                String[] keyValue = values[i].split("\\["); //map key in keyvalue[0]
+                                String list_val = keyValue[1].substring(0,keyValue[1].length()-1); 
+                                String[] list = list_val.split(";");
+                                ArrayList<String> list_values = new ArrayList<>();
+                                for(int j=0;j<list.length;j++){
+                                    list_values.add(list[j]);
+                                }
+                                map.put(keyValue[0],list_values);
+                            }
+                            filterCriterias.setFilterCriterias(map);
+                        break;
+                        default:
+                        break;
+                    }
+                    cid++;
+                }
+                rowNumber++;
+                if(filterCriterias!=null)
+                    filterCriteriasDao.save(filterCriterias);
+            }
+            responseMessage.setMessage("Product saved successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
     
 }

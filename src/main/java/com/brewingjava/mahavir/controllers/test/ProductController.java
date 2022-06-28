@@ -85,7 +85,17 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
-
+    
+    @PostMapping("/excel/filters")
+    public ResponseEntity<?> addFilterCriterias(@RequestParam("file") MultipartFile file){
+        try {
+            return excelHelper.addFilterCriterias(file.getInputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
     // @GetMapping("/excel")
     // public ResponseEntity<?> getProducts(){
     //     try {
