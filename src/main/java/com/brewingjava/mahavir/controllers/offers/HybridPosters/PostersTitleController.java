@@ -47,7 +47,7 @@ public class PostersTitleController {
     }
 
 
-    @GetMapping("/get-posters")
+    @GetMapping("/hybrid-posters")
     public ResponseEntity<?> getTitlePosters(){
         try {
             return postersTitleService.getPosters();

@@ -96,6 +96,28 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    @PostMapping("/excel/hybridposters")
+    public ResponseEntity<?> addHybridPosters(@RequestParam("file") MultipartFile file){
+        try {
+            return excelHelper.addHybridPosters(file.getInputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @PostMapping("/excel/offerposters")
+    public ResponseEntity<?> addOfferPosters(@RequestParam("file") MultipartFile file){
+        try {
+            return excelHelper.addOfferPosters(file.getInputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
     // @GetMapping("/excel")
     // public ResponseEntity<?> getProducts(){
     //     try {
