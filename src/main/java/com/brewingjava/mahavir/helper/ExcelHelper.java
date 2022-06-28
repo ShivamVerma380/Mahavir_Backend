@@ -785,7 +785,7 @@ public class ExcelHelper {
                                 imageUrl = new URL(value);
                                 image = ImageIO.read(imageUrl);
                                 byteArrayOutputStream = new ByteArrayOutputStream();
-                                ImageIO.write(image,"jpg,png",byteArrayOutputStream);
+                                ImageIO.write(image,"jpg",byteArrayOutputStream);
                                 fileName = "sample.jpg";
                                 multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
                                 imageOffer.setImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
@@ -862,7 +862,7 @@ public class ExcelHelper {
             
             while(iterator.hasNext()){
                 Row row = iterator.next();
-                if(rowNumber<=1){
+                if(rowNumber<1){
                     rowNumber++;
                     continue;
                 }
@@ -881,12 +881,15 @@ public class ExcelHelper {
                         break;
                         case 1:
                             value = formatter.formatCellValue(cells.next());
+                            if(offerPosters==null) break;
+                            System.out.println(value);
                             imageUrl = new URL(value);
                             image = ImageIO.read(imageUrl);
                             byteArrayOutputStream = new ByteArrayOutputStream();
-                            ImageIO.write(image,"jpg,png",byteArrayOutputStream);
+                            ImageIO.write(image,"jpg",byteArrayOutputStream);
                             fileName = "sample.jpg";
                             multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            
                             offerPosters.setImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                         break;
                         case 2:
