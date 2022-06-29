@@ -96,6 +96,7 @@ public class UserService {
             new_user.setProductsBoughtByUser(new ArrayList<>());
             new_user.setUserCartProducts(new HashSet<>());
             new_user.setAddToCompare(new ArrayList<>());
+            new_user.setToken("");
             this.userDao.save(new_user);
 
             //spring security

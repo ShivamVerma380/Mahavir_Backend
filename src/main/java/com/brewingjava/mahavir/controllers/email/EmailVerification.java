@@ -1,5 +1,7 @@
 package com.brewingjava.mahavir.controllers.email;
 
+import com.brewingjava.mahavir.helper.OtpResponse;
+import com.brewingjava.mahavir.helper.ResponseMessage;
 import com.brewingjava.mahavir.services.email.EmailVerificationService;
 import com.brewingjava.mahavir.services.email.Mail;
 
@@ -24,6 +26,9 @@ public class EmailVerification {
     @Autowired
     public EmailVerificationService emailVerificationService;
 
+    @Autowired
+    public OtpResponse otpResponse;
+
     @GetMapping("/verify-email/{email}")
     public ResponseEntity<?> getOTP(@PathVariable("email")String email){
         try {
@@ -46,8 +51,9 @@ public class EmailVerification {
             mail.setModel(model);
 
             emailVerificationService.sendSimpleMessage(mail);
-
-            return ResponseEntity.status(HttpStatus.OK).body("Email sent");
+            otpResponse.setMessage("Email sent successfully");
+            otpResponse.setOtp(otp);
+            return ResponseEntity.status(HttpStatus.OK).body(otpResponse);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
