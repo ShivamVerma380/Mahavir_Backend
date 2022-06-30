@@ -38,15 +38,12 @@ import java.awt.image.BufferedImage;
 
 import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
 import com.brewingjava.mahavir.daos.offers.OfferPosterDao;
-import com.brewingjava.mahavir.daos.offers.HybridPosters.PostersTitleDao;
 import com.brewingjava.mahavir.daos.product.FilterCriteriasDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
 import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
 import com.brewingjava.mahavir.entities.offers.OfferPosters;
-import com.brewingjava.mahavir.entities.offers.HybridPosters.ImageOffer;
-import com.brewingjava.mahavir.entities.offers.HybridPosters.PostersTitle;
 import com.brewingjava.mahavir.entities.product.Factors;
 import com.brewingjava.mahavir.entities.product.FilterCriterias;
 import com.brewingjava.mahavir.entities.product.FreeItem;
@@ -729,117 +726,7 @@ public class ExcelHelper {
     }
  
 
-    @Autowired
-    public PostersTitleDao postersTitleDao;
-
-    public ResponseEntity<?> addHybridPosters(InputStream is){
-        try {
-            postersTitleDao.deleteAll();
-            XSSFWorkbook workbook = new XSSFWorkbook(is);
-            XSSFSheet sheet = workbook.getSheet("HybridPosters");
-            int rowNumber=0;
-            DataFormatter formatter = new DataFormatter();
-            String value;
-            Iterator<Row> iterator = sheet.iterator();
-            URL imageUrl;
-            String fileName;
-            MultipartFile multipartFile;
-            BufferedImage image;
-            ByteArrayOutputStream byteArrayOutputStream;
-            while(iterator.hasNext()){
-                Row row = iterator.next();
-                if(rowNumber<=1){
-                    rowNumber++;
-                    continue;
-                }
-                Iterator<Cell> cells = row.iterator();
-                int cid=0;
-                boolean isImagePoster = false;
-                PostersTitle postersTitle = new PostersTitle();
-                ImageOffer imageOffer = new ImageOffer();
-                while(cells.hasNext()){
-                    Cell cell = cells.next();
-                    switch(cid){
-                        case 0:
-                            value = formatter.formatCellValue(cell);
-                            if(value.trim().equals("")){
-                                postersTitle = null;
-                                break;
-                            };
-                            PostersTitle existingPostersTitle = postersTitleDao.getPostersTitleBytitle(value);
-                            if(existingPostersTitle!=null){
-                                postersTitle = existingPostersTitle;
-                            }else{
-                                postersTitle.setTitle(value);
-                            }
-                        break;
-                        case 1:
-                            value = formatter.formatCellValue(cell);
-                            System.out.println(value);
-                            if(postersTitle==null) break;
-                            if(value.trim().equals("-")){
-                                isImagePoster = false;
-                            }else{
-                                isImagePoster = true;
-                                value = formatter.formatCellValue(cell);
-                                imageUrl = new URL(value);
-                                image = ImageIO.read(imageUrl);
-                                byteArrayOutputStream = new ByteArrayOutputStream();
-                                ImageIO.write(image,"jpg",byteArrayOutputStream);
-                                fileName = "sample.jpg";
-                                multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
-                                imageOffer.setImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
-                                // imageOffer.setImageName(fileName);
-                            }
-                        break;
-                        case 2:
-                            value = formatter.formatCellValue(cell);
-                            if(postersTitle==null) break;
-                            if(value.trim().equals("")){
-                                break;
-                            }
-                            if(isImagePoster){
-                                String[] modelNos = value.split(";");
-                                ArrayList<String> modelNoList = new ArrayList<>();
-                                for(int i=0;i<modelNos.length;i++){
-                                    modelNoList.add(modelNos[i]);
-                                }
-                                imageOffer.setModelNos(modelNoList);
-                                ArrayList<ImageOffer> imageOffers;
-                                if(postersTitle.getImageModelNos()==null){
-                                    imageOffers = new ArrayList<>();
-                                }else
-                                    imageOffers =  postersTitle.getImageModelNos();
-                                imageOffers.add(imageOffer);
-                                postersTitle.setImageModelNos(imageOffers);
-                                postersTitleDao.save(postersTitle);
-                            }else{
-                                String[] modelNos = value.split(";");
-                                HashSet<String> modelNoList = new HashSet<>();
-                                for(int i=0;i<modelNos.length;i++){
-                                    modelNoList.add(modelNos[i]);
-                                }
-                                postersTitle.setModelNos(modelNoList);
-                                postersTitleDao.save(postersTitle);
-                                // postersTitle.setModelNos(modelNos);
-                            }
-                        break;
-                        default:
-                        break;
-                    }
-                    cid++;
-                }
-                rowNumber++;
-            }
-            responseMessage.setMessage("Hybrid Posters added successfully");
-            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
+   
 
 
     @Autowired

@@ -1,7 +1,7 @@
 package com.brewingjava.mahavir.services.offers;
 
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -14,8 +14,6 @@ import com.brewingjava.mahavir.entities.offers.OfferTypeDetails;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.helper.JwtUtil;
 import com.brewingjava.mahavir.helper.ResponseMessage;
-
-import lombok.AllArgsConstructor.AnyAnnotation;
 
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
