@@ -70,4 +70,13 @@ public class DealsService {
         }
     }
 
+    public ResponseEntity<?> getDeals(){
+        try {
+            return ResponseEntity.ok(dealsDao.findAll());
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 }
