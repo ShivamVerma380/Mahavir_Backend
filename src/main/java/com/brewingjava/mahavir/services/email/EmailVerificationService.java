@@ -20,6 +20,7 @@ import javax.mail.PasswordAuthentication;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
@@ -126,6 +127,33 @@ public class EmailVerificationService {
         helper.setFrom(mail.getFrom());
 
         emailSender.send(message);
+    }
+
+    public ResponseEntity<?> forgotPassword(Mail mail) throws MessagingException, IOException, TemplateException {
+        try {
+                MimeMessage message = emailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message,
+                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                StandardCharsets.UTF_8.name());
+                Template t = freemarkerConfig.getTemplate("email-template.ftlh");
+                String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, mail.getModel());
+
+                helper.setTo(mail.getTo());
+                helper.setText(html, true);
+                helper.setSubject(mail.getSubject());
+                helper.setFrom(mail.getFrom());
+                emailSender.send(message);
+                // Map model = mail.getModel();
+                
+                otpResponse.setMessage("An OTP has been sent to your email");
+                otpResponse.setOtp(mail.getModel().get("otp").toString());
+                return ResponseEntity.status(HttpStatus.OK).body(otpResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            otpResponse.setMessage(e.getMessage());
+            otpResponse.setOtp(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(otpResponse);
+        }   
     }
 
 

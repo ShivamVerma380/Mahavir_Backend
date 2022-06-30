@@ -40,7 +40,7 @@ public class EmailVerification {
             Mail mail = new Mail();
             mail.setFrom("shivam380.testing@gmail.com");
             mail.setTo(email);
-            mail.setSubject("Sending Email with Freemarker HTML Template Example");
+            mail.setSubject("Mahavir Electronics-OTP Verification");
 
 
             Map model = new HashMap();
@@ -60,6 +60,32 @@ public class EmailVerification {
         }
     }
 
+    @GetMapping("/forgotPassword/{email}")
+    public ResponseEntity<?> forgotPassword(@PathVariable("email")String email){
+        try {
+            Random random = new Random();
+            int number = random.nextInt(999999);
+
+            String otp = String.format("%06d", number);
+            
+            Mail mail = new Mail();
+            mail.setFrom("shivam380.testing@gmail.com");
+            mail.setTo(email);
+            mail.setSubject("Forgot Password-Mahavir Electronics");
+
+            Map model = new HashMap();
+            model.put("name", "Customer,");
+            model.put("location", "Belgium");
+            model.put("signature", "https://memorynotfound.com");
+            model.put("otp", otp);
+            mail.setModel(model);
+            return emailVerificationService.forgotPassword(mail);
+
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
     
     
 }
