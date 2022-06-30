@@ -118,6 +118,27 @@ public class UserService {
         }
     }
 
+    public ResponseEntity<?> updatePassword(String authorization,String password){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest user = userDao.findByEmail(email);
+            if(user==null){
+                responseMessage.setMessage("User not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            String encoded_password = mySecurityConfig.passwordEncoder().encode(password);
+            user.setPassword(encoded_password);
+            userDao.save(user);
+            responseMessage.setMessage("Password updated successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     public ResponseEntity<?> addAddress(String authorization, String name,String pincode,String locality,String address,String city,String state,String landmark,String alternateMobile,String addressType){
         try {
             String token = authorization.substring(7);

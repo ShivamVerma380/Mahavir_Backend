@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +31,17 @@ public class UserController {
     public ResponseEntity<?> addUser(@RequestParam("Email") String email,@RequestParam("Password") String password, @RequestParam("first_name") String firstName,@RequestParam("last_name") String lastName,@RequestParam("PhoneNo")String phoneNo){
         try {
             return userService.addUser(email, password, firstName, lastName, phoneNo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @PutMapping("/updatePassword/{password}")
+    public ResponseEntity<?> updatePassword(@RequestHeader("Authorization") String authorization,@PathVariable("password") String password){
+        try {
+            return userService.updatePassword(authorization, password);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
