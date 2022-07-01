@@ -36,10 +36,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.image.BufferedImage;
 
+import com.brewingjava.mahavir.daos.HomepageComponents.ShopByBrandsDao;
 import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
 import com.brewingjava.mahavir.daos.offers.OfferPosterDao;
 import com.brewingjava.mahavir.daos.product.FilterCriteriasDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
+import com.brewingjava.mahavir.entities.HomepageComponents.BrandCategory;
+import com.brewingjava.mahavir.entities.HomepageComponents.BrandOfferPoster;
+import com.brewingjava.mahavir.entities.HomepageComponents.ShopByBrands;
 import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
@@ -809,4 +813,162 @@ public class ExcelHelper {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    @Autowired
+    public ShopByBrandsDao shopByBrandsDao;
+
+    public ResponseEntity<?> addBrands(InputStream is){
+        try {
+            shopByBrandsDao.deleteAll();
+            XSSFWorkbook workbook = new XSSFWorkbook(is);
+            XSSFSheet sheet = workbook.getSheet("Shop By Brands");
+            int rowNumber=0;
+            DataFormatter formatter = new DataFormatter();
+            String value;
+            Iterator<Row> iterator = sheet.iterator();
+            URL imageUrl;
+            String fileName;
+            MultipartFile multipartFile;
+            BufferedImage image;
+            ByteArrayOutputStream byteArrayOutputStream;
+            while(iterator.hasNext()){
+                Row row = iterator.next();
+                if(rowNumber<=1){
+                    rowNumber++;
+                    continue;
+                }
+                Iterator<Cell> cells = row.iterator();
+                int cid=0;
+                ShopByBrands shopByBrands = new ShopByBrands();
+                ArrayList<BrandOfferPoster> brandOfferPosters = new ArrayList<>();
+                ArrayList<BrandCategory> brandCategories = new ArrayList<>();
+                ArrayList<String> videoLinks = new ArrayList<>();
+                while(cells.hasNext()){
+                    switch(cid){
+                        case 0:
+                            value = formatter.formatCellValue(cells.next());
+                            if(value.trim().equals("")){
+                                shopByBrands = null;
+                                break;
+                            
+                            }
+                            System.out.println(value);
+                            ShopByBrands existingShopByBrands = shopByBrandsDao.findBybrandName(value);
+                            if(existingShopByBrands==null){
+                                shopByBrands = new ShopByBrands();
+                                
+                            }else{
+                                shopByBrands = existingShopByBrands;
+                                brandOfferPosters = shopByBrands.getBrandOfferPosters();
+                                brandCategories = shopByBrands.getBrandCategories();
+                                videoLinks = shopByBrands.getVideoLinks();
+                            }
+                            
+                            shopByBrands.setBrandName(value);
+                        break;
+                        case 1:
+                            value = formatter.formatCellValue(cells.next());
+                            if(shopByBrands==null || value.trim().equals("")) break;
+                            System.out.println(value);
+                            imageUrl = new URL(value);
+                            image = ImageIO.read(imageUrl);
+                            byteArrayOutputStream = new ByteArrayOutputStream();
+                            ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            fileName = "sample.jpg";
+                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            shopByBrands.setBrandLogo(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                        break;
+                        case 2:
+                            value = formatter.formatCellValue(cells.next());
+                            if(shopByBrands==null || value.trim().equals("")) break;
+                            System.out.println(value);
+                            String[] arr = value.split("#");
+                            for(int k=0;k<arr.length;k++){
+                                String offerPostersModelNum[] = arr[k].split("\\[");
+                                System.out.println("offerPosterUrl:"+offerPostersModelNum[0]);
+                                System.out.println("offerPosterModelNum:"+offerPostersModelNum[1]);
+                                BrandOfferPoster brandOfferPoster = new BrandOfferPoster();
+                                imageUrl = new URL(offerPostersModelNum[0]);
+                                image = ImageIO.read(imageUrl);
+                                byteArrayOutputStream = new ByteArrayOutputStream();
+                                ImageIO.write(image,"jpg",byteArrayOutputStream);
+                                fileName = "sample.jpg";
+                                multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                                brandOfferPoster.setOfferPoster(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+
+                                offerPostersModelNum[1] = offerPostersModelNum[1].substring(0,offerPostersModelNum[1].length()-1);
+                                String modelNumbers[] = offerPostersModelNum[1].split(";");
+                                ArrayList<String> modelNumberList = new ArrayList<>();
+                                HashSet<String> categories = new HashSet<>();
+                                for(int i=0;i<modelNumbers.length;i++){
+                                    modelNumberList.add(modelNumbers[i]);
+                                    ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumbers[i]);
+                                    if(productDetail!=null){
+                                        categories.add(productDetail.getCategory());
+                                    }
+                                }
+
+                                ArrayList<String> categoryList = new ArrayList<>();
+                                for(String cat:categories){
+                                    categoryList.add(cat);
+                                }
+                                brandOfferPoster.setModelNumbers(modelNumberList);
+                                brandOfferPoster.setCategories(categoryList);
+                                brandOfferPosters.add(brandOfferPoster);
+                            }
+                            
+                        break;
+                        case 3:
+                            value = formatter.formatCellValue(cells.next());
+                            if(shopByBrands==null || value.trim().equals("")) break;
+                            System.out.println(value);
+                            String categoriesArray[] = value.split("#");
+                            for(int i=0;i<categoriesArray.length;i++){
+                                System.out.println("categoryModelNums:"+categoriesArray[i]);
+                                String categoryModelNum[] = categoriesArray[i].split("\\[");
+                                BrandCategory brandCategory = new BrandCategory();
+                                brandCategory.setCategory(categoryModelNum[0]);
+                                categoryModelNum[1] = categoryModelNum[1].substring(0,categoryModelNum[1].length()-1);
+                                String modelNums[] = categoryModelNum[1].split(";");
+                                ArrayList<String> modelNumberList2 = new ArrayList<>();
+                                for(int j=0;j<modelNums.length;j++){
+                                    modelNumberList2.add(modelNums[j]);
+                                }
+                                brandCategory.setModelNumbers(modelNumberList2);
+                                brandCategories.add(brandCategory);
+                            }
+                        break;
+                        case 4:
+                            value = formatter.formatCellValue(cells.next());
+                            if(shopByBrands==null || value.trim().equals("")) break;
+                            System.out.println(value);
+                            String videoLinksArray[] = value.split("#");
+                            for(int i=0;i<videoLinksArray.length;i++){
+                                System.out.println("videoLinks:"+videoLinksArray[i]);
+                                videoLinks.add(videoLinksArray[i]);
+                            }
+                            shopByBrands.setBrandCategories(brandCategories);
+                            shopByBrands.setBrandOfferPosters(brandOfferPosters);
+                            shopByBrands.setVideoLinks(videoLinks);
+                            shopByBrandsDao.save(shopByBrands);
+                        break;
+                        default:
+                        break;
+                    }
+                    cid++;
+                }
+                rowNumber++;
+            
+            }
+            responseMessage.setMessage("Shop By Brands added successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+
+
 }

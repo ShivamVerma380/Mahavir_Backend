@@ -108,6 +108,17 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    @PostMapping("/excel/shopByBrands")
+    public ResponseEntity<?> addBrands(@RequestParam("file") MultipartFile file){
+        try {
+            return excelHelper.addBrands(file.getInputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
     // @GetMapping("/excel")
     // public ResponseEntity<?> getProducts(){
     //     try {
