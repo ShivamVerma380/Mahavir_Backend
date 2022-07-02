@@ -121,6 +121,7 @@ public class ExcelHelper {
                         case 2:
                             
                             value = formatter.formatCellValue(cell);
+                            if(value.trim().equals("-")) break;
                             imageUrl = new URL(value);
                             image = ImageIO.read(imageUrl);
                             byteArrayOutputStream = new ByteArrayOutputStream();
@@ -131,6 +132,7 @@ public class ExcelHelper {
                             break;
                         case 3:
                             value = formatter.formatCellValue(cell);
+                            if(value.trim().equals("-")) break;
                             imageUrl = new URL(value);
                             image = ImageIO.read(imageUrl);
                             byteArrayOutputStream = new ByteArrayOutputStream();
@@ -141,6 +143,7 @@ public class ExcelHelper {
                             break;
                         case 4:
                             value = formatter.formatCellValue(cell);
+                            if(value.trim().equals("-")) break;
                             imageUrl = new URL(value);
                             image = ImageIO.read(imageUrl);
                             byteArrayOutputStream = new ByteArrayOutputStream();
@@ -151,6 +154,7 @@ public class ExcelHelper {
                             break;
                         case 5:
                             value = formatter.formatCellValue(cell);
+                            if(value.trim().equals("-")) break;
                             imageUrl = new URL(value);
                             image = ImageIO.read(imageUrl);
                             byteArrayOutputStream = new ByteArrayOutputStream();
@@ -161,6 +165,7 @@ public class ExcelHelper {
                             break;
                         case 6:
                             value = formatter.formatCellValue(cell);
+                            if(value.trim().equals("-")) break;
                             imageUrl = new URL(value);
                             image = ImageIO.read(imageUrl);
                             byteArrayOutputStream = new ByteArrayOutputStream();
