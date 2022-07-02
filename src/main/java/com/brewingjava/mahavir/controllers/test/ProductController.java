@@ -38,7 +38,6 @@ public class ProductController {
             if(excelHelper.checkFileType(file)){
                 List<ProductDetail> products = excelHelper.convertExcelToListOfProductDetails(file.getInputStream());
                 productDao.saveAll(products);
-
                 // products = excelHelper.addSubCategories(file.getInputStream());
                 // productDao.saveAll(products);
                 // return ResponseEntity.ok(products);
