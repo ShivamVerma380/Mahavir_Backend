@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
+import com.brewingjava.mahavir.helper.ProductsDetailsResponse;
+
 @Document(collection = "deals")
 @Component
 public class Deals {
@@ -19,16 +21,16 @@ public class Deals {
     @Id
     public String title;
 
-    public HashSet<String> modelNumbers;
+    public HashSet<ProductsDetailsResponse> products;
 
     public ArrayList<String> categories;
 
     public Deals() {
     }
 
-    public Deals(String title, HashSet<String> modelNumbers, ArrayList<String> categories) {
+    public Deals(String title, HashSet<ProductsDetailsResponse> products, ArrayList<String> categories) {
         this.title = title;
-        this.modelNumbers = modelNumbers;
+        this.products = products;
         this.categories = categories;
     }
 
@@ -40,12 +42,12 @@ public class Deals {
         this.title = title;
     }
 
-    public HashSet<String> getModelNumbers() {
-        return modelNumbers;
+    public HashSet<ProductsDetailsResponse> getProducts() {
+        return products;
     }
 
-    public void setModelNumbers(HashSet<String> modelNumbers) {
-        this.modelNumbers = modelNumbers;
+    public void setProducts(HashSet<ProductsDetailsResponse> products) {
+        this.products = products;
     }
 
     public ArrayList<String> getCategories() {
@@ -58,12 +60,8 @@ public class Deals {
 
     @Override
     public String toString() {
-        return "Deals [categories=" + categories + ", modelNumbers=" + modelNumbers + ", title=" + title + "]";
+        return "Deals [categories=" + categories + ", products=" + products + ", title=" + title + "]";
     }
 
-  
-
-
-    
     
 }

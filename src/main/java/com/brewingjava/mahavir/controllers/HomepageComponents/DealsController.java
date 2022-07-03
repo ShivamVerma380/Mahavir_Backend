@@ -28,6 +28,7 @@ public class DealsController {
         try {
             return dealsService.addDeals(authorization, title, modelNumbers);
         } catch (Exception e) {
+            e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
@@ -38,6 +39,7 @@ public class DealsController {
         try {
             return dealsService.getDeals();
         } catch (Exception e) {
+            e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
