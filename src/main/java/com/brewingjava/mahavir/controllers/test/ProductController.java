@@ -34,23 +34,14 @@ public class ProductController {
     @Autowired
     public ProductDetailsDao productDao;
     
-    @PostMapping("/excel")
-    public ResponseEntity<?> addExcelData(@RequestParam("file") MultipartFile file){
+
+
+    @PostMapping("/excel/products")
+    public ResponseEntity<?> addProducts(@RequestParam("file") MultipartFile file){
         try {
-            if(excelHelper.checkFileType(file)){
-                List<ProductDetail> products = excelHelper.convertExcelToListOfProductDetails(file.getInputStream());
-                productDao.saveAll(products);
-                // products = excelHelper.addSubCategories(file.getInputStream());
-                // productDao.saveAll(products);
-                // return ResponseEntity.ok(products);
-                responseMessage.setMessage("Excel data added successfully");
-                return new ResponseEntity<>(responseMessage, HttpStatus.OK);
-            }else{
-                responseMessage.setMessage("File not acceptable");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
-            }
+            return excelHelper.addProducts(file.getInputStream());
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }

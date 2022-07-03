@@ -74,29 +74,28 @@ public class ExcelHelper {
         return false;
     }
 
-    public List<ProductDetail> convertExcelToListOfProductDetails(InputStream is){
-        List<ProductDetail> list = new ArrayList<>();
-
-        DataFormatter formatter = new DataFormatter();
-        PictureData pict;
-        byte[] data;
-        String value;
-        URL imageUrl;
-        String fileName;
-        MultipartFile multipartFile;
-        BufferedImage image;
-        ByteArrayOutputStream byteArrayOutputStream;
-        
+    public ResponseEntity<?> addProducts(InputStream inputStream) {
         try {
-            XSSFWorkbook workbook =  new XSSFWorkbook(is);
-            XSSFSheet sheet = workbook.getSheet("Whirlpool");
+
+            DataFormatter formatter = new DataFormatter();
+            PictureData pict;
+            byte[] data;
+            String value;
+            URL imageUrl;
+            String fileName;
+            MultipartFile multipartFile;
+            BufferedImage image;
+            ByteArrayOutputStream byteArrayOutputStream;
+
+            XSSFWorkbook workbook =  new XSSFWorkbook(inputStream);
+            XSSFSheet sheet = workbook.getSheet("Products");
             int rowNumber=0;
 
             Iterator<Row> iterator = sheet.iterator();
             FreeItem freeItem=null;
             while(iterator.hasNext()){
                 Row row = iterator.next();
-                if(rowNumber<=1){
+                if(rowNumber<1){
                     rowNumber++;
                     continue;
                 }
@@ -111,162 +110,159 @@ public class ExcelHelper {
                     Cell cell = cells.next();
                     switch(cid){
                         case 0:
-                            // int s = (int)cell.getNumericCellValue();
                             try {
                                 value = formatter.formatCellValue(cell);
-                                productDetail.setModelNumber(value);    
+                                if(value.trim().equals("-")){
+                                    productDetail=null;
+                                    break;
+                                }
+                                productDetail.setModelNumber(value);
                             } catch (Exception e) {
-                                flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
+                                System.out.println("Model Number:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
-                            }    
+                                flag = false;
+                            }
                         break;
                         case 1:
                             try {
                                 value = formatter.formatCellValue(cell);
+                                if(productDetail==null || value.trim().equals("-")) break;
                                 productDetail.setProductName(value);
-                                        
                             } catch (Exception e) {
-                                flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
+                                System.out.println("Product Name:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
+                                flag = false;
                             }
-                        break;                        
-                        
+                        break;
                         case 2:
-                            try {  
+                            try {
                                 value = formatter.formatCellValue(cell);
-                                if(value.trim().equals("-")) break;
+                                if(productDetail==null || value.trim().equals("-")) break;
                                 imageUrl = new URL(value);
                                 image = ImageIO.read(imageUrl);
                                 byteArrayOutputStream = new ByteArrayOutputStream();
-                                ImageIO.write(image,"jpg",byteArrayOutputStream);
-                                fileName = "sample.jpg";
-                                multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                                ImageIO.write(image,"jpeg",byteArrayOutputStream);
+                                fileName = "sample.jpeg";
+                                multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
                                 productDetail.setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
-                                flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
+                                System.out.println("Product Image 1:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
+                                flag = false;
                             }
-                            break;
+                        break;
                         case 3:
-                            try {  
+                            try {
                                 value = formatter.formatCellValue(cell);
-                                if(value.trim().equals("-")) break;
+                                if(productDetail==null || value.trim().equals("-")) break;
                                 imageUrl = new URL(value);
                                 image = ImageIO.read(imageUrl);
                                 byteArrayOutputStream = new ByteArrayOutputStream();
-                                ImageIO.write(image,"jpg",byteArrayOutputStream);
-                                fileName = "sample.jpg";
-                                multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                                ImageIO.write(image,"jpeg",byteArrayOutputStream);
+                                fileName = "sample.jpeg";
+                                multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
                                 productDetail.setProductImage2(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
-                                flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
+                                System.out.println("Product Image 2:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
+                                flag = false;
                             }
                         break;
                         case 4:
-                            try{
+                            try {
                                 value = formatter.formatCellValue(cell);
-                            if(value.trim().equals("-")) break;
-                            imageUrl = new URL(value);
-                            image = ImageIO.read(imageUrl);
-                            byteArrayOutputStream = new ByteArrayOutputStream();
-                            ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            fileName = "sample.jpg";
-                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
-                            productDetail.setProductImage3(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
-
-                            }catch(Exception e){
-                                flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
+                                if(productDetail==null || value.trim().equals("-")) break;
+                                imageUrl = new URL(value);
+                                image = ImageIO.read(imageUrl);
+                                byteArrayOutputStream = new ByteArrayOutputStream();
+                                ImageIO.write(image,"jpeg",byteArrayOutputStream);
+                                fileName = "sample.jpeg";
+                                multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
+                                productDetail.setProductImage3(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                            } catch (Exception e) {
+                                System.out.println("Product Image 3:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
+                                flag = false;
                             }
-                            
-                            break;
+                        break;
                         case 5:
                             try {
                                 value = formatter.formatCellValue(cell);
-                                if(value.trim().equals("-")) break;
+                                if(productDetail==null || value.trim().equals("-")) break;
                                 imageUrl = new URL(value);
                                 image = ImageIO.read(imageUrl);
                                 byteArrayOutputStream = new ByteArrayOutputStream();
-                                ImageIO.write(image,"jpg",byteArrayOutputStream);
-                                fileName = "sample.jpg";
-                                multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                                ImageIO.write(image,"jpeg",byteArrayOutputStream);
+                                fileName = "sample.jpeg";
+                                multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
                                 productDetail.setProductImage4(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
-                                flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
+                                System.out.println("Product Image 4:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
+                                flag = false;
                             }
-                            
-                            break;
+                        break;
                         case 6:
                             try {
                                 value = formatter.formatCellValue(cell);
-                                if(value.trim().equals("-")) break;
+                                if(productDetail==null || value.trim().equals("-")) break;
                                 imageUrl = new URL(value);
                                 image = ImageIO.read(imageUrl);
                                 byteArrayOutputStream = new ByteArrayOutputStream();
-                                ImageIO.write(image,"jpg",byteArrayOutputStream);
-                                fileName = "sample.jpg";
-                                multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                                ImageIO.write(image,"jpeg",byteArrayOutputStream);
+                                fileName = "sample.jpeg";
+                                multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
                                 productDetail.setProductImage5(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
-                                flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
+                                System.out.println("Product Image 5:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
+                                flag = false;
                             }
                         break;
-                        
                         case 7:
-                            try{
+                            try {
                                 value = formatter.formatCellValue(cell);
-                                if(value.trim().equals("-")) break;
+                                if(productDetail==null || value.trim().equals("-")) break;
                                 productDetail.setProductPrice(value);
                             } catch (Exception e) {
-                                flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
+                                System.out.println("Product Image 5:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
+                                flag = false;
                             }
-                            
-                            break;
+                        break;
                         case 8:
                             try {
                                 value = formatter.formatCellValue(cell);
-                                if(value.trim().equals("-")) break;
-                                productDetail.setOfferPrice(value);    
+                                if(productDetail==null || value.trim().equals("-")) break;
+                                productDetail.setOfferPrice(value);
                             } catch (Exception e) {
-                                flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
+                                System.out.println("Product Image 5:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
+                                flag = false;
                             }
-                            break;
+                        break;
                         case 9:
                             try {
                                 value = formatter.formatCellValue(cell);
+                                if(productDetail==null || value.trim().equals("-")) break;
                                 productDetail.setCategory(value);
                             } catch (Exception e) {
-                                flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
+                                System.out.println("Product Image 5:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
+                                flag = false;
                             }
-                            break;
+                        break;
                         case 10:
                             try {
                                 value = formatter.formatCellValue(cell);
-                                if(value.trim().equals("-")) break;
+                                if(productDetail==null || value.trim().equals("-")) break;
                                 productDetail.setProductHighlights(value);
                             } catch (Exception e) {
-                                flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
-                                // e.printStackTrace();
+                                e.printStackTrace();
+                                responseMessage.setMessage(e.getMessage());
+                                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
                             }
-                            
-                            break;
+                        break;
                         case 11:
                             try {
                                 value = formatter.formatCellValue(cell);
@@ -292,7 +288,7 @@ public class ExcelHelper {
                             try {
                                 HashMap<String,HashMap<String,String>> productInfo = new HashMap<>();
                                 value = formatter.formatCellValue(cell);
-                                if(value.trim().equals("")){
+                                if(value.trim().equals("-")){
                                     productDetail.setProductInformation(new HashMap<>());
                                     break;
                                 }
@@ -322,15 +318,15 @@ public class ExcelHelper {
                             } catch (Exception e) {
                                 flag = false;
                                 System.out.println(formatter.formatCellValue(cell));
-                                // e.printStackTrace();
+                                e.printStackTrace();
                             }
-                            break;
+                        break;
                         case 13:
                             try {
                                 HashMap<String,ArrayList<String>> productVariants = new HashMap<>();
                                 value = formatter.formatCellValue(cell);
-                                if(value.trim().equals("")){
-                                    System.out.println("Empty");
+                                if(value.trim().equals("-")){
+                                    // System.out.println("Empty");
                                     productDetail.setVariants(new HashMap<>());
                                     break;
                                 }
@@ -350,10 +346,9 @@ public class ExcelHelper {
                             } catch (Exception e) {
                                 flag = false;
                                 System.out.println(formatter.formatCellValue(cell));
-                                // e.printStackTrace();
+                                e.printStackTrace();
                             }
-                            break;
-
+                        break;
                         case 14:
                             try {
                                 value = formatter.formatCellValue(cell);
@@ -378,7 +373,7 @@ public class ExcelHelper {
                             } catch (Exception e) {
                                 flag = false;
                                 System.out.println(formatter.formatCellValue(cell));
-                                // e.printStackTrace();
+                                e.printStackTrace();
                             }
                         break;
                         case 15:
@@ -400,38 +395,28 @@ public class ExcelHelper {
                             } catch (Exception e) {
                                 flag = false;
                                 System.out.println(formatter.formatCellValue(cell));
-                                // e.printStackTrace();
+                                e.printStackTrace();
                             }   
                         break;
+
                         default:
-                            break;
+                        break;
                     }
                     cid++;
-                    rowNumber++;
                 }
-                if(!productDetail.getModelNumber().trim().equals("") && flag){
-                    // productDetail.setSubCategoryMap(new HashMap<>());
-                    // productDetail.setFiltercriterias(new HashMap<>());
-                    if(freeItem!=null){
-                        System.out.println("out"+freeItem.toString());
-                        productDetail.setFreeItem(freeItem);
-                    }
-                       
-                    //productDetail.setProductInformation(new HashMap<>());
-                    productDetail.setProductVariants(new ArrayList<>());
-                    // productDetail.setVariants(new HashMap<>());
-                    list.add(productDetail);
-                }
-                    
-
-            }   
-            
+                if(flag)
+                    productDetailsDao.save(productDetail);
+                rowNumber++;
+            }
+            responseMessage.setMessage("Products saved successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
-            e.printStackTrace();            
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
-        return list;
-
     }
+
 
     @Autowired
     public ProductDetailsDao productDetailsDao;
@@ -674,7 +659,7 @@ public class ExcelHelper {
                     switch(cid){
                         case 0:
                             value = formatter.formatCellValue(cell);
-                            if(value.trim().equals("")) break;
+                            if(value.trim().equals("-")) break;
                             categoriesToDisplay = new CategoriesToDisplay();
                             categoriesToDisplay.setCategory(value);
                             CategoriesToDisplay existingCat = categoriesToDisplayDao.findBycategory(value);
@@ -691,7 +676,7 @@ public class ExcelHelper {
                             if(categoriesToDisplay==null) break;
                             value = formatter.formatCellValue(cell);
                             System.out.println(value);
-                            if(value.trim().equals("")) break;
+                            if(value.trim().equals("-")) break;
                             imageUrl = new URL(value);
                             System.out.println("imageUrl="+imageUrl);
                             image = ImageIO.read(imageUrl);
@@ -705,7 +690,7 @@ public class ExcelHelper {
                             if(categoriesToDisplay==null) break;
                             value = formatter.formatCellValue(cell);
                             System.out.println(value); //subCat  name
-                            if(value.trim().equals("")) break;
+                            if(value.trim().equals("-")) break;
                             //already subCategory exists will be removed
                             for(int i=0;i<subCategoriesList.size();i++){
                                 if(subCategoriesList.get(i).getSubCategoryName().equals(value)){
@@ -1159,6 +1144,8 @@ public class ExcelHelper {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    
 
 
 
