@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.brewingjava.mahavir.daos.HomepageComponents.DealsDao;
 import com.brewingjava.mahavir.daos.HomepageComponents.ShopByBrandsDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
@@ -143,6 +144,31 @@ public class ProductController {
     //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
     //     }
     // }
+
+    @PostMapping("/excel/deals")
+    public ResponseEntity<?> addDeals(@RequestParam("file") MultipartFile file){
+        try {
+            return excelHelper.addDeals(file.getInputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @Autowired
+    public DealsDao dealsDao;
+
+    @GetMapping("/excel/deals")
+    public ResponseEntity<?> getDeals(){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(dealsDao.findAll());
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 
 }
 

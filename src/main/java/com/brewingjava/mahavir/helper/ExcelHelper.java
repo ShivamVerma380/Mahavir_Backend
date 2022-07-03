@@ -36,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.image.BufferedImage;
 
+import com.brewingjava.mahavir.daos.HomepageComponents.DealsDao;
 import com.brewingjava.mahavir.daos.HomepageComponents.ShopByBrandsDao;
 import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
 import com.brewingjava.mahavir.daos.offers.OfferPosterDao;
@@ -43,6 +44,7 @@ import com.brewingjava.mahavir.daos.product.FilterCriteriasDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
 import com.brewingjava.mahavir.entities.HomepageComponents.BrandCategory;
 import com.brewingjava.mahavir.entities.HomepageComponents.BrandOfferPoster;
+import com.brewingjava.mahavir.entities.HomepageComponents.Deals;
 import com.brewingjava.mahavir.entities.HomepageComponents.ShopByBrands;
 import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.categories.SubCategories;
@@ -1073,6 +1075,83 @@ public class ExcelHelper {
             
             }
             responseMessage.setMessage("Shop By Brands added successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @Autowired
+    public DealsDao dealsDao;
+
+    public ResponseEntity<?> addDeals(InputStream is){
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook(is);
+            XSSFSheet sheet = workbook.getSheet("Deals");
+            int rowNumber=0;
+            DataFormatter formatter = new DataFormatter();
+            String value;
+            Iterator<Row> iterator = sheet.iterator();
+            while(iterator.hasNext()){
+                Row row = iterator.next();
+                if(rowNumber<=1){
+                    rowNumber++;
+                    continue;
+                }
+                Iterator<Cell> cells = row.iterator();
+                int cid=0;
+                Deals deals = new Deals();
+                HashSet<ProductsDetailsResponse> products = new HashSet<>();
+                HashSet<String> categories = new HashSet<>();
+                while(cells.hasNext()){
+                    Cell cell = cells.next();
+                    switch(cid){
+                        case 0:
+                            value = formatter.formatCellValue(cell);
+                            if(value.trim().equals("-"))
+                            {
+                                deals = null;
+                                break;
+                            }
+                            System.out.println(value);
+                            deals.setTitle(value);
+                        break;
+                        case 1:
+                            value = formatter.formatCellValue(cell);
+                            if(deals==null || value.trim().equals("")) break;
+                            System.out.println(value);
+                            String mNums[] = value.split(";");
+                            for(int i=0;i<mNums.length;i++){
+                                ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(mNums[i]);
+                                
+                                if(productDetail!=null){
+                                    ProductsDetailsResponse productsDetailsResponse = new ProductsDetailsResponse();
+                                    productsDetailsResponse.setModelNumber(productDetail.getModelNumber());
+                                    productsDetailsResponse.setProductName(productDetail.getProductName());
+                                    productsDetailsResponse.setProductPrice(productDetail.getProductPrice());
+                                    productsDetailsResponse.setCategory(productDetail.getCategory());
+                                    productsDetailsResponse.setSubCategoryMap(productDetail.getSubCategoryMap());
+                                    productsDetailsResponse.setOfferPrice(productDetail.getOfferPrice());
+                                    productsDetailsResponse.setProductHighlights(productDetail.getProductHighlights());
+                                    productsDetailsResponse.setProductImage1(productDetail.getProductImage1());
+                                    products.add(productsDetailsResponse);
+                                    categories.add(productDetail.getCategory());
+                                }
+                            }
+                            deals.setProducts(products);
+                            deals.setCategories(new ArrayList<>(categories));
+                            dealsDao.save(deals);
+                        break;
+                        default:
+                        break;
+                    }
+                    cid++;   
+                }
+                rowNumber++;
+            }
+            responseMessage.setMessage("Deals added successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
             e.printStackTrace();
