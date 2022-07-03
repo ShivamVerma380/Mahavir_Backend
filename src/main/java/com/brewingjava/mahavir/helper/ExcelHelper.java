@@ -115,7 +115,8 @@ public class ExcelHelper {
                                 productDetail.setModelNumber(value);    
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }    
                         break;
                         case 1:
@@ -125,7 +126,8 @@ public class ExcelHelper {
                                         
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                         break;                        
                         
@@ -142,7 +144,8 @@ public class ExcelHelper {
                                 productDetail.setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                             break;
                         case 3:
@@ -158,7 +161,8 @@ public class ExcelHelper {
                                 productDetail.setProductImage2(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                         break;
                         case 4:
@@ -175,7 +179,8 @@ public class ExcelHelper {
 
                             }catch(Exception e){
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                             
                             break;
@@ -192,7 +197,8 @@ public class ExcelHelper {
                                 productDetail.setProductImage4(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                             
                             break;
@@ -209,7 +215,8 @@ public class ExcelHelper {
                                 productDetail.setProductImage5(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                         break;
                         
@@ -220,7 +227,8 @@ public class ExcelHelper {
                                 productDetail.setProductPrice(value);
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                             
                             break;
@@ -231,7 +239,8 @@ public class ExcelHelper {
                                 productDetail.setOfferPrice(value);    
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                             break;
                         case 9:
@@ -240,7 +249,8 @@ public class ExcelHelper {
                                 productDetail.setCategory(value);
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                             break;
                         case 10:
@@ -250,7 +260,8 @@ public class ExcelHelper {
                                 productDetail.setProductHighlights(value);
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                             
                             break;
@@ -270,7 +281,8 @@ public class ExcelHelper {
                                 productDetail.setSubCategoryMap(map);
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                             
                         break;
@@ -307,7 +319,8 @@ public class ExcelHelper {
                                 productDetail.setProductInformation(productInfo);
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                             break;
                         case 13:
@@ -319,14 +332,14 @@ public class ExcelHelper {
                                     productDetail.setVariants(new HashMap<>());
                                     break;
                                 }
-                                System.out.println(value);
+                                // System.out.println(value);
                                 String variants[] = value.split("#");
                                 for(int i=0;i<variants.length;i++){
-                                    System.out.println(variants[i]);
+                                    // System.out.println(variants[i]);
                                     String factors[] = variants[i].split("\\[");
                                     String x = factors[1].substring(0,factors[1].length()-1);  
                                     String values[] = x.split(";");
-                                    System.out.println("key:"+factors[0]+"\tvalues:"+x);
+                                    // System.out.println("key:"+factors[0]+"\tvalues:"+x);
                                     ArrayList<String> arrayList = new ArrayList<>();
                                     for(int j=0;j<values.length;j++) arrayList.add(values[j]);
                                     productVariants.put(factors[0], arrayList);
@@ -334,7 +347,8 @@ public class ExcelHelper {
                                 productDetail.setVariants(productVariants);
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                             break;
 
@@ -342,7 +356,7 @@ public class ExcelHelper {
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(value.trim().equals("-")){    
-                                    System.out.println("In if free item"); 
+                                    // System.out.println("In if free item"); 
                                     freeItem = null; 
                                     break;
                                 }
@@ -361,7 +375,8 @@ public class ExcelHelper {
                                 System.out.println(freeItem.toString());                    
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                         break;
                         case 15:
@@ -382,7 +397,8 @@ public class ExcelHelper {
                                 
                             } catch (Exception e) {
                                 flag = false;
-                                e.printStackTrace();
+                                System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }   
                         break;
                         default:

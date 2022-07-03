@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.brewingjava.mahavir.daos.HomepageComponents.ShopByBrandsDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.helper.ExcelHelper;
@@ -112,6 +113,20 @@ public class ProductController {
     public ResponseEntity<?> addBrands(@RequestParam("file") MultipartFile file){
         try {
             return excelHelper.addBrands(file.getInputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @Autowired
+    public ShopByBrandsDao shopByBrandsDao;
+
+    @GetMapping("/excel/shopByBrands")
+    public ResponseEntity<?> getShopByBrands(){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(shopByBrandsDao.findAll());
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
