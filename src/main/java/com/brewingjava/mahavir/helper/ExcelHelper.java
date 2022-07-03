@@ -95,7 +95,7 @@ public class ExcelHelper {
             FreeItem freeItem=null;
             while(iterator.hasNext()){
                 Row row = iterator.next();
-                if(rowNumber<1){
+                if(rowNumber<=1){
                     rowNumber++;
                     continue;
                 }
@@ -404,7 +404,7 @@ public class ExcelHelper {
                     }
                     cid++;
                 }
-                if(flag)
+                if(flag || productDetail!=null || !productDetail.getModelNumber().equals(""))
                     productDetailsDao.save(productDetail);
                 rowNumber++;
             }
