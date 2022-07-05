@@ -126,7 +126,10 @@ public class ExcelHelper {
                         case 1:
                             try {
                                 value = formatter.formatCellValue(cell);
-                                if(productDetail==null || value.trim().equals("-")) break;
+                                if(productDetail==null || value.trim().equals("-")){
+                                    productDetail.setProductName("");
+                                    break;
+                                } 
                                 productDetail.setProductName(value);
                             } catch (Exception e) {
                                 System.out.println("Product Name:"+formatter.formatCellValue(cell));
@@ -942,6 +945,7 @@ public class ExcelHelper {
                 ArrayList<BrandOfferPoster> brandOfferPosters = new ArrayList<>();
                 ArrayList<BrandCategory> brandCategories = new ArrayList<>();
                 ArrayList<String> videoLinks = new ArrayList<>();
+                BrandCategory brandCategory = new BrandCategory();
                 while(cells.hasNext()){
                     switch(cid){
                         case 0:
@@ -1025,21 +1029,28 @@ public class ExcelHelper {
                             for(int i=0;i<categoriesArray.length;i++){
                                 System.out.println("categoryModelNums:"+categoriesArray[i]);
                                 String categoryModelNum[] = categoriesArray[i].split("\\[");
-                                BrandCategory brandCategory = new BrandCategory();
+                                
                                 brandCategory.setCategory(categoryModelNum[0]);
                                 categoryModelNum[1] = categoryModelNum[1].substring(0,categoryModelNum[1].length()-1);
                                 String modelNums[] = categoryModelNum[1].split(";");
                                 ArrayList<String> modelNumberList2 = new ArrayList<>();
-                                for(int j=0;j<modelNums.length;j++){
+                                for(int j=0;j<modelNums.length-1;j++){
                                     modelNumberList2.add(modelNums[j]);
                                 }
                                 brandCategory.setModelNumbers(modelNumberList2);
+                                imageUrl = new URL(modelNums[modelNums.length-1 ]);
+                                image = ImageIO.read(imageUrl);
+                                byteArrayOutputStream = new ByteArrayOutputStream();
+                                ImageIO.write(image,"jpg",byteArrayOutputStream);
+                                fileName = "sample.jpg";
+                                multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                                brandCategory.setCatImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                                 brandCategories.add(brandCategory);
                             }
                         break;
                         case 4:
                             value = formatter.formatCellValue(cells.next());
-                            if(shopByBrands==null || value.trim().equals("")) break;
+                            if(shopByBrands==null || value.trim().equals("-")) break;
                             System.out.println(value);
                             String videoLinksArray[] = value.split("#");
                             for(int i=0;i<videoLinksArray.length;i++){

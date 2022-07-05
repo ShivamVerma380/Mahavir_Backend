@@ -2,6 +2,7 @@ package com.brewingjava.mahavir.entities.HomepageComponents;
 
 import java.util.ArrayList;
 
+import org.bson.types.Binary;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -9,13 +10,16 @@ public class BrandCategory {
     
     private String category;
 
+    private Binary catImage;
+
     private ArrayList<String> modelNumbers;
 
     public BrandCategory() {
     }
 
-    public BrandCategory(String category, ArrayList<String> modelNumbers) {
+    public BrandCategory(String category, Binary catImage, ArrayList<String> modelNumbers) {
         this.category = category;
+        this.catImage = catImage;
         this.modelNumbers = modelNumbers;
     }
 
@@ -25,6 +29,14 @@ public class BrandCategory {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public Binary getCatImage() {
+        return catImage;
+    }
+
+    public void setCatImage(Binary catImage) {
+        this.catImage = catImage;
     }
 
     public ArrayList<String> getModelNumbers() {
@@ -37,8 +49,11 @@ public class BrandCategory {
 
     @Override
     public String toString() {
-        return "BrandCategory [category=" + category + ", modelNumbers=" + modelNumbers + "]";
+        return "BrandCategory [catImage=" + catImage + ", category=" + category + ", modelNumbers=" + modelNumbers
+                + "]";
     }
+
+    
 
     
 
