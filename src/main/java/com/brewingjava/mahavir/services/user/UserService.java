@@ -181,6 +181,28 @@ public class UserService {
         }
     }
 
+    public ResponseEntity<?> getAddress(String authorization){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest userRequest = userDao.findByEmail(email);
+            if(userRequest==null){
+                responseMessage.setMessage("User Not found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            ArrayList<UserAddress> list = userRequest.getUserAdresses();
+            if(list ==null){
+                list = new ArrayList<>();
+            }
+            // responseMessage.setMessage("Addresss fetched successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+    
     public ResponseEntity<?> buyProduct(String Authorization, String BuyDate, String DeliveryDate, String modelNumber) {
         try {
             String token = Authorization.substring(7);

@@ -60,6 +60,19 @@ public class UserController {
         }
     }
 
+
+    @GetMapping("/address")
+    public ResponseEntity<?> getAddresses(@RequestHeader("Authorization") String authorization){
+        try {
+            
+            return userService.getAddress(authorization);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @PostMapping("/buy-product")
     public ResponseEntity<?> buyproduct(@RequestHeader("Authorization") String Authorization, @RequestParam("Buy_Date") String BuyDate, @RequestParam("Delivery_Date") String DeliveryDate, @RequestParam("ModelNumber") String modelNumber) {
         try {
