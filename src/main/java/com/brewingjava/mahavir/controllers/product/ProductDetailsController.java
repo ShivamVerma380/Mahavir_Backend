@@ -39,8 +39,8 @@ public class ProductDetailsController {
     
     @PostMapping("/add-product")
     @CrossOrigin(origins = "*")
-    public ResponseEntity<?> addProductDetails(@RequestParam("modelNumber") String modelNumber,@RequestParam("productName") String productName, @RequestParam("productHighlights") String productHighlights,@RequestParam("productImage1") MultipartFile productImage1,
-    @RequestParam("productImage2")MultipartFile productImage2,@RequestParam("productImage3") MultipartFile productImage3,@RequestParam("productImage4") MultipartFile productImage4,@RequestParam("productImage5") MultipartFile productImage5,
+    public ResponseEntity<?> addProductDetails(@RequestParam("modelNumber") String modelNumber,@RequestParam("productName") String productName, @RequestParam("productHighlights") String productHighlights,@RequestParam("productImage1") String productImage1,
+    @RequestParam("productImage2")String productImage2,@RequestParam("productImage3") String productImage3,@RequestParam("productImage4") String productImage4,@RequestParam("productImage5") String productImage5,
     @RequestParam("productPrice") String productPrice ,@RequestParam("offerPrice") String offerPrice,@RequestParam("category") String category, @RequestHeader("Authorization") String authorization){
         try{
             return productDetailsService.addProductDetail(modelNumber,productName, productHighlights, productPrice,offerPrice, productImage1, productImage2, productImage3, productImage4, productImage5, category, authorization);
@@ -123,7 +123,7 @@ public class ProductDetailsController {
     }
 
     @PostMapping("/add-product-variant-factor/image/{ModelNumber}/{FactorName}")
-    public ResponseEntity<?> addImgFactorsAffected(@RequestHeader("Authorization")String authorization,@PathVariable("FactorName") String factorName,@PathVariable("ModelNumber")String modelNumber,@RequestParam("ProductImage1") MultipartFile image1,@RequestParam("ProductImage2") MultipartFile image2,@RequestParam("ProductImage3") MultipartFile image3,@RequestParam("ProductImage4") MultipartFile image4,@RequestParam("ProductImage5") MultipartFile image5){
+    public ResponseEntity<?> addImgFactorsAffected(@RequestHeader("Authorization")String authorization,@PathVariable("FactorName") String factorName,@PathVariable("ModelNumber")String modelNumber,@RequestParam("ProductImage1") String image1,@RequestParam("ProductImage2") String image2,@RequestParam("ProductImage3") String image3,@RequestParam("ProductImage4") String image4,@RequestParam("ProductImage5") String image5){
         try {
 
             return productVariantService.addImgFactorsAffected(authorization, factorName, modelNumber, image1,image2,image3,image4,image5);
@@ -149,7 +149,7 @@ public class ProductDetailsController {
     
 
     @PostMapping("/free-item/{modelNumber}")
-    public ResponseEntity<?> addFreeItem(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber, @RequestParam("name") String name,@RequestParam("price") String price , @RequestParam("image") MultipartFile image){
+    public ResponseEntity<?> addFreeItem(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber, @RequestParam("name") String name,@RequestParam("price") String price , @RequestParam("image") String image){
         try {
             return productDetailsService.addFreeItem(authorization, modelNumber, name, price, image);
         } catch (Exception e) {

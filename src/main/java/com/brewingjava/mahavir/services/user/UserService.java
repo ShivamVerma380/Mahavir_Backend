@@ -220,7 +220,7 @@ public class UserService {
                 orders.setBuyerEmail(email);
                 orders.setDateOfDelivery(DeliveryDate);
                 orders.setProductImage(productDetail.getProductImage1());
-                orders.setmodelNumber(modelNumber);
+                orders.setModelNumber(modelNumber);
                 orders.setProductPrice(productDetail.getProductPrice());
                 ordersDao.save(orders);
                   

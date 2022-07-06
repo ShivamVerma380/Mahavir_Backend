@@ -14,7 +14,7 @@ public class ProductsDetailsResponse {
 
     private String productHighlights;
     
-    private Binary productImage1;
+    private String productImage1;
 
     private String OfferPrice;
 
@@ -28,8 +28,10 @@ public class ProductsDetailsResponse {
     public ProductsDetailsResponse() {
     }
 
+
     public ProductsDetailsResponse(String modelNumber, String productName, String productHighlights,
-            Binary productImage1, String offerPrice, String productPrice, HashMap<String, String> subCategoryMap,String category) {
+            String productImage1, String offerPrice, String productPrice, HashMap<String, String> subCategoryMap,
+            String category) {
         this.modelNumber = modelNumber;
         this.productName = productName;
         this.productHighlights = productHighlights;
@@ -39,6 +41,7 @@ public class ProductsDetailsResponse {
         this.subCategoryMap = subCategoryMap;
         this.category = category;
     }
+
 
     public String getModelNumber() {
         return modelNumber;
@@ -70,12 +73,12 @@ public class ProductsDetailsResponse {
     }
 
 
-    public Binary getProductImage1() {
+    public String getProductImage1() {
         return productImage1;
     }
 
 
-    public void setProductImage1(Binary productImage1) {
+    public void setProductImage1(String productImage1) {
         this.productImage1 = productImage1;
     }
 
@@ -109,13 +112,16 @@ public class ProductsDetailsResponse {
         this.subCategoryMap = subCategoryMap;
     }
 
+
     public String getCategory() {
         return category;
     }
 
+
     public void setCategory(String category) {
         this.category = category;
     }
+
 
     @Override
     public String toString() {
@@ -125,6 +131,7 @@ public class ProductsDetailsResponse {
                 + subCategoryMap + "]";
     }
 
+    
     
     
 

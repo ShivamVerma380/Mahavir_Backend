@@ -76,8 +76,8 @@ public class ProductDetailsService {
     public Review review;
 
     public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productHighlights,
-            String productPrice,String offerPrice, MultipartFile productImage1, MultipartFile productImage2, MultipartFile productImage3,
-            MultipartFile productImage4, MultipartFile productImage5, String category,
+            String productPrice,String offerPrice, String productImage1, String productImage2, String productImage3,
+            String productImage4, String productImage5, String category,
             String authorization) {
         try {
             String token = authorization.substring(7);
@@ -95,16 +95,11 @@ public class ProductDetailsService {
             ProductDetail productDetail = new ProductDetail();
             productDetail.setModelNumber(modelNumber);
             productDetail.setProductHighlights(productHighlights);
-            productDetail.setProductImage1(
-                    new Binary(BsonBinarySubType.BINARY, productImage1.getBytes()));
-            productDetail.setProductImage2(
-                    new Binary(BsonBinarySubType.BINARY, productImage2.getBytes()));
-            productDetail.setProductImage3(
-                    new Binary(BsonBinarySubType.BINARY, productImage3.getBytes()));
-            productDetail.setProductImage4(
-                    new Binary(BsonBinarySubType.BINARY, productImage4.getBytes()));
-            productDetail.setProductImage5(
-                    new Binary(BsonBinarySubType.BINARY, productImage5.getBytes()));
+            productDetail.setProductImage1(productImage1);
+            productDetail.setProductImage2(productImage2);
+            productDetail.setProductImage3(productImage3);
+            productDetail.setProductImage4(productImage4);
+            productDetail.setProductImage5(productImage5);
             
             productDetail.setProductPrice(productPrice);
             productDetail.setCategory(category);
@@ -313,7 +308,7 @@ public class ProductDetailsService {
             List<Orders> userOrders = userRequest.getProductsBoughtByUser();
             boolean flag = false;
             for(int i=0;i<userOrders.size();i++){
-                if(userOrders.get(i).getmodelNumber().equals(modelNumber)){
+                if(userOrders.get(i).getModelNumber().equals(modelNumber)){
                     flag = true;
                     break;
                 }
@@ -404,7 +399,7 @@ public class ProductDetailsService {
         }
     }
 
-    public ResponseEntity<?> addFreeItem(String authorization,String modelNumber,String name,String price,MultipartFile image){
+    public ResponseEntity<?> addFreeItem(String authorization,String modelNumber,String name,String price,String image){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);

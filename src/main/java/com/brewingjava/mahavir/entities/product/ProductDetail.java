@@ -24,15 +24,15 @@ public class ProductDetail {
 
         private String productHighlights;
         
-        private Binary productImage1;
+        private String productImage1;
         
-        private Binary productImage2;
+        private String productImage2;
         
-        private Binary productImage3;
+        private String productImage3;
         
-        private Binary productImage4;
+        private String productImage4;
         
-        private Binary productImage5;
+        private String productImage5;
         
         private String productPrice;
         
@@ -61,10 +61,9 @@ public class ProductDetail {
         public ProductDetail() {
         }
 
-        
 
-        public ProductDetail(String modelNumber, String productName, String productHighlights, Binary productImage1,
-                Binary productImage2, Binary productImage3, Binary productImage4, Binary productImage5,
+        public ProductDetail(String modelNumber, String productName, String productHighlights, String productImage1,
+                String productImage2, String productImage3, String productImage4, String productImage5,
                 String productPrice, String productVideoLink, String category, HashMap<String, String> subCategoryMap,
                 String offerPrice, HashMap<String, HashMap<String, String>> productInformation,
                 HashMap<String, ArrayList<String>> variants,
@@ -92,108 +91,135 @@ public class ProductDetail {
         }
 
 
-
         public String getModelNumber() {
             return modelNumber;
         }
+
 
         public void setModelNumber(String modelNumber) {
             this.modelNumber = modelNumber;
         }
 
+
         public String getProductName() {
             return productName;
         }
+
 
         public void setProductName(String productName) {
             this.productName = productName;
         }
 
-        
 
-        public Binary getProductImage1() {
+        public String getProductHighlights() {
+            return productHighlights;
+        }
+
+
+        public void setProductHighlights(String productHighlights) {
+            this.productHighlights = productHighlights;
+        }
+
+
+        public String getProductImage1() {
             return productImage1;
         }
 
-        public void setProductImage1(Binary productImage1) {
+
+        public void setProductImage1(String productImage1) {
             this.productImage1 = productImage1;
         }
 
-        public Binary getProductImage2() {
+
+        public String getProductImage2() {
             return productImage2;
         }
 
 
-        public void setProductImage2(Binary productImage2) {
+        public void setProductImage2(String productImage2) {
             this.productImage2 = productImage2;
         }
 
-        public Binary getProductImage3() {
+
+        public String getProductImage3() {
             return productImage3;
         }
 
-        public void setProductImage3(Binary productImage3) {
+
+        public void setProductImage3(String productImage3) {
             this.productImage3 = productImage3;
         }
 
-        public Binary getProductImage4() {
+
+        public String getProductImage4() {
             return productImage4;
         }
 
-        public void setProductImage4(Binary productImage4) {
+
+        public void setProductImage4(String productImage4) {
             this.productImage4 = productImage4;
         }
 
-        public Binary getProductImage5() {
+
+        public String getProductImage5() {
             return productImage5;
         }
 
-        public void setProductImage5(Binary productImage5) {
+
+        public void setProductImage5(String productImage5) {
             this.productImage5 = productImage5;
         }
+
 
         public String getProductPrice() {
             return productPrice;
         }
 
+
         public void setProductPrice(String productPrice) {
             this.productPrice = productPrice;
         }
+
 
         public String getProductVideoLink() {
             return productVideoLink;
         }
 
+
         public void setProductVideoLink(String productVideoLink) {
             this.productVideoLink = productVideoLink;
         }
+
 
         public String getCategory() {
             return category;
         }
 
+
         public void setCategory(String category) {
             this.category = category;
         }
+
 
         public HashMap<String, String> getSubCategoryMap() {
             return subCategoryMap;
         }
 
+
         public void setSubCategoryMap(HashMap<String, String> subCategoryMap) {
             this.subCategoryMap = subCategoryMap;
         }
+
 
         public String getOfferPrice() {
             return OfferPrice;
         }
 
+
         public void setOfferPrice(String offerPrice) {
             OfferPrice = offerPrice;
         }
 
-
-        
 
         public HashMap<String, HashMap<String, String>> getProductInformation() {
             return productInformation;
@@ -204,68 +230,55 @@ public class ProductDetail {
             this.productInformation = productInformation;
         }
 
-        
-        public String getProductHighlights() {
-            return productHighlights;
-        }
-
-
-
-
-        public void setProductHighlights(String productHighlights) {
-            this.productHighlights = productHighlights;
-        }
-
-
-
 
         public HashMap<String, ArrayList<String>> getVariants() {
             return variants;
         }
 
 
-
-
         public void setVariants(HashMap<String, ArrayList<String>> variants) {
             this.variants = variants;
         }
-
-        
-
 
 
         public List<ProductVariants> getProductVariants() {
             return ProductVariants;
         }
 
+
         public void setProductVariants(List<ProductVariants> productVariants) {
             ProductVariants = productVariants;
         }
+
 
         public FreeItem getFreeItem() {
             return freeItem;
         }
 
+
         public void setFreeItem(FreeItem freeItem) {
             this.freeItem = freeItem;
         }
+
 
         public ArrayList<ProductDescription> getProductDescriptions() {
             return productDescriptions;
         }
 
+
         public void setProductDescriptions(ArrayList<ProductDescription> productDescriptions) {
             this.productDescriptions = productDescriptions;
         }
+
 
         public HashMap<String, String> getFiltercriterias() {
             return filtercriterias;
         }
 
+
         public void setFiltercriterias(HashMap<String, String> filtercriterias) {
             this.filtercriterias = filtercriterias;
         }
-
 
 
         @Override
@@ -279,8 +292,4 @@ public class ProductDetail {
                     + ", productPrice=" + productPrice + ", productVideoLink=" + productVideoLink + ", subCategoryMap="
                     + subCategoryMap + ", variants=" + variants + "]";
         }
-
-        
-        
-        
 }

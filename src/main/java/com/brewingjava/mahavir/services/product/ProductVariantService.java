@@ -119,8 +119,8 @@ public class ProductVariantService {
     }
 
     public ResponseEntity<?> addImgFactorsAffected(String authorization, String factorName, String modelNumber,
-            MultipartFile image1, MultipartFile image2, MultipartFile image3, MultipartFile image4,
-            MultipartFile image5) {
+            String image1, String image2, String image3, String image4,
+            String image5) {
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -140,15 +140,15 @@ public class ProductVariantService {
                     List<Factors> factorsAffected = list.get(i).getFactorsAffected();
 
                     
-                    Factors factors = new Factors("productImage1",new Binary(BsonBinarySubType.BINARY,image1.getBytes()));
+                    Factors factors = new Factors("productImage1",image1);
                     factorsAffected.add(factors);
-                    factors = new Factors("productImage2",new Binary(BsonBinarySubType.BINARY,image2.getBytes()));
+                    factors = new Factors("productImage2",image2);
                     factorsAffected.add(factors);
-                    factors = new Factors("productImage3",new Binary(BsonBinarySubType.BINARY,image3.getBytes()));
+                    factors = new Factors("productImage3",image3);
                     factorsAffected.add(factors);
-                    factors = new Factors("productImage4",new Binary(BsonBinarySubType.BINARY,image4.getBytes()));
+                    factors = new Factors("productImage4",image4);
                     factorsAffected.add(factors);
-                    factors = new Factors("productImage5",new Binary(BsonBinarySubType.BINARY,image5.getBytes()));
+                    factors = new Factors("productImage5",image5);
                     factorsAffected.add(factors);                   
                     
 

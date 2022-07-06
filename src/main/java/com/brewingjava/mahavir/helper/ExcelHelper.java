@@ -141,13 +141,14 @@ public class ExcelHelper {
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(productDetail==null || value.trim().equals("-")) break;
-                                imageUrl = new URL(value);
-                                image = ImageIO.read(imageUrl);
-                                byteArrayOutputStream = new ByteArrayOutputStream();
-                                ImageIO.write(image,"jpeg",byteArrayOutputStream);
-                                fileName = "sample.jpeg";
-                                multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
-                                productDetail.setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                                productDetail.setProductImage1(value);
+                                // imageUrl = new URL(value);
+                                // image = ImageIO.read(imageUrl);
+                                // byteArrayOutputStream = new ByteArrayOutputStream();
+                                // ImageIO.write(image,"jpeg",byteArrayOutputStream);
+                                // fileName = "sample.jpeg";
+                                // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
+                                // productDetail.setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
                                 System.out.println("Product Image 1:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
@@ -158,13 +159,14 @@ public class ExcelHelper {
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(productDetail==null || value.trim().equals("-")) break;
-                                imageUrl = new URL(value);
-                                image = ImageIO.read(imageUrl);
-                                byteArrayOutputStream = new ByteArrayOutputStream();
-                                ImageIO.write(image,"jpeg",byteArrayOutputStream);
-                                fileName = "sample.jpeg";
-                                multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
-                                productDetail.setProductImage2(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                                productDetail.setProductImage2(value);
+                                // imageUrl = new URL(value);
+                                // image = ImageIO.read(imageUrl);
+                                // byteArrayOutputStream = new ByteArrayOutputStream();
+                                // ImageIO.write(image,"jpeg",byteArrayOutputStream);
+                                // fileName = "sample.jpeg";
+                                // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
+                                // productDetail.setProductImage2(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
                                 System.out.println("Product Image 2:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
@@ -175,13 +177,14 @@ public class ExcelHelper {
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(productDetail==null || value.trim().equals("-")) break;
-                                imageUrl = new URL(value);
-                                image = ImageIO.read(imageUrl);
-                                byteArrayOutputStream = new ByteArrayOutputStream();
-                                ImageIO.write(image,"jpeg",byteArrayOutputStream);
-                                fileName = "sample.jpeg";
-                                multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
-                                productDetail.setProductImage3(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                                productDetail.setProductImage3(value);
+                                // imageUrl = new URL(value);
+                                // image = ImageIO.read(imageUrl);
+                                // byteArrayOutputStream = new ByteArrayOutputStream();
+                                // ImageIO.write(image,"jpeg",byteArrayOutputStream);
+                                // fileName = "sample.jpeg";
+                                // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
+                                // productDetail.setProductImage3(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
                                 System.out.println("Product Image 3:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
@@ -192,13 +195,14 @@ public class ExcelHelper {
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(productDetail==null || value.trim().equals("-")) break;
-                                imageUrl = new URL(value);
-                                image = ImageIO.read(imageUrl);
-                                byteArrayOutputStream = new ByteArrayOutputStream();
-                                ImageIO.write(image,"jpeg",byteArrayOutputStream);
-                                fileName = "sample.jpeg";
-                                multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
-                                productDetail.setProductImage4(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                                productDetail.setProductImage4(value);
+                                // imageUrl = new URL(value);
+                                // image = ImageIO.read(imageUrl);
+                                // byteArrayOutputStream = new ByteArrayOutputStream();
+                                // ImageIO.write(image,"jpeg",byteArrayOutputStream);
+                                // fileName = "sample.jpeg";
+                                // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
+                                // productDetail.setProductImage4(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
                                 System.out.println("Product Image 4:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
@@ -209,13 +213,14 @@ public class ExcelHelper {
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(productDetail==null || value.trim().equals("-")) break;
-                                imageUrl = new URL(value);
-                                image = ImageIO.read(imageUrl);
-                                byteArrayOutputStream = new ByteArrayOutputStream();
-                                ImageIO.write(image,"jpeg",byteArrayOutputStream);
-                                fileName = "sample.jpeg";
-                                multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
-                                productDetail.setProductImage5(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                                productDetail.setProductImage5(value);
+                                // imageUrl = new URL(value);
+                                // image = ImageIO.read(imageUrl);
+                                // byteArrayOutputStream = new ByteArrayOutputStream();
+                                // ImageIO.write(image,"jpeg",byteArrayOutputStream);
+                                // fileName = "sample.jpeg";
+                                // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
+                                // productDetail.setProductImage5(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
                                 System.out.println("Product Image 5:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
@@ -228,7 +233,7 @@ public class ExcelHelper {
                                 if(productDetail==null || value.trim().equals("-")) break;
                                 productDetail.setProductPrice(value);
                             } catch (Exception e) {
-                                System.out.println("Product Image 5:"+formatter.formatCellValue(cell));
+                                System.out.println("Product Price:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
                                 flag = false;
                             }
@@ -239,7 +244,7 @@ public class ExcelHelper {
                                 if(productDetail==null || value.trim().equals("-")) break;
                                 productDetail.setOfferPrice(value);
                             } catch (Exception e) {
-                                System.out.println("Product Image 5:"+formatter.formatCellValue(cell));
+                                System.out.println("Offer Price:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
                                 flag = false;
                             }
@@ -250,7 +255,7 @@ public class ExcelHelper {
                                 if(productDetail==null || value.trim().equals("-")) break;
                                 productDetail.setCategory(value);
                             } catch (Exception e) {
-                                System.out.println("Product Image 5:"+formatter.formatCellValue(cell));
+                                System.out.println("Categorys:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
                                 flag = false;
                             }
@@ -490,68 +495,68 @@ public class ExcelHelper {
                             if(productDetail==null) break;
                             value = formatter.formatCellValue(cell);
                             System.out.println(value);
-                            if(value.trim().equals("")) break;
-                            factors.setFactorname("productImage1");
-                            imageUrl = new URL(value);
-                            System.out.println("imageUrl="+imageUrl);
-                            image = ImageIO.read(imageUrl);
-                            byteArrayOutputStream = new ByteArrayOutputStream();
-                            ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            fileName = "sample.jpg";
-                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            // if(value.trim().equals("")) break;
+                            // factors.setFactorname("productImage1");
+                            // imageUrl = new URL(value);
+                            // System.out.println("imageUrl="+imageUrl);
+                            // image = ImageIO.read(imageUrl);
+                            // byteArrayOutputStream = new ByteArrayOutputStream();
+                            // ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            // fileName = "sample.jpg";
+                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
                             // .setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes())); 
-                            factors.setFactorValueImg(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                            factors.setFactorValueImg(value);
                             list.add(factors);
                             break;
                         case 4:
                             if(productDetail==null) break;
                             value = formatter.formatCellValue(cell);
                             System.out.println(value);
-                            if(value.trim().equals("")) break;
-                            factors.setFactorname("productImage2");
-                            imageUrl = new URL(value);
-                            System.out.println("imageUrl="+imageUrl);
-                            image = ImageIO.read(imageUrl);
-                            byteArrayOutputStream = new ByteArrayOutputStream();
-                            ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            fileName = "sample.jpg";
-                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            // if(value.trim().equals("")) break;
+                            // factors.setFactorname("productImage2");
+                            // imageUrl = new URL(value);
+                            // System.out.println("imageUrl="+imageUrl);
+                            // image = ImageIO.read(imageUrl);
+                            // byteArrayOutputStream = new ByteArrayOutputStream();
+                            // ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            // fileName = "sample.jpg";
+                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
                             // .setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes())); 
-                            factors.setFactorValueImg(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                            factors.setFactorValueImg(value);
                             list.add(factors);
                             break;
                         case 5:
                             if(productDetail==null) break;
                             value = formatter.formatCellValue(cell);
                             System.out.println(value);
-                            if(value.trim().equals("")) break;
-                            factors.setFactorname("productImage3");
-                            imageUrl = new URL(value);
-                            System.out.println("imageUrl="+imageUrl);
-                            image = ImageIO.read(imageUrl);
-                            byteArrayOutputStream = new ByteArrayOutputStream();
-                            ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            fileName = "sample.jpg";
-                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            // if(value.trim().equals("")) break;
+                            // factors.setFactorname("productImage3");
+                            // imageUrl = new URL(value);
+                            // System.out.println("imageUrl="+imageUrl);
+                            // image = ImageIO.read(imageUrl);
+                            // byteArrayOutputStream = new ByteArrayOutputStream();
+                            // ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            // fileName = "sample.jpg";
+                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
                             // .setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes())); 
-                            factors.setFactorValueImg(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                            factors.setFactorValueImg(value);
                             list.add(factors);
                             break;
                         case 6:
                             if(productDetail==null) break;
                             value = formatter.formatCellValue(cell);
                             System.out.println(value);
-                            if(value.trim().equals("")) break;
-                            factors.setFactorname("productImage4");
-                            imageUrl = new URL(value);
-                            System.out.println("imageUrl="+imageUrl);
-                            image = ImageIO.read(imageUrl);
-                            byteArrayOutputStream = new ByteArrayOutputStream();
-                            ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            fileName = "sample.jpg";
-                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            // if(value.trim().equals("")) break;
+                            // factors.setFactorname("productImage4");
+                            // imageUrl = new URL(value);
+                            // System.out.println("imageUrl="+imageUrl);
+                            // image = ImageIO.read(imageUrl);
+                            // byteArrayOutputStream = new ByteArrayOutputStream();
+                            // ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            // fileName = "sample.jpg";
+                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
                             // .setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes())); 
-                            factors.setFactorValueImg(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                            factors.setFactorValueImg(value);
                             list.add(factors);
                             break;
 
@@ -559,17 +564,17 @@ public class ExcelHelper {
                             if(productDetail==null) break;
                             value = formatter.formatCellValue(cell);
                             System.out.println(value);
-                            if(value.trim().equals("")) break;
-                            factors.setFactorname("productImage5");
-                            imageUrl = new URL(value);
-                            System.out.println("imageUrl="+imageUrl);
-                            image = ImageIO.read(imageUrl);
-                            byteArrayOutputStream = new ByteArrayOutputStream();
-                            ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            fileName = "sample.jpg";
-                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            // if(value.trim().equals("")) break;
+                            // factors.setFactorname("productImage5");
+                            // imageUrl = new URL(value);
+                            // System.out.println("imageUrl="+imageUrl);
+                            // image = ImageIO.read(imageUrl);
+                            // byteArrayOutputStream = new ByteArrayOutputStream();
+                            // ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            // fileName = "sample.jpg";
+                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
                             // .setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes())); 
-                            factors.setFactorValueImg(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                            factors.setFactorValueImg(value);
                             list.add(factors);
                             break;
                         case 8:

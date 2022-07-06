@@ -10,7 +10,7 @@ public class Factors {  // add-productvariant/modelNumber/factor i.e. 3GB (Non i
 
     private String factorValueNonImg;
     
-    private Binary factorValueImg;
+    private String factorValueImg;
 
 
     // Add Product Information dynamically based on factors  List<Hashmaps>
@@ -21,16 +21,14 @@ public class Factors {  // add-productvariant/modelNumber/factor i.e. 3GB (Non i
     }
 
 
-    public Factors(String factorname, String factorType, String factorValueNonImg, Binary factorValueImg) {
+    public Factors(String factorname, String factorValueNonImg, String factorValueImg) {
         this.factorname = factorname;
         this.factorValueNonImg = factorValueNonImg;
         this.factorValueImg = factorValueImg;
     }
 
-    
 
-
-    public Factors(String factorname, Binary factorValueImg) {
+    public Factors(String factorname, String factorValueImg) {
         this.factorname = factorname;
         this.factorValueImg = factorValueImg;
     }
@@ -40,25 +38,28 @@ public class Factors {  // add-productvariant/modelNumber/factor i.e. 3GB (Non i
         return factorname;
     }
 
+
     public void setFactorname(String factorname) {
         this.factorname = factorname;
     }
 
-    
 
     public String getFactorValueNonImg() {
         return factorValueNonImg;
     }
 
+
     public void setFactorValueNonImg(String factorValueNonImg) {
         this.factorValueNonImg = factorValueNonImg;
     }
 
-    public Binary getFactorValueImg() {
+
+    public String getFactorValueImg() {
         return factorValueImg;
     }
 
-    public void setFactorValueImg(Binary factorValueImg) {
+
+    public void setFactorValueImg(String factorValueImg) {
         this.factorValueImg = factorValueImg;
     }
 
@@ -69,6 +70,8 @@ public class Factors {  // add-productvariant/modelNumber/factor i.e. 3GB (Non i
                 + ", factorname=" + factorname + "]";
     }
 
+    
+    
     
     
 }
