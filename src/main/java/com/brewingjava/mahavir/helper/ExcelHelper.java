@@ -949,7 +949,7 @@ public class ExcelHelper {
             ByteArrayOutputStream byteArrayOutputStream;
             while(iterator.hasNext()){
                 Row row = iterator.next();
-                if(rowNumber<=1){
+                if(rowNumber<1){
                     rowNumber++;
                     continue;
                 }
