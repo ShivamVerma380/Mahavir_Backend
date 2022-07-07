@@ -95,7 +95,7 @@ public class ExcelHelper {
             FreeItem freeItem=null;
             while(iterator.hasNext()){
                 Row row = iterator.next();
-                if(rowNumber<=1){
+                if(rowNumber<1){
                     rowNumber++;
                     continue;
                 }
@@ -132,7 +132,7 @@ public class ExcelHelper {
                                 } 
                                 productDetail.setProductName(value);
                             } catch (Exception e) {
-                                System.out.println("Product Name:"+formatter.formatCellValue(cell));
+                                System.out.println("Product Name:"+productDetail.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
@@ -150,7 +150,7 @@ public class ExcelHelper {
                                 // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
                                 // productDetail.setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
-                                System.out.println("Product Image 1:"+formatter.formatCellValue(cell));
+                                System.out.println("Product Image 1:"+productDetail.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
@@ -168,7 +168,7 @@ public class ExcelHelper {
                                 // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
                                 // productDetail.setProductImage2(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
-                                System.out.println("Product Image 2:"+formatter.formatCellValue(cell));
+                                System.out.println("Product Image 2:"+productDetail.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
@@ -186,7 +186,7 @@ public class ExcelHelper {
                                 // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
                                 // productDetail.setProductImage3(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
-                                System.out.println("Product Image 3:"+formatter.formatCellValue(cell));
+                                System.out.println("Product Image 3:"+productDetail.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
@@ -204,7 +204,7 @@ public class ExcelHelper {
                                 // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
                                 // productDetail.setProductImage4(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
-                                System.out.println("Product Image 4:"+formatter.formatCellValue(cell));
+                                System.out.println("Product Image 4:"+productDetail.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
@@ -222,7 +222,7 @@ public class ExcelHelper {
                                 // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
                                 // productDetail.setProductImage5(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
-                                System.out.println("Product Image 5:"+formatter.formatCellValue(cell));
+                                System.out.println("Product Image 5:"+productDetail.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
@@ -233,7 +233,7 @@ public class ExcelHelper {
                                 if(productDetail==null || value.trim().equals("-")) break;
                                 productDetail.setProductPrice(value);
                             } catch (Exception e) {
-                                System.out.println("Product Price:"+formatter.formatCellValue(cell));
+                                System.out.println("Product Price:"+productDetail.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
@@ -244,7 +244,7 @@ public class ExcelHelper {
                                 if(productDetail==null || value.trim().equals("-")) break;
                                 productDetail.setOfferPrice(value);
                             } catch (Exception e) {
-                                System.out.println("Offer Price:"+formatter.formatCellValue(cell));
+                                System.out.println("Offer Price:"+productDetail.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
@@ -255,7 +255,7 @@ public class ExcelHelper {
                                 if(productDetail==null || value.trim().equals("-")) break;
                                 productDetail.setCategory(value);
                             } catch (Exception e) {
-                                System.out.println("Categorys:"+formatter.formatCellValue(cell));
+                                System.out.println("Categorys:"+productDetail.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
@@ -263,12 +263,16 @@ public class ExcelHelper {
                         case 10:
                             try {
                                 value = formatter.formatCellValue(cell);
-                                if(productDetail==null || value.trim().equals("-")) break;
-                                productDetail.setProductHighlights(value);
+                                if(productDetail==null || value.trim().equals("-")) {
+                                    productDetail.setProductHighlights("");
+                                    break;
+                                }productDetail.setProductHighlights(value);
                             } catch (Exception e) {
-                                e.printStackTrace();
-                                responseMessage.setMessage(e.getMessage());
-                                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+                                System.out.println("Product Highlights:"+productDetail.getModelNumber());
+                                flag=false;
+                                // e.printStackTrace();
+                                // responseMessage.setMessage(e.getMessage());
+                                // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
                             }
                         break;
                         case 11:
@@ -287,7 +291,8 @@ public class ExcelHelper {
                                 productDetail.setSubCategoryMap(map);
                             } catch (Exception e) {
                                 flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
+                                System.out.println("Sub Categories:"+productDetail.getModelNumber());
+                                // System.out.println(formatter.formatCellValue(cell));
                                 // e.printStackTrace();
                             }
                             
@@ -325,8 +330,9 @@ public class ExcelHelper {
                                 productDetail.setProductInformation(productInfo);
                             } catch (Exception e) {
                                 flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
-                                e.printStackTrace();
+                                System.out.println("Product Information:"+productDetail.getModelNumber());
+                                // System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                         break;
                         case 13:
@@ -353,8 +359,9 @@ public class ExcelHelper {
                                 productDetail.setVariants(productVariants);
                             } catch (Exception e) {
                                 flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
-                                e.printStackTrace();
+                                System.out.println("Product Variants:"+productDetail.getModelNumber());
+                                // System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                         break;
                         case 14:
@@ -380,8 +387,9 @@ public class ExcelHelper {
                                 System.out.println(freeItem.toString());                    
                             } catch (Exception e) {
                                 flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
-                                e.printStackTrace();
+                                System.out.println("Free Item:"+productDetail.getModelNumber());
+                                // System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }
                         break;
                         case 15:
@@ -402,8 +410,9 @@ public class ExcelHelper {
                                 
                             } catch (Exception e) {
                                 flag = false;
-                                System.out.println(formatter.formatCellValue(cell));
-                                e.printStackTrace();
+                                System.out.println("Filter Criterias:"+productDetail.getModelNumber());
+                                // System.out.println(formatter.formatCellValue(cell));
+                                // e.printStackTrace();
                             }   
                         break;
 
