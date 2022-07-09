@@ -404,7 +404,7 @@ public class ExcelHelper {
                                 String keyValue[] = value.split(";");
                                 for(int i=0;i<keyValue.length;i++){
                                     String pair[] = keyValue[i].split("=");
-                                    filterCriterias.put(pair[0],pair[1]);
+                                    filterCriterias.put(pair[0].trim(),pair[1].trim());
                                 }
                                 productDetail.setFiltercriterias(filterCriterias);
                                 
@@ -800,31 +800,41 @@ public class ExcelHelper {
                     Cell cell = cells.next();
                     switch(cid){
                         case 0:
-                            value = formatter.formatCellValue(cell);
-                            if(value.trim().equals("")){
-                                filterCriterias = null;
-                                break;
-                            };
-                            filterCriterias = new FilterCriterias();
-                            filterCriterias.setCategory(value);
+                            try {
+                                value = formatter.formatCellValue(cell);
+                                if(value.trim().equals("")){
+                                    filterCriterias = null;
+                                    break;
+                                };
+                                filterCriterias = new FilterCriterias();
+                                filterCriterias.setCategory(value);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            
                         break;
                         case 1:
-                            value = formatter.formatCellValue(cell);
-                            if(value.trim().equals("") || filterCriterias==null) break;
-                            HashMap<String,ArrayList<String>> map = new HashMap<>();
-                            String values[] = value.split("#");
-                            for(int i=0;i<values.length;i++){
-                                System.out.println(values[i]);
-                                String[] keyValue = values[i].split("\\["); //map key in keyvalue[0]
-                                String list_val = keyValue[1].substring(0,keyValue[1].length()-1); 
-                                String[] list = list_val.split(";");
-                                ArrayList<String> list_values = new ArrayList<>();
-                                for(int j=0;j<list.length;j++){
-                                    list_values.add(list[j]);
-                                }
-                                map.put(keyValue[0],list_values);
+                            try {
+                                value = formatter.formatCellValue(cell);
+                                if(value.trim().equals("") || filterCriterias==null) break;
+                                HashMap<String,ArrayList<String>> map = new HashMap<>();
+                                String values[] = value.split("#");
+                                for(int i=0;i<values.length;i++){
+                                    System.out.println(values[i]);
+                                    String[] keyValue = values[i].split("\\["); //map key in keyvalue[0]
+                                    String list_val = keyValue[1].substring(0,keyValue[1].length()-1); 
+                                    String[] list = list_val.split(";");
+                                    ArrayList<String> list_values = new ArrayList<>();
+                                    for(int j=0;j<list.length;j++){
+                                        list_values.add(list[j].trim());
+                                    }
+                                    map.put(keyValue[0],list_values);
                             }
                             filterCriterias.setFilterCriterias(map);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            
                         break;
                         default:
                         break;
