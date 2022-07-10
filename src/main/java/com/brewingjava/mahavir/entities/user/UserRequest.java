@@ -36,6 +36,8 @@ public class UserRequest {
 
     private ArrayList<UserAddress> userAdresses;
 
+    private ArrayList<String> userWishList;
+
 
     
     public UserRequest() {
@@ -161,12 +163,25 @@ public class UserRequest {
     }
 
 
+
+    public ArrayList<String> getUserWishList() {
+        return userWishList;
+    }
+
+
+    public void setUserWishList(ArrayList<String> userWishList) {
+        this.userWishList = userWishList;
+    }
+
+
     @Override
     public String toString() {
         return "UserRequest [addToCompare=" + addToCompare + ", email=" + email + ", firstName=" + firstName
                 + ", lastName=" + lastName + ", password=" + password + ", phoneNo=" + phoneNo
                 + ", productsBoughtByUser=" + productsBoughtByUser + ", token=" + token + ", userAdresses="
-                + userAdresses + ", userCartProducts=" + userCartProducts + "]";
+                + userAdresses + ", userCartProducts=" + userCartProducts + ", userWishList=" + userWishList + "]";
     }
+
+    
 
 }

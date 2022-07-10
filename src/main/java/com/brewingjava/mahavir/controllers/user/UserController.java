@@ -168,5 +168,27 @@ public class UserController {
         }
     }
 
+    @PostMapping("/wishlist")
+    public ResponseEntity<?> addToWishlist(@RequestHeader("Authorization") String authorization,@RequestParam("modelNumber") String modelNumber){
+        try {
+            return userService.addToWishlist(authorization, modelNumber);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @GetMapping("/wishlist")
+    public ResponseEntity<?> getWishlist(@RequestHeader("Authorization") String authorization){
+        try {
+            return userService.getWishlist(authorization);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 
 }

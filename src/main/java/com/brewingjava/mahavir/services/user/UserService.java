@@ -92,6 +92,7 @@ public class UserService {
             new_user.setProductsBoughtByUser(new ArrayList<>());
             new_user.setUserCartProducts(new HashSet<>());
             new_user.setAddToCompare(new ArrayList<>());
+            new_user.setUserWishList(new ArrayList<>());
             new_user.setToken("");
             this.userDao.save(new_user);
 
@@ -467,4 +468,52 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    public ResponseEntity<?> addToWishlist(String authorization,String modelNumber){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest userRequest = userDao.findByEmail(email);
+            if(userRequest==null){
+                responseMessage.setMessage("User Not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            ArrayList<String> wishlist = userRequest.getUserWishList();
+            for(int i=0;i<wishlist.size();i++){
+                if(wishlist.get(i).equals(modelNumber)){
+                    responseMessage.setMessage("Product is already present in wishlist");
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                }
+            }
+            wishlist.add(modelNumber);
+            userRequest.setUserWishList(wishlist);
+            userDao.save(userRequest);
+            responseMessage.setMessage("Product added to wishlist");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getWishlist(String authorization){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest userRequest = userDao.findByEmail(email);
+            if(userRequest==null){
+                responseMessage.setMessage("User Not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            return ResponseEntity.ok(userRequest.getUserWishList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+
 }
