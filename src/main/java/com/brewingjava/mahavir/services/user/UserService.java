@@ -523,5 +523,33 @@ public class UserService {
         }
     }
 
+    public ResponseEntity<?> deleteWishlist(String authorization,String modelNumber){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest userRequest = userDao.findByEmail(email);
+            if(userRequest==null){
+                responseMessage.setMessage("User Not Found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            ArrayList<String> wishlist = userRequest.getUserWishList();
+            for(int i=0;i<wishlist.size();i++){
+                if(wishlist.get(i).equals(modelNumber)){
+                    wishlist.remove(i);
+                    userRequest.setUserWishList(wishlist);
+                    userDao.save(userRequest);
+                    responseMessage.setMessage("Product deleted from wishlist");
+                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                }
+            }
+            responseMessage.setMessage("Product not found in wishlist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 
 }
