@@ -191,8 +191,8 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/wishlist")
-    public ResponseEntity<?> deleteWishlist(@RequestHeader("Authorization") String authorization,@RequestParam("modelNumber") String modelNumber){
+    @DeleteMapping("/wishlist/{modelNumber}")
+    public ResponseEntity<?> deleteWishlist(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber){
         try {
             return userService.deleteWishlist(authorization, modelNumber);
         } catch (Exception e) {
