@@ -507,7 +507,15 @@ public class UserService {
                 responseMessage.setMessage("User Not found");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
             }
-            return ResponseEntity.ok(userRequest.getUserWishList());
+            ArrayList<ProductDetail> list = new ArrayList<>();
+            ArrayList<String> wishlist = userRequest.getUserWishList();
+            for(int i=0;i<wishlist.size();i++){
+                ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(wishlist.get(i));
+                if(productDetail!=null)
+                    list.add(productDetail);
+            }
+            return ResponseEntity.ok(list);
+            // return ResponseEntity.ok(userRequest.getUserWishList());
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
