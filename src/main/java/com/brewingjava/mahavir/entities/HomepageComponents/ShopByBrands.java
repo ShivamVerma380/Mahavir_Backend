@@ -14,7 +14,7 @@ public class ShopByBrands {
     @Id
     private String brandName;
 
-    private Binary brandLogo;
+    private String brandLogo;
 
     private ArrayList<BrandOfferPoster> brandOfferPosters;
 
@@ -27,7 +27,7 @@ public class ShopByBrands {
     }
 
 
-    public ShopByBrands(String brandName, Binary brandLogo, ArrayList<BrandOfferPoster> brandOfferPosters,
+    public ShopByBrands(String brandName, String brandLogo, ArrayList<BrandOfferPoster> brandOfferPosters,
             ArrayList<BrandCategory> brandCategories, ArrayList<String> videoLinks) {
         this.brandName = brandName;
         this.brandLogo = brandLogo;
@@ -47,12 +47,12 @@ public class ShopByBrands {
     }
 
 
-    public Binary getBrandLogo() {
+    public String getBrandLogo() {
         return brandLogo;
     }
 
 
-    public void setBrandLogo(Binary brandLogo) {
+    public void setBrandLogo(String brandLogo) {
         this.brandLogo = brandLogo;
     }
 

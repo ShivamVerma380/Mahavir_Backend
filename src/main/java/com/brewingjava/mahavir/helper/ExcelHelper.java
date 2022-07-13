@@ -981,7 +981,7 @@ public class ExcelHelper {
             ByteArrayOutputStream byteArrayOutputStream;
             while(iterator.hasNext()){
                 Row row = iterator.next();
-                if(rowNumber<1){
+                if(rowNumber<=1){
                     rowNumber++;
                     continue;
                 }
@@ -1002,30 +1002,30 @@ public class ExcelHelper {
                             
                             }
                             System.out.println(value);
-                            ShopByBrands existingShopByBrands = shopByBrandsDao.findBybrandName(value);
-                            if(existingShopByBrands==null){
-                                shopByBrands = new ShopByBrands();
+                            // ShopByBrands existingShopByBrands = shopByBrandsDao.findBybrandName(value);
+                            // if(existingShopByBrands==null){
+                            //     shopByBrands = new ShopByBrands();
                                 
-                            }else{
-                                shopByBrands = existingShopByBrands;
-                                brandOfferPosters = shopByBrands.getBrandOfferPosters();
-                                brandCategories = shopByBrands.getBrandCategories();
-                                videoLinks = shopByBrands.getVideoLinks();
-                            }
-                            
+                            // }else{
+                            //     shopByBrands = existingShopByBrands;
+                            //     brandOfferPosters = shopByBrands.getBrandOfferPosters();
+                            //     brandCategories = shopByBrands.getBrandCategories();
+                            //     videoLinks = shopByBrands.getVideoLinks();
+                            // }
+                            shopByBrands = new ShopByBrands();
                             shopByBrands.setBrandName(value);
                         break;
                         case 1:
                             value = formatter.formatCellValue(cells.next());
                             if(shopByBrands==null || value.trim().equals("")) break;
-                            System.out.println(value);
-                            imageUrl = new URL(value);
-                            image = ImageIO.read(imageUrl);
+                            // System.out.println(value);
+                            // imageUrl = new URL(value);
+                            // image = ImageIO.read(imageUrl);
                             byteArrayOutputStream = new ByteArrayOutputStream();
-                            ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            fileName = "sample.jpg";
-                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
-                            shopByBrands.setBrandLogo(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                            // ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            // fileName = "sample.jpg";
+                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            shopByBrands.setBrandLogo(value);
                         break;
                         case 2:
                             value = formatter.formatCellValue(cells.next());
@@ -1037,13 +1037,13 @@ public class ExcelHelper {
                                 System.out.println("offerPosterUrl:"+offerPostersModelNum[0]);
                                 System.out.println("offerPosterModelNum:"+offerPostersModelNum[1]);
                                 BrandOfferPoster brandOfferPoster = new BrandOfferPoster();
-                                imageUrl = new URL(offerPostersModelNum[0]);
-                                image = ImageIO.read(imageUrl);
-                                byteArrayOutputStream = new ByteArrayOutputStream();
-                                ImageIO.write(image,"jpg",byteArrayOutputStream);
-                                fileName = "sample.jpg";
-                                multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
-                                brandOfferPoster.setOfferPoster(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                                // imageUrl = new URL(offerPostersModelNum[0]);
+                                // image = ImageIO.read(imageUrl);
+                                // byteArrayOutputStream = new ByteArrayOutputStream();
+                                // ImageIO.write(image,"jpg",byteArrayOutputStream);
+                                // fileName = "sample.jpg";
+                                // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                                brandOfferPoster.setOfferPoster(offerPostersModelNum[0]);
 
                                 offerPostersModelNum[1] = offerPostersModelNum[1].substring(0,offerPostersModelNum[1].length()-1);
                                 String modelNumbers[] = offerPostersModelNum[1].split(";");
@@ -1084,13 +1084,13 @@ public class ExcelHelper {
                                     modelNumberList2.add(modelNums[j]);
                                 }
                                 brandCategory.setModelNumbers(modelNumberList2);
-                                imageUrl = new URL(modelNums[modelNums.length-1 ]);
-                                image = ImageIO.read(imageUrl);
-                                byteArrayOutputStream = new ByteArrayOutputStream();
-                                ImageIO.write(image,"jpg",byteArrayOutputStream);
-                                fileName = "sample.jpg";
-                                multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
-                                brandCategory.setCatImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                                // imageUrl = new URL(modelNums[modelNums.length-1 ]);
+                                // image = ImageIO.read(imageUrl);
+                                // byteArrayOutputStream = new ByteArrayOutputStream();
+                                // ImageIO.write(image,"jpg",byteArrayOutputStream);
+                                // fileName = "sample.jpg";
+                                // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                                brandCategory.setCatImage(modelNums[modelNums.length-1 ]);
                                 brandCategories.add(brandCategory);
                             }
                         break;

@@ -10,14 +10,14 @@ public class BrandCategory {
     
     private String category;
 
-    private Binary catImage;
+    private String catImage;
 
     private ArrayList<String> modelNumbers;
 
     public BrandCategory() {
     }
 
-    public BrandCategory(String category, Binary catImage, ArrayList<String> modelNumbers) {
+    public BrandCategory(String category, String catImage, ArrayList<String> modelNumbers) {
         this.category = category;
         this.catImage = catImage;
         this.modelNumbers = modelNumbers;
@@ -31,11 +31,11 @@ public class BrandCategory {
         this.category = category;
     }
 
-    public Binary getCatImage() {
+    public String getCatImage() {
         return catImage;
     }
 
-    public void setCatImage(Binary catImage) {
+    public void setCatImage(String catImage) {
         this.catImage = catImage;
     }
 

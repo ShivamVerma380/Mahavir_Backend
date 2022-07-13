@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BrandOfferPoster {
     
-    private Binary offerPoster;
+    private String offerPoster;
 
     private ArrayList<String> modelNumbers;
 
@@ -17,17 +17,17 @@ public class BrandOfferPoster {
     public BrandOfferPoster() {
     }
 
-    public BrandOfferPoster(Binary offerPoster, ArrayList<String> modelNumbers, ArrayList<String> categories) {
+    public BrandOfferPoster(String offerPoster, ArrayList<String> modelNumbers, ArrayList<String> categories) {
         this.offerPoster = offerPoster;
         this.modelNumbers = modelNumbers;
         this.categories = categories;
     }
 
-    public Binary getOfferPoster() {
+    public String getOfferPoster() {
         return offerPoster;
     }
 
-    public void setOfferPoster(Binary offerPoster) {
+    public void setOfferPoster(String offerPoster) {
         this.offerPoster = offerPoster;
     }
 
