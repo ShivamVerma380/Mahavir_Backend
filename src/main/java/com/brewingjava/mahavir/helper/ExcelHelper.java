@@ -53,6 +53,7 @@ import com.brewingjava.mahavir.entities.offers.OfferPosters;
 import com.brewingjava.mahavir.entities.product.Factors;
 import com.brewingjava.mahavir.entities.product.FilterCriterias;
 import com.brewingjava.mahavir.entities.product.FreeItem;
+import com.brewingjava.mahavir.entities.product.ProductDescription;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.entities.product.ProductVariants;
 
@@ -415,6 +416,27 @@ public class ExcelHelper {
                                 // e.printStackTrace();
                             }   
                         break;
+                        case 16:
+                            try {
+                                value = formatter.formatCellValue(cell);
+                                if(productDetail==null) break;
+                                if(value.trim().equals("-")){
+                                    break;
+                                }
+                                String[] productDesc = value.split("#");
+                                ArrayList<ProductDescription> list  = new ArrayList<>(); 
+                                for(int i=0;i<productDesc.length;i++){
+                                    String product[] = productDesc[i].split(";");
+                                    ProductDescription productDescription = new ProductDescription(product[0],product[1],product[2]);
+                                    list.add(productDescription);
+                                }
+                                productDetail.setProductDescriptions(list);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                responseMessage.setMessage(e.getMessage());
+                                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+                            }
 
                         default:
                         break;

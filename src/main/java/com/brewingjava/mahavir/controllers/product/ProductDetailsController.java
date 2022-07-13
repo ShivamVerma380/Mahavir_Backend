@@ -160,7 +160,7 @@ public class ProductDetailsController {
     }   
 
     @PostMapping("/description/{modelNumber}")
-    public ResponseEntity<?> addDescription(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber,@RequestParam("title") String title, @RequestParam("description") String description,@RequestParam("image") MultipartFile image){
+    public ResponseEntity<?> addDescription(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber,@RequestParam("title") String title, @RequestParam("description") String description,@RequestParam("image") String image){
         try {
             return productDetailsService.addDescription(authorization, modelNumber, title, description, image);
         } catch (Exception e) {

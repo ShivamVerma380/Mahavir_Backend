@@ -425,7 +425,7 @@ public class ProductDetailsService {
         }
     }
 
-    public ResponseEntity<?> addDescription(String authorization,String modelNumber,String title,String description,MultipartFile image){
+    public ResponseEntity<?> addDescription(String authorization,String modelNumber,String title,String description,String image){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -443,7 +443,7 @@ public class ProductDetailsService {
             if(list==null){
                 list = new ArrayList<>();
             }
-            ProductDescription productDescription = new ProductDescription(title, description, new Binary(BsonBinarySubType.BINARY, image.getBytes()));
+            ProductDescription productDescription = new ProductDescription(title, description,image);
             list.add(productDescription);
             productDetail.setProductDescriptions(list);
             productDetailsDao.save(productDetail);

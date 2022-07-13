@@ -10,9 +10,9 @@ public class ProductDescription {
 
     private String description;
 
-    private Binary image;
+    private String image;
 
-    public ProductDescription(String title, String description, Binary image) {
+    public ProductDescription(String title, String description, String image) {
         this.title = title;
         this.description = description;
         this.image = image;
@@ -37,11 +37,11 @@ public class ProductDescription {
         this.description = description;
     }
 
-    public Binary getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Binary image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
