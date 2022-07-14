@@ -108,7 +108,6 @@ public class ProductDetailsService {
             
             productDetail.setProductInformation(new HashMap<>());
             productDetail.setSubCategoryMap(new HashMap<String,String>());
-            productDetail.setProductVariants(new ArrayList<>());
             productDetail.setVariants(new HashMap<>());
             productDetail.setFiltercriterias(new HashMap<>());
             productDetailsDao.save(productDetail);
@@ -176,31 +175,6 @@ public class ProductDetailsService {
         }
     }
 
-    public ResponseEntity<?> addProductVariants(String auth,String modelNumber,HashMap<String,ArrayList<String>> variants){
-        try {
-            String token = auth.substring(7);
-            String email = jwtUtil.extractUsername(token);
-            admin = adminDao.findByEmail(email);
-            if(admin==null){
-                responseMessage.setMessage("Only admins can add product variants");
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-            }
-            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
-            if(productDetail==null){
-                responseMessage.setMessage("Product Not Found");
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-            }
-            productDetail.setVariants(variants);
-            productDetailsDao.save(productDetail);
-            responseMessage.setMessage("Product Variants added Successfully");
-            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
 
     public ResponseEntity<?> removeProductDetails(String authorization,String modelNumber){
         try {
@@ -456,49 +430,45 @@ public class ProductDetailsService {
         }
     }
 
-
-    public ResponseEntity<?> getProductDetailsByFactors(String modelNumber,String factorName){
+    public ResponseEntity<?> getProductVariant(String modelNumber,String required,String clicked){
         try {
-            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+            ProductDetail  productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
             if(productDetail==null){
-                responseMessage.setMessage("Product Not Found");
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                responseMessage.setMessage("Product Not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
             }
-            List<ProductVariants> list = productDetail.getProductVariants();
-            for(int i=0;i<list.size();i++){
-                if(list.get(i).getFactorName().equals(factorName)){
-                    List<Factors> factors = list.get(i).getFactorsAffected();
-                    for(int j=0;j<factors.size();j++){
-                        if(factors.get(j).getFactorname().equals("productName"))
-                            productDetail.setProductName(factors.get(j).getFactorValueNonImg());
-                        else if(factors.get(j).getFactorname().equals("productHighlights"))
-                            productDetail.setProductHighlights(factors.get(j).getFactorValueNonImg());
-                        else if(factors.get(j).getFactorname().equals("productImage1"))
-                            productDetail.setProductImage1(factors.get(j).getFactorValueImg());
-                        else if(factors.get(j).getFactorname().equals("productImage2"))
-                            productDetail.setProductImage2(factors.get(j).getFactorValueImg());
-                        else if(factors.get(j).getFactorname().equals("productImage3"))
-                            productDetail.setProductImage3(factors.get(j).getFactorValueImg());
-                        else if(factors.get(j).getFactorname().equals("productImage4"))
-                            productDetail.setProductImage4(factors.get(j).getFactorValueImg());
-                        else if(factors.get(j).getFactorname().equals("productImage5"))
-                            productDetail.setProductImage5(factors.get(j).getFactorValueImg());
-                        else if(factors.get(j).getFactorname().equals("productPrice"))
-                            productDetail.setProductPrice(factors.get(j).getFactorValueNonImg());
-                        else if(factors.get(j).getFactorname().equals("OfferPrice"))
-                            productDetail.setOfferPrice(factors.get(j).getFactorValueNonImg());
-                    }
-                    return ResponseEntity.status(HttpStatus.OK).body(productDetail);
+            HashMap<String,String> map = productDetail.getVariants();
+            if(map==null){
+                responseMessage.setMessage("No variants found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            //modelNumber = 17363
+            // title = White 190L
+            // required= White
+            if(map.containsKey(required.trim())){
+                ProductDetail requiredProduct = productDetailsDao.findProductDetailBymodelNumber(map.get(required));
+                return ResponseEntity.status(HttpStatus.OK).body(requiredProduct);
+            }
+
+            for(Map.Entry<String,String> entry: map.entrySet()){
+                String str = entry.getKey();
+                if(str.contains(clicked.trim())){
+                    ProductDetail requiredProduct = productDetailsDao.findProductDetailBymodelNumber(entry.getValue());
+                    return ResponseEntity.status(HttpStatus.OK).body(requiredProduct);
                 }
             }
-            responseMessage.setMessage("Factor Not Found");
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+
+            responseMessage.setMessage("No variant found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }    
+        }    
+    }
+
+    
 
 /*
     public ResponseEntity<?> addReview(String modelNumber, String rating, String review, String authorization) {

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.bson.types.Binary;
 import org.springframework.stereotype.Component;
 
+import com.brewingjava.mahavir.entities.product.ProductDetail;
+
 @Component
 public class BrandCategory {
     
@@ -12,15 +14,15 @@ public class BrandCategory {
 
     private String catImage;
 
-    private ArrayList<String> modelNumbers;
+    private ArrayList<ProductDetail> products;
 
     public BrandCategory() {
     }
 
-    public BrandCategory(String category, String catImage, ArrayList<String> modelNumbers) {
+    public BrandCategory(String category, String catImage, ArrayList<ProductDetail> products) {
         this.category = category;
         this.catImage = catImage;
-        this.modelNumbers = modelNumbers;
+        this.products = products;
     }
 
     public String getCategory() {
@@ -39,22 +41,17 @@ public class BrandCategory {
         this.catImage = catImage;
     }
 
-    public ArrayList<String> getModelNumbers() {
-        return modelNumbers;
+    public ArrayList<ProductDetail> getProducts() {
+        return products;
     }
 
-    public void setModelNumbers(ArrayList<String> modelNumbers) {
-        this.modelNumbers = modelNumbers;
+    public void setProducts(ArrayList<ProductDetail> products) {
+        this.products = products;
     }
 
     @Override
     public String toString() {
-        return "BrandCategory [catImage=" + catImage + ", category=" + category + ", modelNumbers=" + modelNumbers
-                + "]";
+        return "BrandCategory [catImage=" + catImage + ", category=" + category + ", products=" + products + "]";
     }
-
-    
-
-    
 
 }

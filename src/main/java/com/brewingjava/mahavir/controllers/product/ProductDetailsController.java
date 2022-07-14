@@ -4,7 +4,6 @@ import com.brewingjava.mahavir.entities.categories.ProductInformationItem;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 import com.brewingjava.mahavir.services.product.ProductDetailsService;
-import com.brewingjava.mahavir.services.product.ProductVariantService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,8 +33,6 @@ public class ProductDetailsController {
     @Autowired
     public ProductDetailsService productDetailsService;
 
-    @Autowired
-    public ProductVariantService productVariantService;
     
     @PostMapping("/add-product")
     @CrossOrigin(origins = "*")
@@ -74,16 +71,6 @@ public class ProductDetailsController {
         }
     }
 
-    @PostMapping("/add-product-variants/{ModelNumber}")
-    public ResponseEntity<?> addProductVariants(@RequestHeader("Authorization") String authorization,@PathVariable("ModelNumber")String modelNumber,@RequestBody HashMap<String,ArrayList<String>> variants){
-        try {
-            return productDetailsService.addProductVariants(authorization,modelNumber,variants);
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
 
     @PostMapping("/add-review/{modelNumber}")
     public ResponseEntity<?> addReview(@PathVariable("modelNumber") String modelNumber, @RequestHeader("Authorization") String authorization ,@RequestParam("Review")String review,@RequestParam("Rating") String rating,@RequestParam("Date") String date){
@@ -97,43 +84,7 @@ public class ProductDetailsController {
         }
     }
 
-    @PostMapping("/add-product-variant-factor/{ModelNumber}")
-    public ResponseEntity<?> addProductVariantFactor(@RequestHeader("Authorization")String authorization,@RequestParam("FactorName") String factorName,@PathVariable("ModelNumber")String ModelNumber){
-        try {
-            return productVariantService.addProductVariantFactor(authorization, factorName, ModelNumber);
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
     
-    //ModelNumber,FactorName,  keytoChange => non img values
-    @PostMapping("/add-product-variant-factor/{ModelNumber}/{FactorName}")
-    public ResponseEntity<?> addNonImgFactorsAffected(@RequestHeader("Authorization")String authorization,@PathVariable("FactorName") String factorName,@PathVariable("ModelNumber")String modelNumber,@RequestBody HashMap<String,String> nonImgFactors){
-        try {
-
-            return productVariantService.addNonImgFactorsAffected(authorization, factorName, modelNumber, nonImgFactors);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
-
-    @PostMapping("/add-product-variant-factor/image/{ModelNumber}/{FactorName}")
-    public ResponseEntity<?> addImgFactorsAffected(@RequestHeader("Authorization")String authorization,@PathVariable("FactorName") String factorName,@PathVariable("ModelNumber")String modelNumber,@RequestParam("ProductImage1") String image1,@RequestParam("ProductImage2") String image2,@RequestParam("ProductImage3") String image3,@RequestParam("ProductImage4") String image4,@RequestParam("ProductImage5") String image5){
-        try {
-
-            return productVariantService.addImgFactorsAffected(authorization, factorName, modelNumber, image1,image2,image3,image4,image5);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
 
     @PostMapping("/filter-criterias/{modelNumber}")
     public ResponseEntity<?> addProductFilterCriterias(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber,@RequestBody HashMap<String,String> filterCriterias){
@@ -169,6 +120,18 @@ public class ProductDetailsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    @GetMapping("/variant/{modelNumber}/{required}/{clicked}")
+    public ResponseEntity<?> getProductVariant(@PathVariable("modelNumber")String modelNumber, @PathVariable("required") String required,@PathVariable("clicked") String clicked){
+        try {
+            return productDetailsService.getProductVariant(modelNumber, required, clicked);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 
     @GetMapping("/get-reviews/{modelNumber}")
     public ResponseEntity<?> getReviews(@PathVariable("modelNumber") String modelNumber){
@@ -250,17 +213,6 @@ public class ProductDetailsController {
         }
     }
 
-    @GetMapping("/get-products/{modelNumber}/{factorName}")
-    public ResponseEntity<?> getProductDetailsByFactor(@PathVariable("modelNumber")String modelNumber,@PathVariable("factorName")String factorName){
-        try {
-            return productDetailsService.getProductDetailsByFactors(modelNumber, factorName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-
-    }
 
     @GetMapping("/get-products-by-category/{Category}")
     public ResponseEntity<?> getProductsByCategory(@PathVariable("Category") String category){

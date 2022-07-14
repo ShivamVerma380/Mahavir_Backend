@@ -323,7 +323,9 @@ public class ExcelHelper {
                                             //System.out.println("pair[0]="+pair[0]+"\tpair[1]="+pair[1]);
                                             mp.put(pair[0],pair[1]);
                                         } catch (Exception e) {
-                                            e.printStackTrace();
+                                            // e.printStackTrace();
+                                            flag = false;
+                                            System.out.println("Product Information:"+productDetail.getModelNumber());
                                         }
                                     }
                                     productInfo.put(subSplit[0],mp);
@@ -338,24 +340,19 @@ public class ExcelHelper {
                         break;
                         case 13:
                             try {
-                                HashMap<String,ArrayList<String>> productVariants = new HashMap<>();
+                                HashMap<String,String> productVariants = new HashMap<>();
                                 value = formatter.formatCellValue(cell);
+                                if(productDetail==null) break;
                                 if(value.trim().equals("-")){
-                                    // System.out.println("Empty");
                                     productDetail.setVariants(new HashMap<>());
                                     break;
                                 }
-                                // System.out.println(value);
-                                String variants[] = value.split("#");
-                                for(int i=0;i<variants.length;i++){
-                                    // System.out.println(variants[i]);
-                                    String factors[] = variants[i].split("\\[");
-                                    String x = factors[1].substring(0,factors[1].length()-1);  
-                                    String values[] = x.split(";");
-                                    // System.out.println("key:"+factors[0]+"\tvalues:"+x);
-                                    ArrayList<String> arrayList = new ArrayList<>();
-                                    for(int j=0;j<values.length;j++) arrayList.add(values[j]);
-                                    productVariants.put(factors[0], arrayList);
+                                String array[] = value.split(";");
+                                for(int i=0;i<array.length;i++){
+                                    // array[i] = array[i].trim();
+                                    String pair[] = array[i].split("=");
+
+                                    productVariants.put(pair[0].trim(),pair[1].trim());
                                 }
                                 productDetail.setVariants(productVariants);
                             } catch (Exception e) {
@@ -366,6 +363,33 @@ public class ExcelHelper {
                             }
                         break;
                         case 14:
+                            try {
+                                value = formatter.formatCellValue(cell);
+                                if(productDetail==null) break;
+                                if(value.trim().equals("-")){
+                                    productDetail.setVariantTypes(new HashMap<>());
+                                    break;
+                                }
+                                HashMap<String,ArrayList<String>> variantTypes = new HashMap<>();
+                                String array[] = value.split("#");
+                                for(int i=0;i<array.length;i++){
+                                    String pair[] = array[i].split("\\[");
+                                    pair[1] = pair[1].substring(0,pair[1].length()-1);
+                                    String values[] = pair[1].split(";");
+                                    ArrayList<String> list = new ArrayList<>();
+                                    for(int j=0;j<values.length;j++){
+                                        list.add(values[j]);
+                                    }
+                                    variantTypes.put(pair[0],list);
+                                }
+                                productDetail.setVariantTypes(variantTypes);
+
+                            } catch (Exception e) {
+                                flag = false;
+                                System.out.println("Product Variant Types:"+productDetail.getModelNumber());
+                            }
+                        break;
+                        case 15:
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(value.trim().equals("-")){    
@@ -393,7 +417,7 @@ public class ExcelHelper {
                                 // e.printStackTrace();
                             }
                         break;
-                        case 15:
+                        case 16:
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(productDetail==null) break;
@@ -416,7 +440,7 @@ public class ExcelHelper {
                                 // e.printStackTrace();
                             }   
                         break;
-                        case 16:
+                        case 17:
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(productDetail==null) break;
@@ -433,9 +457,10 @@ public class ExcelHelper {
                                 productDetail.setProductDescriptions(list);
 
                             } catch (Exception e) {
-                                e.printStackTrace();
-                                responseMessage.setMessage(e.getMessage());
-                                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+                                // e.printStackTrace();
+                                System.out.println("Product Description:"+productDetail.getModelNumber());
+                                // responseMessage.setMessage(e.getMessage());
+                                // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
                             }
 
                         default:
@@ -443,8 +468,15 @@ public class ExcelHelper {
                     }
                     cid++;
                 }
-                if(flag || productDetail!=null || !productDetail.getModelNumber().equals(""))
-                    productDetailsDao.save(productDetail);
+                try {
+                    if(flag || productDetail!=null || !productDetail.getModelNumber().equals(""))
+                        productDetailsDao.save(productDetail);
+                    else
+                        System.out.println("Product Details not saved"+productDetail.getModelNumber());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                
                 rowNumber++;
             }
             responseMessage.setMessage("Products saved successfully");
@@ -463,204 +495,7 @@ public class ExcelHelper {
     @Autowired
     public ResponseMessage responseMessage;
 
-    public boolean addFactorsAffected(InputStream is){
-        try {
-            XSSFWorkbook workbook =  new XSSFWorkbook(is);
-            XSSFSheet sheet = workbook.getSheet("Factors");
-            int rowNumber=0;
-
-            DataFormatter formatter = new DataFormatter();
-            String value;
-            PictureData pict;
-            byte[] data;
-            URL imageUrl;
-            String fileName;
-            MultipartFile multipartFile;
-            BufferedImage image;
-            ByteArrayOutputStream byteArrayOutputStream;
-            Iterator<Row> iterator = sheet.iterator();
-            ArrayList<ProductDetail> arrayList = new ArrayList<>();
-            ProductDetail productDetail = null;
-            while(iterator.hasNext()){
-                Row row = iterator.next();
-                if(rowNumber<1){
-                    rowNumber++;
-                    continue;
-                }
-                Iterator<Cell> cells = row.iterator();
-                int cid=0;
-                productDetail=null;
-                List<ProductVariants> productVariants = new ArrayList<ProductVariants>();
-                ProductVariants obj = new ProductVariants();
-                List<Factors> list = new ArrayList<>();
-                while(cells.hasNext()){
-                    Cell cell = cells.next();
-                    Factors factors = new Factors();
-                    switch(cid){
-                        case 0:
-                            value = formatter.formatCellValue(cell);
-                            if(value.trim().equals("")) break;
-                            productDetail = productDetailsDao.findProductDetailBymodelNumber(value);
-                            productVariants =  productDetail.getProductVariants();
-                            break;
-                        case 1:
-                            if(productDetail==null) break;
-                            value = formatter.formatCellValue(cell);
-                            if(value.trim().equals("")) break;
-                            for(int i=0;i<productVariants.size();i++){
-                                if(productVariants.get(i).getFactorName().equals(value)){
-                                    productVariants.remove(productVariants.get(i));
-                                }
-                            }
-                            obj.setFactorName(value);
-                            break;
-                        case 2:
-                            if(productDetail==null) break;
-                            value = formatter.formatCellValue(cell);
-                            if(value.trim().equals("")) break;
-                            factors.setFactorname("productName");
-                            factors.setFactorValueNonImg(value);
-                            list.add(factors);
-                            break;
-                        case 3:
-                            if(productDetail==null) break;
-                            value = formatter.formatCellValue(cell);
-                            System.out.println(value);
-                            // if(value.trim().equals("")) break;
-                            // factors.setFactorname("productImage1");
-                            // imageUrl = new URL(value);
-                            // System.out.println("imageUrl="+imageUrl);
-                            // image = ImageIO.read(imageUrl);
-                            // byteArrayOutputStream = new ByteArrayOutputStream();
-                            // ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            // fileName = "sample.jpg";
-                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
-                            // .setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes())); 
-                            factors.setFactorValueImg(value);
-                            list.add(factors);
-                            break;
-                        case 4:
-                            if(productDetail==null) break;
-                            value = formatter.formatCellValue(cell);
-                            System.out.println(value);
-                            // if(value.trim().equals("")) break;
-                            // factors.setFactorname("productImage2");
-                            // imageUrl = new URL(value);
-                            // System.out.println("imageUrl="+imageUrl);
-                            // image = ImageIO.read(imageUrl);
-                            // byteArrayOutputStream = new ByteArrayOutputStream();
-                            // ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            // fileName = "sample.jpg";
-                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
-                            // .setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes())); 
-                            factors.setFactorValueImg(value);
-                            list.add(factors);
-                            break;
-                        case 5:
-                            if(productDetail==null) break;
-                            value = formatter.formatCellValue(cell);
-                            System.out.println(value);
-                            // if(value.trim().equals("")) break;
-                            // factors.setFactorname("productImage3");
-                            // imageUrl = new URL(value);
-                            // System.out.println("imageUrl="+imageUrl);
-                            // image = ImageIO.read(imageUrl);
-                            // byteArrayOutputStream = new ByteArrayOutputStream();
-                            // ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            // fileName = "sample.jpg";
-                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
-                            // .setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes())); 
-                            factors.setFactorValueImg(value);
-                            list.add(factors);
-                            break;
-                        case 6:
-                            if(productDetail==null) break;
-                            value = formatter.formatCellValue(cell);
-                            System.out.println(value);
-                            // if(value.trim().equals("")) break;
-                            // factors.setFactorname("productImage4");
-                            // imageUrl = new URL(value);
-                            // System.out.println("imageUrl="+imageUrl);
-                            // image = ImageIO.read(imageUrl);
-                            // byteArrayOutputStream = new ByteArrayOutputStream();
-                            // ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            // fileName = "sample.jpg";
-                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
-                            // .setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes())); 
-                            factors.setFactorValueImg(value);
-                            list.add(factors);
-                            break;
-
-                        case 7:
-                            if(productDetail==null) break;
-                            value = formatter.formatCellValue(cell);
-                            System.out.println(value);
-                            // if(value.trim().equals("")) break;
-                            // factors.setFactorname("productImage5");
-                            // imageUrl = new URL(value);
-                            // System.out.println("imageUrl="+imageUrl);
-                            // image = ImageIO.read(imageUrl);
-                            // byteArrayOutputStream = new ByteArrayOutputStream();
-                            // ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            // fileName = "sample.jpg";
-                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
-                            // .setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes())); 
-                            factors.setFactorValueImg(value);
-                            list.add(factors);
-                            break;
-                        case 8:
-                            if(productDetail==null) break;
-                            value = formatter.formatCellValue(cell);
-                            System.out.println(value);
-                            if(value.trim().equals("")) break;
-                            factors.setFactorname("productPrice");
-                            factors.setFactorValueNonImg(value);
-                            list.add(factors);
-                            break;
-                        case 9:
-                            if(productDetail==null) break;
-                            value = formatter.formatCellValue(cell);
-                            System.out.println(value);
-                            if(value.trim().equals("")) break;
-                            factors.setFactorname("OfferPrice");
-                            factors.setFactorValueNonImg(value);
-                            list.add(factors);
-                            break;
-                        default:
-                            break;
-
-                    }
-                    cid++;
-                }
-                rowNumber++;
-                // System.out.println("list="+list);
-                obj.setFactorsAffected(list);
-                productVariants.add(obj);
-                System.out.println(obj.getFactorName()+"\n"+obj.getFactorsAffected());
-                // System.out.println("productVariants="+productVariants);
-                if(productDetail!=null){
-                    productDetail.setProductVariants(productVariants);
-                    productDetailsDao.save(productDetail);
-                }
-                
-                // productDetailsDao.save(productDetail);               
-            }
-            
-            
-            // if(productDetail!=null)
-            //     productDetailsDao.save(productDetail);
-            System.out.println("After product details save to dao");
-            // responseMessage.setMessage("Product variant factors added successfully");
-            return true;
-
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            // responseMessage.setMessage(e.getMessage());
-            return false;
-        }
-    }
-
+   
     @Autowired
     public CategoriesToDisplayDao categoriesToDisplayDao;
 
@@ -1047,6 +882,7 @@ public class ExcelHelper {
                                 if(shopByBrands==null || value.trim().equals("-")) break;
                                 ArrayList<BrandCategory> list = new ArrayList<>();
                                 String arr[] = value.split("#");
+                                ArrayList<ProductDetail> products = new ArrayList<>();
                                 for(int i=0;i<arr.length;i++){
                                     String category[] = arr[i].split("\\[");
                                     BrandCategory brandCategory = new BrandCategory();
@@ -1058,11 +894,12 @@ public class ExcelHelper {
                                         ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(models[j]);
                                         if(productDetail==null) continue;
                                         modelNumbers.add(models[j]);
+                                        products.add(productDetail);
                                     }
 
                                     ArrayList<String> mod = new ArrayList<>(modelNumbers);
                                     
-                                    brandCategory.setModelNumbers(mod);
+                                    brandCategory.setProducts(products);
                                     brandCategory.setCatImage(models[models.length-1]);
                                     list.add(brandCategory);
                                 }

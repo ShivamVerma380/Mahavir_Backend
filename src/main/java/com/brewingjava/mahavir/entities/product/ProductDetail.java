@@ -47,9 +47,9 @@ public class ProductDetail {
 
         private HashMap<String,HashMap<String,String>> productInformation;
 
-        private HashMap<String,ArrayList<String>> variants;				
+        private HashMap<String,String> variants;				
 
-        private List<ProductVariants> ProductVariants; // store product variants
+        private HashMap<String,ArrayList<String>> variantTypes;
 
         private FreeItem freeItem;
 
@@ -58,16 +58,16 @@ public class ProductDetail {
         private HashMap<String,String> filtercriterias;
 
 
+
+
         public ProductDetail() {
         }
-
 
         public ProductDetail(String modelNumber, String productName, String productHighlights, String productImage1,
                 String productImage2, String productImage3, String productImage4, String productImage5,
                 String productPrice, String productVideoLink, String category, HashMap<String, String> subCategoryMap,
                 String offerPrice, HashMap<String, HashMap<String, String>> productInformation,
-                HashMap<String, ArrayList<String>> variants,
-                List<com.brewingjava.mahavir.entities.product.ProductVariants> productVariants, FreeItem freeItem,
+                HashMap<String, String> variants, HashMap<String, ArrayList<String>> variantTypes, FreeItem freeItem,
                 ArrayList<ProductDescription> productDescriptions, HashMap<String, String> filtercriterias) {
             this.modelNumber = modelNumber;
             this.productName = productName;
@@ -84,11 +84,18 @@ public class ProductDetail {
             OfferPrice = offerPrice;
             this.productInformation = productInformation;
             this.variants = variants;
-            ProductVariants = productVariants;
+            this.variantTypes = variantTypes;
             this.freeItem = freeItem;
             this.productDescriptions = productDescriptions;
             this.filtercriterias = filtercriterias;
         }
+
+
+
+
+
+
+
 
 
         public String getModelNumber() {
@@ -231,25 +238,7 @@ public class ProductDetail {
         }
 
 
-        public HashMap<String, ArrayList<String>> getVariants() {
-            return variants;
-        }
-
-
-        public void setVariants(HashMap<String, ArrayList<String>> variants) {
-            this.variants = variants;
-        }
-
-
-        public List<ProductVariants> getProductVariants() {
-            return ProductVariants;
-        }
-
-
-        public void setProductVariants(List<ProductVariants> productVariants) {
-            ProductVariants = productVariants;
-        }
-
+        
 
         public FreeItem getFreeItem() {
             return freeItem;
@@ -281,9 +270,11 @@ public class ProductDetail {
         }
 
 
+        
+
         @Override
         public String toString() {
-            return "ProductDetail [OfferPrice=" + OfferPrice + ", ProductVariants=" + ProductVariants + ", category="
+            return "ProductDetail [OfferPrice=" + OfferPrice + ", category="
                     + category + ", filtercriterias=" + filtercriterias + ", freeItem=" + freeItem + ", modelNumber="
                     + modelNumber + ", productDescriptions=" + productDescriptions + ", productHighlights="
                     + productHighlights + ", productImage1=" + productImage1 + ", productImage2=" + productImage2
@@ -291,5 +282,21 @@ public class ProductDetail {
                     + productImage5 + ", productInformation=" + productInformation + ", productName=" + productName
                     + ", productPrice=" + productPrice + ", productVideoLink=" + productVideoLink + ", subCategoryMap="
                     + subCategoryMap + ", variants=" + variants + "]";
+        }
+
+        public HashMap<String,String> getVariants() {
+            return variants;
+        }
+
+        public void setVariants(HashMap<String,String> variants) {
+            this.variants = variants;
+        }
+
+        public HashMap<String, ArrayList<String>> getVariantTypes() {
+            return variantTypes;
+        }
+
+        public void setVariantTypes(HashMap<String, ArrayList<String>> variantTypes) {
+            this.variantTypes = variantTypes;
         }
 }

@@ -47,24 +47,7 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/excel/factorsAffected")
-    public ResponseEntity<?> addFactorsAffected(@RequestParam("file") MultipartFile file){
-        try {
-            boolean flag = excelHelper.addFactorsAffected(file.getInputStream());
-            if(flag){
-                responseMessage.setMessage("Product variants uploaded successfully");
-                return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-            }
-            else{
-                responseMessage.setMessage("File not acceptable");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
-
+    
     @PostMapping("/excel/Categories")
     public ResponseEntity<?> addCategories(@RequestParam("file") MultipartFile file){
         try {
