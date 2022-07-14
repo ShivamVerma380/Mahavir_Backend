@@ -882,7 +882,7 @@ public class ExcelHelper {
                                 if(shopByBrands==null || value.trim().equals("-")) break;
                                 ArrayList<BrandCategory> list = new ArrayList<>();
                                 String arr[] = value.split("#");
-                                ArrayList<ProductDetail> products = new ArrayList<>();
+                                
                                 for(int i=0;i<arr.length;i++){
                                     String category[] = arr[i].split("\\[");
                                     BrandCategory brandCategory = new BrandCategory();
@@ -891,9 +891,12 @@ public class ExcelHelper {
                                     category[1] = category[1].substring(0,category[1].length()-1);
                                     String models[] = category[1].split(";");
                                     for(int j=0;j<models.length-1;j++){
-                                        ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(models[j]);
-                                        if(productDetail==null) continue;
                                         modelNumbers.add(models[j]);
+                                    }
+                                    ArrayList<ProductDetail> products = new ArrayList<>();
+                                    for(String model:modelNumbers){
+                                        ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(model);
+                                        if(productDetail==null) continue;
                                         products.add(productDetail);
                                     }
 
