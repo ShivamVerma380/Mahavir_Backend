@@ -51,6 +51,8 @@ public class ProductDetail {
 
         private HashMap<String,ArrayList<String>> variantTypes;
 
+        private ArrayList<String> defaultVariant;
+
         private FreeItem freeItem;
 
         private ArrayList<ProductDescription> productDescriptions;
@@ -63,12 +65,14 @@ public class ProductDetail {
         public ProductDetail() {
         }
 
+
         public ProductDetail(String modelNumber, String productName, String productHighlights, String productImage1,
                 String productImage2, String productImage3, String productImage4, String productImage5,
                 String productPrice, String productVideoLink, String category, HashMap<String, String> subCategoryMap,
                 String offerPrice, HashMap<String, HashMap<String, String>> productInformation,
-                HashMap<String, String> variants, HashMap<String, ArrayList<String>> variantTypes, FreeItem freeItem,
-                ArrayList<ProductDescription> productDescriptions, HashMap<String, String> filtercriterias) {
+                HashMap<String, String> variants, HashMap<String, ArrayList<String>> variantTypes,
+                ArrayList<String> defaultVariant, FreeItem freeItem, ArrayList<ProductDescription> productDescriptions,
+                HashMap<String, String> filtercriterias) {
             this.modelNumber = modelNumber;
             this.productName = productName;
             this.productHighlights = productHighlights;
@@ -85,16 +89,11 @@ public class ProductDetail {
             this.productInformation = productInformation;
             this.variants = variants;
             this.variantTypes = variantTypes;
+            this.defaultVariant = defaultVariant;
             this.freeItem = freeItem;
             this.productDescriptions = productDescriptions;
             this.filtercriterias = filtercriterias;
         }
-
-
-
-
-
-
 
 
 
@@ -269,21 +268,6 @@ public class ProductDetail {
             this.filtercriterias = filtercriterias;
         }
 
-
-        
-
-        @Override
-        public String toString() {
-            return "ProductDetail [OfferPrice=" + OfferPrice + ", category="
-                    + category + ", filtercriterias=" + filtercriterias + ", freeItem=" + freeItem + ", modelNumber="
-                    + modelNumber + ", productDescriptions=" + productDescriptions + ", productHighlights="
-                    + productHighlights + ", productImage1=" + productImage1 + ", productImage2=" + productImage2
-                    + ", productImage3=" + productImage3 + ", productImage4=" + productImage4 + ", productImage5="
-                    + productImage5 + ", productInformation=" + productInformation + ", productName=" + productName
-                    + ", productPrice=" + productPrice + ", productVideoLink=" + productVideoLink + ", subCategoryMap="
-                    + subCategoryMap + ", variants=" + variants + "]";
-        }
-
         public HashMap<String,String> getVariants() {
             return variants;
         }
@@ -299,4 +283,31 @@ public class ProductDetail {
         public void setVariantTypes(HashMap<String, ArrayList<String>> variantTypes) {
             this.variantTypes = variantTypes;
         }
+
+
+        public ArrayList<String> getDefaultVariant() {
+            return defaultVariant;
+        }
+
+
+        public void setDefaultVariant(ArrayList<String> defaultVariant) {
+            this.defaultVariant = defaultVariant;
+        }
+
+
+        @Override
+        public String toString() {
+            return "ProductDetail [OfferPrice=" + OfferPrice + ", category=" + category + ", defaultVariant="
+                    + defaultVariant + ", filtercriterias=" + filtercriterias + ", freeItem=" + freeItem
+                    + ", modelNumber=" + modelNumber + ", productDescriptions=" + productDescriptions
+                    + ", productHighlights=" + productHighlights + ", productImage1=" + productImage1
+                    + ", productImage2=" + productImage2 + ", productImage3=" + productImage3 + ", productImage4="
+                    + productImage4 + ", productImage5=" + productImage5 + ", productInformation=" + productInformation
+                    + ", productName=" + productName + ", productPrice=" + productPrice + ", productVideoLink="
+                    + productVideoLink + ", subCategoryMap=" + subCategoryMap + ", variantTypes=" + variantTypes
+                    + ", variants=" + variants + "]";
+        }
+
+
+        
 }

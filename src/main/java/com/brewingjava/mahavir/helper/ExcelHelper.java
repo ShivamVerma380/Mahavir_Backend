@@ -365,6 +365,21 @@ public class ExcelHelper {
                         case 14:
                             try {
                                 value = formatter.formatCellValue(cell);
+                                if(productDetail==null || value.trim().equals("-")) break;
+                                String array[] = value.split(";");
+                                ArrayList<String> defaultVariants = new ArrayList<>();
+                                for(int i=0;i<array.length;i++){
+                                    defaultVariants.add(array[i].trim());
+                                }
+                                productDetail.setDefaultVariant(defaultVariants);
+                            } catch (Exception e) {
+                                flag = false;
+                                System.out.println("Default variants:"+productDetail.getModelNumber());
+                            }
+                        break;
+                        case 15:
+                            try {
+                                value = formatter.formatCellValue(cell);
                                 if(productDetail==null) break;
                                 if(value.trim().equals("-")){
                                     productDetail.setVariantTypes(new HashMap<>());
@@ -389,7 +404,7 @@ public class ExcelHelper {
                                 System.out.println("Product Variant Types:"+productDetail.getModelNumber());
                             }
                         break;
-                        case 15:
+                        case 16:
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(value.trim().equals("-")){    
@@ -417,7 +432,7 @@ public class ExcelHelper {
                                 // e.printStackTrace();
                             }
                         break;
-                        case 16:
+                        case 17:
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(productDetail==null) break;
@@ -440,7 +455,7 @@ public class ExcelHelper {
                                 // e.printStackTrace();
                             }   
                         break;
-                        case 17:
+                        case 18:
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(productDetail==null) break;
