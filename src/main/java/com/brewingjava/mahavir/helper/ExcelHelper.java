@@ -351,9 +351,11 @@ public class ExcelHelper {
                                 for(int i=0;i<array.length;i++){
                                     // array[i] = array[i].trim();
                                     String pair[] = array[i].split("=");
-
-                                    productVariants.put(pair[0].trim(),pair[1].trim());
+                                    // System.out.println("pair[0]="+pair[0]+"\tpair[1]="+pair[1]);
+                                    productVariants.put(pair[0],pair[1]);
                                 }
+                                System.out.println(productDetail.getModelNumber()+"\t"+productVariants);
+                                // productDetail.setVariants(productVariants);
                                 productDetail.setVariants(productVariants);
                             } catch (Exception e) {
                                 flag = false;
@@ -395,6 +397,7 @@ public class ExcelHelper {
                                     for(int j=0;j<values.length;j++){
                                         list.add(values[j]);
                                     }
+                                    System.out.println("pair[0]="+pair[0]+"\tpair[1]="+pair[1]);
                                     variantTypes.put(pair[0],list);
                                 }
                                 productDetail.setVariantTypes(variantTypes);

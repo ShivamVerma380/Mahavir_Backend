@@ -446,15 +446,17 @@ public class ProductDetailsService {
             // title = White 190L
             // required= White
             if(map.containsKey(required.trim())){
-                ProductDetail requiredProduct = productDetailsDao.findProductDetailBymodelNumber(map.get(required));
-                return ResponseEntity.status(HttpStatus.OK).body(requiredProduct);
+                // ProductDetail requiredProduct = productDetailsDao.findProductDetailBymodelNumber(map.get(required));
+                responseMessage.setMessage(map.get(required.trim()));
+                return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
             }
 
             for(Map.Entry<String,String> entry: map.entrySet()){
                 String str = entry.getKey();
                 if(str.contains(clicked.trim())){
-                    ProductDetail requiredProduct = productDetailsDao.findProductDetailBymodelNumber(entry.getValue());
-                    return ResponseEntity.status(HttpStatus.OK).body(requiredProduct);
+                    responseMessage.setMessage(entry.getValue());
+                    // ProductDetail requiredProduct = productDetailsDao.findProductDetailBymodelNumber(entry.getValue());
+                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
                 }
             }
 
