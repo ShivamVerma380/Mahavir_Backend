@@ -1,6 +1,7 @@
 package com.brewingjava.mahavir.controllers.test;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.brewingjava.mahavir.daos.HomepageComponents.DealsDao;
 import com.brewingjava.mahavir.daos.HomepageComponents.ShopByBrandsDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
+import com.brewingjava.mahavir.entities.HomepageComponents.BrandCategory;
+import com.brewingjava.mahavir.entities.HomepageComponents.ShopByBrands;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.helper.ExcelHelper;
 import com.brewingjava.mahavir.helper.ResponseMessage;
@@ -102,6 +106,30 @@ public class ProductController {
     public ResponseEntity<?> getShopByBrands(){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(shopByBrandsDao.findAll());
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @GetMapping("/excel/shopByBrands/{brand}/{category}")
+    public ResponseEntity<?> getShopByBrandsCategory(@PathVariable("brand") String brand,@PathVariable("category") String category){
+
+        try {
+            ShopByBrands brands = shopByBrandsDao.findBybrandName(brand);
+            if(brands==null){
+                responseMessage.setMessage("Brand not found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }   
+            ArrayList<BrandCategory> list = brands.getBrandCategories();
+            for(int i=0;i<list.size();i++){
+                if(list.get(i).getCategory().equals(category)){
+                    return ResponseEntity.status(HttpStatus.OK).body(list.get(i).getProducts());
+                }
+            }
+            responseMessage.setMessage("Category not found");
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

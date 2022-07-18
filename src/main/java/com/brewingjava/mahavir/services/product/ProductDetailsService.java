@@ -613,6 +613,7 @@ public class ProductDetailsService {
                 productsDetailsResponse.setProductHighlights(productDetails.get(i).getProductHighlights());
                 productsDetailsResponse.setSubCategoryMap(productDetails.get(i).getSubCategoryMap());
                 productsDetailsResponse.setCategory(productDetails.get(i).getCategory());
+                productsDetailsResponse.setFiltercriterias(productDetails.get(i).getFiltercriterias());
                 productsDetailsResponses.add(productsDetailsResponse);
             }
             return ResponseEntity.status(HttpStatus.OK).body(productsDetailsResponses);

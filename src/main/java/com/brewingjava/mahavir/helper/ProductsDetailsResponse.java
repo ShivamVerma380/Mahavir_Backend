@@ -24,14 +24,18 @@ public class ProductsDetailsResponse {
 
     private String category;
 
+    private HashMap<String,String> filtercriterias;
 
     public ProductsDetailsResponse() {
     }
 
 
+    
+
+
     public ProductsDetailsResponse(String modelNumber, String productName, String productHighlights,
             String productImage1, String offerPrice, String productPrice, HashMap<String, String> subCategoryMap,
-            String category) {
+            String category, HashMap<String, String> filtercriterias) {
         this.modelNumber = modelNumber;
         this.productName = productName;
         this.productHighlights = productHighlights;
@@ -40,7 +44,11 @@ public class ProductsDetailsResponse {
         this.productPrice = productPrice;
         this.subCategoryMap = subCategoryMap;
         this.category = category;
+        this.filtercriterias = filtercriterias;
     }
+
+
+
 
 
     public String getModelNumber() {
@@ -122,17 +130,20 @@ public class ProductsDetailsResponse {
         this.category = category;
     }
 
+    public HashMap<String, String> getFiltercriterias() {
+        return filtercriterias;
+    }
+
+    public void setFiltercriterias(HashMap<String, String> filtercriterias) {
+        this.filtercriterias = filtercriterias;
+    }
 
     @Override
     public String toString() {
-        return "ProductsDetailsResponse [OfferPrice=" + OfferPrice + ", category=" + category + ", modelNumber="
-                + modelNumber + ", productHighlights=" + productHighlights + ", productImage1=" + productImage1
-                + ", productName=" + productName + ", productPrice=" + productPrice + ", subCategoryMap="
-                + subCategoryMap + "]";
-    }
-
-    
-    
-    
+        return "ProductsDetailsResponse [OfferPrice=" + OfferPrice + ", category=" + category + ", filtercriterias="
+                + filtercriterias + ", modelNumber=" + modelNumber + ", productHighlights=" + productHighlights
+                + ", productImage1=" + productImage1 + ", productName=" + productName + ", productPrice=" + productPrice
+                + ", subCategoryMap=" + subCategoryMap + "]";
+    }    
 
 }
