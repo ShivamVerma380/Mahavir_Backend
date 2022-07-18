@@ -17,9 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.brewingjava.mahavir.daos.HomepageComponents.DealsDao;
 import com.brewingjava.mahavir.daos.HomepageComponents.ShopByBrandsDao;
+import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
 import com.brewingjava.mahavir.entities.HomepageComponents.BrandCategory;
 import com.brewingjava.mahavir.entities.HomepageComponents.ShopByBrands;
+import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.helper.ExcelHelper;
 import com.brewingjava.mahavir.helper.ResponseMessage;
@@ -165,6 +167,27 @@ public class ProductController {
     public ResponseEntity<?> getDeals(){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(dealsDao.findAll());
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @Autowired
+    public CategoriesToDisplayDao categoriesToDisplayDao;
+
+
+    @GetMapping("/categories")
+    public ResponseEntity<?> getCategories(){
+        try {
+            List<CategoriesToDisplay> list = categoriesToDisplayDao.findAll();
+            ArrayList<String> categoryName = new ArrayList<>();
+            for(int i=0;i<list.size();i++){
+                categoryName.add(list.get(i).getCategory());
+            }
+            CategoryResponse obj = new CategoryResponse(categoryName);
+            return ResponseEntity.status(HttpStatus.OK).body(obj);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
