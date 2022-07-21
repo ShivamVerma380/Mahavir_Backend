@@ -10,6 +10,8 @@ public class ProductsDetailsResponse {
     
     public String modelNumber;
 
+    public String productId;
+
     private String productName;
 
     private String productHighlights;

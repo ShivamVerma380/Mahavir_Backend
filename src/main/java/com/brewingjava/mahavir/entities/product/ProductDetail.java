@@ -19,6 +19,8 @@ public class ProductDetail {
         //private List<String> modelNumber; //can keep this in inventory management database?
         @Id
         private String modelNumber;
+
+        private String productId;
         
         private String productName;
 
@@ -66,14 +68,19 @@ public class ProductDetail {
         }
 
 
-        public ProductDetail(String modelNumber, String productName, String productHighlights, String productImage1,
-                String productImage2, String productImage3, String productImage4, String productImage5,
-                String productPrice, String productVideoLink, String category, HashMap<String, String> subCategoryMap,
-                String offerPrice, HashMap<String, HashMap<String, String>> productInformation,
-                HashMap<String, String> variants, HashMap<String, ArrayList<String>> variantTypes,
-                ArrayList<String> defaultVariant, FreeItem freeItem, ArrayList<ProductDescription> productDescriptions,
-                HashMap<String, String> filtercriterias) {
+        
+
+
+
+        public ProductDetail(String modelNumber, String productId, String productName, String productHighlights,
+                String productImage1, String productImage2, String productImage3, String productImage4,
+                String productImage5, String productPrice, String productVideoLink, String category,
+                HashMap<String, String> subCategoryMap, String offerPrice,
+                HashMap<String, HashMap<String, String>> productInformation, HashMap<String, String> variants,
+                HashMap<String, ArrayList<String>> variantTypes, ArrayList<String> defaultVariant, FreeItem freeItem,
+                ArrayList<ProductDescription> productDescriptions, HashMap<String, String> filtercriterias) {
             this.modelNumber = modelNumber;
+            this.productId = productId;
             this.productName = productName;
             this.productHighlights = productHighlights;
             this.productImage1 = productImage1;
@@ -94,6 +101,9 @@ public class ProductDetail {
             this.productDescriptions = productDescriptions;
             this.filtercriterias = filtercriterias;
         }
+
+
+
 
 
 
@@ -294,19 +304,29 @@ public class ProductDetail {
             this.defaultVariant = defaultVariant;
         }
 
+        public String getProductId() {
+            return productId;
+        }
+
+        public void setProductId(String productId) {
+            this.productId = productId;
+        }
+
 
         @Override
         public String toString() {
             return "ProductDetail [OfferPrice=" + OfferPrice + ", category=" + category + ", defaultVariant="
                     + defaultVariant + ", filtercriterias=" + filtercriterias + ", freeItem=" + freeItem
                     + ", modelNumber=" + modelNumber + ", productDescriptions=" + productDescriptions
-                    + ", productHighlights=" + productHighlights + ", productImage1=" + productImage1
-                    + ", productImage2=" + productImage2 + ", productImage3=" + productImage3 + ", productImage4="
-                    + productImage4 + ", productImage5=" + productImage5 + ", productInformation=" + productInformation
-                    + ", productName=" + productName + ", productPrice=" + productPrice + ", productVideoLink="
-                    + productVideoLink + ", subCategoryMap=" + subCategoryMap + ", variantTypes=" + variantTypes
-                    + ", variants=" + variants + "]";
+                    + ", productHighlights=" + productHighlights + ", productId=" + productId + ", productImage1="
+                    + productImage1 + ", productImage2=" + productImage2 + ", productImage3=" + productImage3
+                    + ", productImage4=" + productImage4 + ", productImage5=" + productImage5 + ", productInformation="
+                    + productInformation + ", productName=" + productName + ", productPrice=" + productPrice
+                    + ", productVideoLink=" + productVideoLink + ", subCategoryMap=" + subCategoryMap
+                    + ", variantTypes=" + variantTypes + ", variants=" + variants + "]";
         }
+
+        
 
 
         
