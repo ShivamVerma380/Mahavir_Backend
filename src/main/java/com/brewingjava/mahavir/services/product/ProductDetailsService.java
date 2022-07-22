@@ -908,7 +908,9 @@ public class ProductDetailsService {
                                 productsDetailsResponse.setProductImage1(productDetail.getProductImage1());
                                 productsDetailsResponse.setProductPrice(productDetail.getProductPrice());
                                 productsDetailsResponse.setSubCategoryMap(productDetail.getSubCategoryMap());
+                                productsDetailsResponse.setProductId(productDetail.getProductId());
                                 productsDetailsResponse.setCategory(productDetail.getCategory());
+                                
                                 list.add(productsDetailsResponse);
                             }
                             if(list.size()>18){

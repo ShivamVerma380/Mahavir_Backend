@@ -140,12 +140,36 @@ public class ProductsDetailsResponse {
         this.filtercriterias = filtercriterias;
     }
 
+    
+
+    
+
+
+
+
+
     @Override
     public String toString() {
         return "ProductsDetailsResponse [OfferPrice=" + OfferPrice + ", category=" + category + ", filtercriterias="
                 + filtercriterias + ", modelNumber=" + modelNumber + ", productHighlights=" + productHighlights
-                + ", productImage1=" + productImage1 + ", productName=" + productName + ", productPrice=" + productPrice
-                + ", subCategoryMap=" + subCategoryMap + "]";
+                + ", productId=" + productId + ", productImage1=" + productImage1 + ", productName=" + productName
+                + ", productPrice=" + productPrice + ", subCategoryMap=" + subCategoryMap + "]";
+    }
+
+
+
+
+
+    public String getProductId() {
+        return productId;
+    }
+
+
+
+
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }    
 
 }
