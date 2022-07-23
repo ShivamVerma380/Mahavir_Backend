@@ -640,11 +640,16 @@ public class ProductDetailsService {
             List<CategoriesToDisplay> existingCategoriesToDisplay = categoriesToDisplayDao.findAll();
             //Add all categories
             for(int i=0;i<existingCategoriesToDisplay.size();i++){
-                SearchResponse searchResponse = new SearchResponse(existingCategoriesToDisplay.get(i).getCategory(),existingCategoriesToDisplay.get(i).getCategory());
-                searchResponse.setType("category");
-                searchResponse.setCategory(existingCategoriesToDisplay.get(i).getCategory());
-                searchResponse.setModelNumbers(new ArrayList<>());        
-                list.add(searchResponse);
+                try {
+                    SearchResponse searchResponse = new SearchResponse(existingCategoriesToDisplay.get(i).getCategory(),existingCategoriesToDisplay.get(i).getCategory());
+                    searchResponse.setType("category");
+                    searchResponse.setCategory(existingCategoriesToDisplay.get(i).getCategory());
+                    searchResponse.setModelNumbers(new ArrayList<>());        
+                    list.add(searchResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                
             }
             //Add all SubSubCategories
             for(int i=0;i<existingCategoriesToDisplay.size();i++){
@@ -652,36 +657,46 @@ public class ProductDetailsService {
                 for(int j=0;j<existingSubCategories.size();j++){
                     List<SubSubCategories> existingSubSubCategories = existingSubCategories.get(j).getSubSubCategories();
                     for(int k=0;k<existingSubSubCategories.size();k++){
-                        String name = existingSubSubCategories.get(k).getSubSubCategoryName()+" in  "+existingCategoriesToDisplay.get(i).getCategory();
-                        SearchResponse searchResponse = new SearchResponse(name,name);
-                        searchResponse.setType("subSubCategory");
-                        searchResponse.setCategory(existingCategoriesToDisplay.get(i).getCategory());
-                        searchResponse.setSubSubCategory(existingSubSubCategories.get(k).getSubSubCategoryName());
-                        HashSet<String> modelNos = existingSubSubCategories.get(k).getmodelNumber();
+                        try {
+                            String name = existingSubSubCategories.get(k).getSubSubCategoryName()+" in  "+existingCategoriesToDisplay.get(i).getCategory();
+                            SearchResponse searchResponse = new SearchResponse(name,name);
+                            searchResponse.setType("subSubCategory");
+                            searchResponse.setCategory(existingCategoriesToDisplay.get(i).getCategory());
+                            searchResponse.setSubSubCategory(existingSubSubCategories.get(k).getSubSubCategoryName());
+                            HashSet<String> modelNos = existingSubSubCategories.get(k).getmodelNumber();
+                            
+                            searchResponse.setModelNumbers(new ArrayList<>(modelNos));
+                            list.add(searchResponse);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         
-                        searchResponse.setModelNumbers(new ArrayList<>(modelNos));
-                        list.add(searchResponse);
                     }
                 }
             }
 
             for(int i=0;i<productDetails.size();i++){
-                SearchResponse searchResponse = new SearchResponse(productDetails.get(i).getModelNumber(),productDetails.get(i).getProductName());
-                searchResponse.setCategory(productDetails.get(i).getCategory());
-                String[] highlights = productDetails.get(i).getProductHighlights().split(";");
-                String str="";
-                for(int j=0;j<highlights.length;j++){
-                    str+=highlights[j]+" ";
+                try {
+                    SearchResponse searchResponse = new SearchResponse(productDetails.get(i).getModelNumber(),productDetails.get(i).getProductName());
+                    searchResponse.setCategory(productDetails.get(i).getCategory());
+                    String[] highlights = productDetails.get(i).getProductHighlights().split(";");
+                    String str="";
+                    for(int j=0;j<highlights.length;j++){
+                        str+=highlights[j]+" ";
+                    }
+                    searchResponse.setHighlights(str);
+                    searchResponse.setPrice(productDetails.get(i).getProductPrice());
+                    HashMap<String,String> subCategoryMap = productDetails.get(i).getSubCategoryMap();
+                    searchResponse.setSubSubCategory(subCategoryMap.get("BRAND"));
+                    ArrayList<String> modelNumbers = new ArrayList<>();
+                    modelNumbers.add(productDetails.get(i).getModelNumber());
+                    searchResponse.setModelNumbers(modelNumbers);
+                    searchResponse.setType("product");
+                    list.add(searchResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                searchResponse.setHighlights(str);
-                searchResponse.setPrice(productDetails.get(i).getProductPrice());
-                HashMap<String,String> subCategoryMap = productDetails.get(i).getSubCategoryMap();
-                searchResponse.setSubSubCategory(subCategoryMap.get("BRAND"));
-                ArrayList<String> modelNumbers = new ArrayList<>();
-                modelNumbers.add(productDetails.get(i).getModelNumber());
-                searchResponse.setModelNumbers(modelNumbers);
-                searchResponse.setType("product");
-                list.add(searchResponse);
+                
             }
             
             return ResponseEntity.status(HttpStatus.OK).body(list);
