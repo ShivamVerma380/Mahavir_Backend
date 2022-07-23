@@ -333,6 +333,11 @@ public class ProductDetailsService {
                 double avg = (1*new_productReview.getNosOfOneStars()+ 2*new_productReview.getNosOfTwoStars()+3*new_productReview.getNosOfThreeStars()+4*new_productReview.getNosOfFourStars()+5*new_productReview.getNosOfFiveStars())/new_productReview.getTotalRatings();
                 new_productReview.setAverageRatings(avg);
                 productReviewsDao.save(new_productReview);
+                
+                ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+                productDetail.setAverageRating(avg);
+                productDetailsDao.save(productDetail);
+
                 responseMessage.setMessage("Product Review added successfully");
                 return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
             }
@@ -899,19 +904,21 @@ public class ProductDetailsService {
                             HashSet<String> modelNos = subSubCategories.get(j).getmodelNumber();
                             modelNos.remove(modelNumber);
                             for(String modelNo:modelNos){
-                                ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNo);
-                                ProductsDetailsResponse productsDetailsResponse = new ProductsDetailsResponse();
-                                productsDetailsResponse.setModelNumber(productDetail.getModelNumber());
-                                productsDetailsResponse.setProductName(productDetail.getProductName());
-                                productsDetailsResponse.setOfferPrice(productDetail.getOfferPrice());
-                                productsDetailsResponse.setProductHighlights(productDetail.getProductHighlights());
-                                productsDetailsResponse.setProductImage1(productDetail.getProductImage1());
-                                productsDetailsResponse.setProductPrice(productDetail.getProductPrice());
-                                productsDetailsResponse.setSubCategoryMap(productDetail.getSubCategoryMap());
-                                productsDetailsResponse.setProductId(productDetail.getProductId());
-                                productsDetailsResponse.setCategory(productDetail.getCategory());
-                                
-                                list.add(productsDetailsResponse);
+                                if(modelNumber!=modelNo){
+                                    ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNo);
+                                    ProductsDetailsResponse productsDetailsResponse = new ProductsDetailsResponse();
+                                    productsDetailsResponse.setModelNumber(productDetail.getModelNumber());
+                                    productsDetailsResponse.setProductName(productDetail.getProductName());
+                                    productsDetailsResponse.setOfferPrice(productDetail.getOfferPrice());
+                                    productsDetailsResponse.setProductHighlights(productDetail.getProductHighlights());
+                                    productsDetailsResponse.setProductImage1(productDetail.getProductImage1());
+                                    productsDetailsResponse.setProductPrice(productDetail.getProductPrice());
+                                    productsDetailsResponse.setSubCategoryMap(productDetail.getSubCategoryMap());
+                                    productsDetailsResponse.setProductId(productDetail.getProductId());
+                                    productsDetailsResponse.setCategory(productDetail.getCategory());
+                                    
+                                    list.add(productsDetailsResponse);
+                                }
                             }
                             if(list.size()>18){
                                 flag = false;

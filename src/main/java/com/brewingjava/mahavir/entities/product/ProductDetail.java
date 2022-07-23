@@ -61,16 +61,15 @@ public class ProductDetail {
 
         private HashMap<String,String> filtercriterias;
 
+        private double averageRating = 0;
+
 
 
 
         public ProductDetail() {
         }
 
-
         
-
-
 
         public ProductDetail(String modelNumber, String productId, String productName, String productHighlights,
                 String productImage1, String productImage2, String productImage3, String productImage4,
@@ -78,7 +77,8 @@ public class ProductDetail {
                 HashMap<String, String> subCategoryMap, String offerPrice,
                 HashMap<String, HashMap<String, String>> productInformation, HashMap<String, String> variants,
                 HashMap<String, ArrayList<String>> variantTypes, ArrayList<String> defaultVariant, FreeItem freeItem,
-                ArrayList<ProductDescription> productDescriptions, HashMap<String, String> filtercriterias) {
+                ArrayList<ProductDescription> productDescriptions, HashMap<String, String> filtercriterias,
+                double averageRating) {
             this.modelNumber = modelNumber;
             this.productId = productId;
             this.productName = productName;
@@ -100,10 +100,8 @@ public class ProductDetail {
             this.freeItem = freeItem;
             this.productDescriptions = productDescriptions;
             this.filtercriterias = filtercriterias;
+            this.averageRating = averageRating;
         }
-
-
-
 
 
 
@@ -313,18 +311,33 @@ public class ProductDetail {
         }
 
 
+
+        public double getAverageRating() {
+            return averageRating;
+        }
+
+
+
+        public void setAverageRating(double averageRating) {
+            this.averageRating = averageRating;
+        }
+
+
+
         @Override
         public String toString() {
-            return "ProductDetail [OfferPrice=" + OfferPrice + ", category=" + category + ", defaultVariant="
-                    + defaultVariant + ", filtercriterias=" + filtercriterias + ", freeItem=" + freeItem
-                    + ", modelNumber=" + modelNumber + ", productDescriptions=" + productDescriptions
-                    + ", productHighlights=" + productHighlights + ", productId=" + productId + ", productImage1="
-                    + productImage1 + ", productImage2=" + productImage2 + ", productImage3=" + productImage3
-                    + ", productImage4=" + productImage4 + ", productImage5=" + productImage5 + ", productInformation="
-                    + productInformation + ", productName=" + productName + ", productPrice=" + productPrice
-                    + ", productVideoLink=" + productVideoLink + ", subCategoryMap=" + subCategoryMap
+            return "ProductDetail [OfferPrice=" + OfferPrice + ", averageRating=" + averageRating + ", category="
+                    + category + ", defaultVariant=" + defaultVariant + ", filtercriterias=" + filtercriterias
+                    + ", freeItem=" + freeItem + ", modelNumber=" + modelNumber + ", productDescriptions="
+                    + productDescriptions + ", productHighlights=" + productHighlights + ", productId=" + productId
+                    + ", productImage1=" + productImage1 + ", productImage2=" + productImage2 + ", productImage3="
+                    + productImage3 + ", productImage4=" + productImage4 + ", productImage5=" + productImage5
+                    + ", productInformation=" + productInformation + ", productName=" + productName + ", productPrice="
+                    + productPrice + ", productVideoLink=" + productVideoLink + ", subCategoryMap=" + subCategoryMap
                     + ", variantTypes=" + variantTypes + ", variants=" + variants + "]";
         }
+
+        
 
         
 
