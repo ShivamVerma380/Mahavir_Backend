@@ -72,17 +72,17 @@ public class ProductDetailsController {
     }
 
 
-    @PostMapping("/add-review/{modelNumber}")
-    public ResponseEntity<?> addReview(@PathVariable("modelNumber") String modelNumber, @RequestHeader("Authorization") String authorization ,@RequestParam("Review")String review,@RequestParam("Rating") String rating,@RequestParam("Date") String date){
-        long R = Long.parseLong(rating); 
-        try {
-            return productDetailsService.addReview(authorization,modelNumber,R, review, date);
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
+    // @PostMapping("/add-review/{modelNumber}")
+    // public ResponseEntity<?> addReview(@PathVariable("modelNumber") String modelNumber, @RequestHeader("Authorization") String authorization ,@RequestParam("Review")String review,@RequestParam("Rating") String rating,@RequestParam("Date") String date){
+    //     long R = Long.parseLong(rating); 
+    //     try {
+    //         return productDetailsService.addReview(authorization,modelNumber,R, review, date);
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         responseMessage.setMessage(e.getMessage());
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+    //     }
+    // }
 
     
 

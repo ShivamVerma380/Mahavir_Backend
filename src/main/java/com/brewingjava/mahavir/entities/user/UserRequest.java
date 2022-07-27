@@ -8,6 +8,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
+import com.brewingjava.mahavir.entities.orders.OrderDetails;
+
 
 
 
@@ -26,7 +28,11 @@ public class UserRequest {
     
     private String phoneNo;
     
-    private List<Orders> productsBoughtByUser; 
+    private List<OrderDetails> productsBoughtByUser; 
+
+    private List<OrderDetails> productsCancelledByUser;
+
+    private List<OrderDetails> productsReturnedByUser;
     
     private HashSet<String> userCartProducts;
 
@@ -105,16 +111,7 @@ public class UserRequest {
     }
 
 
-    public List<Orders> getProductsBoughtByUser() {
-        return productsBoughtByUser;
-    }
     
-
-
-    public void setProductsBoughtByUser(List<Orders> productsBoughtByUser) {
-        this.productsBoughtByUser = productsBoughtByUser;
-    }
-
 
     
     public HashSet<String> getUserCartProducts() {
@@ -174,12 +171,45 @@ public class UserRequest {
     }
 
 
+    
+
+    public List<OrderDetails> getProductsCancelledByUser() {
+        return productsCancelledByUser;
+    }
+
+
+    public void setProductsCancelledByUser(List<OrderDetails> productsCancelledByUser) {
+        this.productsCancelledByUser = productsCancelledByUser;
+    }
+
+
+    public List<OrderDetails> getProductsReturnedByUser() {
+        return productsReturnedByUser;
+    }
+
+
+    public void setProductsReturnedByUser(List<OrderDetails> productsReturnedByUser) {
+        this.productsReturnedByUser = productsReturnedByUser;
+    }
+
+    public List<OrderDetails> getProductsBoughtByUser() {
+        return productsBoughtByUser;
+    }
+
+
+    public void setProductsBoughtByUser(List<OrderDetails> productsBoughtByUser) {
+        this.productsBoughtByUser = productsBoughtByUser;
+    }
+
+
     @Override
     public String toString() {
         return "UserRequest [addToCompare=" + addToCompare + ", email=" + email + ", firstName=" + firstName
                 + ", lastName=" + lastName + ", password=" + password + ", phoneNo=" + phoneNo
-                + ", productsBoughtByUser=" + productsBoughtByUser + ", token=" + token + ", userAdresses="
-                + userAdresses + ", userCartProducts=" + userCartProducts + ", userWishList=" + userWishList + "]";
+                + ", productsBoughtByUser=" + productsBoughtByUser + ", productsCancelledByUser="
+                + productsCancelledByUser + ", productsReturnedByUser=" + productsReturnedByUser + ", token=" + token
+                + ", userAdresses=" + userAdresses + ", userCartProducts=" + userCartProducts + ", userWishList="
+                + userWishList + "]";
     }
 
     

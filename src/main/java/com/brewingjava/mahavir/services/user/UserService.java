@@ -8,20 +8,18 @@ import java.util.ListIterator;
 import com.brewingjava.mahavir.config.MySecurityConfig;
 import com.brewingjava.mahavir.daos.admin.AdminDao;
 import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
+import com.brewingjava.mahavir.daos.orders.OrderDetailsDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
-import com.brewingjava.mahavir.daos.user.OrdersDao;
 import com.brewingjava.mahavir.daos.user.UserDao;
 import com.brewingjava.mahavir.entities.admin.Admin;
 import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
-import com.brewingjava.mahavir.entities.user.Orders;
 import com.brewingjava.mahavir.entities.user.UserAddress;
 import com.brewingjava.mahavir.entities.user.UserRequest;
 import com.brewingjava.mahavir.helper.JwtResponse;
 import com.brewingjava.mahavir.helper.JwtUtil;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 import com.brewingjava.mahavir.services.CustomUserDetailsService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators.Add;
 import org.springframework.http.HttpStatus;
@@ -65,7 +63,7 @@ public class UserService {
     public ProductDetailsDao productDetailsDao;
 
     @Autowired
-    public OrdersDao ordersDao;
+    public OrderDetailsDao orderDetailsDao;
 
 
     @Autowired
@@ -94,6 +92,9 @@ public class UserService {
             new_user.setAddToCompare(new ArrayList<>());
             new_user.setUserWishList(new ArrayList<>());
             new_user.setToken("");
+            new_user.setProductsBoughtByUser(new ArrayList<>());
+            new_user.setProductsCancelledByUser(new ArrayList<>());
+            new_user.setProductsReturnedByUser(new ArrayList<>());
             this.userDao.save(new_user);
 
             //spring security
@@ -204,52 +205,52 @@ public class UserService {
         }
     }
     
-    public ResponseEntity<?> buyProduct(String Authorization, String BuyDate, String DeliveryDate, String modelNumber) {
-        try {
-            String token = Authorization.substring(7);
-            String email = jwtUtil.extractUsername(token);
-            UserRequest userRequest = userDao.findByEmail(email);
-            if(userRequest==null){
-                responseMessage.setMessage("Admin can't buy a product");
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-            }
-            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
-            if (productDetail!=null) {
-                Orders orders = new Orders();
-                //orders.setOrderId("1234");
-                orders.setBuyDate(BuyDate);
-                orders.setBuyerEmail(email);
-                orders.setDateOfDelivery(DeliveryDate);
-                orders.setProductImage(productDetail.getProductImage1());
-                orders.setModelNumber(modelNumber);
-                orders.setProductPrice(productDetail.getProductPrice());
-                ordersDao.save(orders);
+    // public ResponseEntity<?> buyProduct(String Authorization, String BuyDate, String DeliveryDate, String modelNumber) {
+    //     try {
+    //         String token = Authorization.substring(7);
+    //         String email = jwtUtil.extractUsername(token);
+    //         UserRequest userRequest = userDao.findByEmail(email);
+    //         if(userRequest==null){
+    //             responseMessage.setMessage("Admin can't buy a product");
+    //             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+    //         }
+    //         ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+    //         if (productDetail!=null) {
+    //             OrderDetailsDao orders = new OrderDetailsDao();
+    //             //orders.setOrderId("1234");
+    //             orders.set(BuyDate);
+    //             orders.setBuyerEmail(email);
+    //             orders.setDateOfDelivery(DeliveryDate);
+    //             orders.setProductImage(productDetail.getProductImage1());
+    //             orders.setModelNumber(modelNumber);
+    //             orders.setProductPrice(productDetail.getProductPrice());
+    //             ordersDao.save(orders);
                   
-                List<Orders> userOrders = userRequest.getProductsBoughtByUser();
-                if (userOrders==null) {
-                    List<Orders> newOrders = new ArrayList<>();
-                    newOrders.add(orders);
-                    userRequest.setProductsBoughtByUser(newOrders);
-                } else {
-                    userOrders.add(orders);
-                    userRequest.setProductsBoughtByUser(userOrders);
-                }
-                userDao.save(userRequest);
-                responseMessage.setMessage("Order saved successfully");
-                return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+    //             List<Orders> userOrders = userRequest.getProductsBoughtByUser();
+    //             if (userOrders==null) {
+    //                 List<Orders> newOrders = new ArrayList<>();
+    //                 newOrders.add(orders);
+    //                 userRequest.setProductsBoughtByUser(newOrders);
+    //             } else {
+    //                 userOrders.add(orders);
+    //                 userRequest.setProductsBoughtByUser(userOrders);
+    //             }
+    //             userDao.save(userRequest);
+    //             responseMessage.setMessage("Order saved successfully");
+    //             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
                 
-            } else {
-                responseMessage.setMessage("Product not found");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
-            }
+    //         } else {
+    //             responseMessage.setMessage("Product not found");
+    //             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+    //         }
             
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         responseMessage.setMessage(e.getMessage());
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
 
-        }
-    }
+    //     }
+    // }
 
     public ResponseEntity<?> getBoughtProducts(String authorization){
         try {
@@ -374,29 +375,29 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> getOrders(String authorization) {
-        try {
-            String token = authorization.substring(7);
-            String email = jwtUtil.extractUsername(token);
-            UserRequest user = userDao.findByEmail(email);
-            if(user == null){
-                responseMessage.setMessage("You cannot view orders");
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-            }
-            List<Orders> orders = user.getProductsBoughtByUser();
-            if(orders==null){
-                responseMessage.setMessage("No orders placed");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
-            }
-            responseMessage.setMessage("Orders");
-            return ResponseEntity.status(HttpStatus.OK).body(orders);
+    // public ResponseEntity<?> getOrders(String authorization) {
+    //     try {
+    //         String token = authorization.substring(7);
+    //         String email = jwtUtil.extractUsername(token);
+    //         UserRequest user = userDao.findByEmail(email);
+    //         if(user == null){
+    //             responseMessage.setMessage("You cannot view orders");
+    //             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+    //         }
+    //         List<Orders> orders = user.getProductsBoughtByUser();
+    //         if(orders==null){
+    //             responseMessage.setMessage("No orders placed");
+    //             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+    //         }
+    //         responseMessage.setMessage("Orders");
+    //         return ResponseEntity.status(HttpStatus.OK).body(orders);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseMessage.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        }
-    }
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         responseMessage.setMessage(e.getMessage());
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+    //     }
+    // }
 
     public ResponseEntity<?> addToCompare(String authorization,String category,String modelNumber){
         try {
