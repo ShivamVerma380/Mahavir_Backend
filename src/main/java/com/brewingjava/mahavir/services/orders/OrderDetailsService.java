@@ -1,7 +1,11 @@
 package com.brewingjava.mahavir.services.orders;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PreDestroy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,8 +51,15 @@ public class OrderDetailsService {
             }
             List<OrderDetails> allOrders = orderDetailsDao.findAll();
 
+
             orderDetails.setOrderId(allOrders.size()+1);
             orderDetails.setBuyerEmail(userRequest.getEmail());
+            HashMap<String,Integer> products = orderDetails.getProducts();
+            HashMap<String,Boolean> isProductRated = new HashMap<>();
+            for(Map.Entry<String,Integer> map:products.entrySet()){
+                isProductRated.put(map.getKey(), false);
+            }
+            orderDetails.setIsProductRated(isProductRated);
             if(orderDetails.getUserAddress()==null){
                 responseMessage.setMessage("Please provide address");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);

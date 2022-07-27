@@ -6,7 +6,7 @@ import com.brewingjava.mahavir.entities.orders.OrderDetails;
 
 public interface OrderDetailsDao extends MongoRepository<OrderDetails, Integer> {
 
-    public String getOrderDetailsByOrderId(int orderId);
+    public OrderDetails getOrderDetailsByOrderId(int orderId);
 
 }
     

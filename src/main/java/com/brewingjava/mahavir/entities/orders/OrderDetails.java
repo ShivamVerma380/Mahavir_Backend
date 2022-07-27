@@ -17,6 +17,8 @@ public class OrderDetails {
 
     private HashMap<String,Integer> products;
 
+    private HashMap<String,Boolean> isProductRated; // GL-39822 => Yes, HF-23884 => No
+
     private String buyerEmail;
 
     private String buyDate;
@@ -128,12 +130,24 @@ public class OrderDetails {
     }
 
 
+    public HashMap<String, Boolean> getIsProductRated() {
+        return isProductRated;
+    }
+
+
+    public void setIsProductRated(HashMap<String, Boolean> isProductRated) {
+        this.isProductRated = isProductRated;
+    }
+
+
     @Override
     public String toString() {
         return "OrderDetails [buyDate=" + buyDate + ", buyerEmail=" + buyerEmail + ", deliveryDate=" + deliveryDate
-                + ", orderId=" + orderId + ", paymentAmount=" + paymentAmount + ", paymentMode=" + paymentMode
-                + ", products=" + products + ", userAddress=" + userAddress + "]";
-    }  
+                + ", isProductRated=" + isProductRated + ", orderId=" + orderId + ", paymentAmount=" + paymentAmount
+                + ", paymentMode=" + paymentMode + ", products=" + products + ", userAddress=" + userAddress + "]";
+    }
+
+        
 
 
 }

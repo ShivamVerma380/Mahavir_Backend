@@ -11,6 +11,7 @@ import java.util.Map;
 
 import com.brewingjava.mahavir.daos.admin.AdminDao;
 import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
+import com.brewingjava.mahavir.daos.orders.OrderDetailsDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
 import com.brewingjava.mahavir.daos.product.ProductReivewsDao;
 import com.brewingjava.mahavir.daos.user.UserDao;
@@ -70,6 +71,9 @@ public class ProductDetailsService {
 
     @Autowired
     public ProductReivewsDao productReviewsDao;
+
+    @Autowired
+    public OrderDetailsDao orderDetailsDao;
 
     @Autowired
     public Review review;
@@ -269,6 +273,131 @@ public class ProductDetailsService {
         }
     }
 
+    
+
+    public ResponseEntity<?> addReview(String authorization,String modelNumber,int orderId,long rating,String review,String date){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest userRequest = userDao.findByEmail(email);
+            if(userRequest==null){
+                responseMessage.setMessage("User Not Found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }           
+            ArrayList<OrderDetails> userOrders = (ArrayList<OrderDetails>) userRequest.getProductsBoughtByUser();
+            for(int i=0;i<userOrders.size();i++){
+                if(userOrders.get(i).getOrderId()==orderId){
+                    // HashMap<String,Integer> products = userOrders.get(i).getProducts();
+                    HashMap<String,Boolean> isproductRated = userOrders.get(i).getIsProductRated();
+                    for(Map.Entry<String,Boolean> map:isproductRated.entrySet()){
+                        if(map.getKey().equals(modelNumber)){
+                            if(map.getValue()==true){
+                                responseMessage.setMessage("You have already rated the product");
+                                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                            }
+                            isproductRated.put(modelNumber,true);
+                            OrderDetails orderDetails = orderDetailsDao.getOrderDetailsByOrderId(orderId);
+                            orderDetails.setIsProductRated(isproductRated);
+                            orderDetailsDao.save(orderDetails);
+                            userOrders.get(i).setIsProductRated(isproductRated);
+                            userRequest.setProductsBoughtByUser(userOrders);
+                            userDao.save(userRequest);
+                            ProductReviews productReviews = productReviewsDao.findProductReviewsBymodelNumber(modelNumber);
+                            if(productReviews==null){
+                                ProductReviews new_productReview = new ProductReviews();
+                                new_productReview.setAverageRatings(0);
+                                new_productReview.setModelNumber(modelNumber);
+                                new_productReview.setNosOfFiveStars(0);
+                                new_productReview.setNosOfFourStars(0);
+                                new_productReview.setNosOfOneStars(0);
+                                new_productReview.setNosOfThreeStars(0);
+                                new_productReview.setNosOfTwoStars(0);
+                                new_productReview.setTotalRatings(0);
+                                new_productReview.setTotalReviews(0);
+                                new_productReview.setReviews(new ArrayList<>());
+                                Review reviewObj = new Review();
+                                reviewObj.setDate(date);
+                                reviewObj.setRating(rating);
+                                reviewObj.setReviewer_name(userRequest.getFirstName()+" "+userRequest.getLastName());
+                                reviewObj.setReview(review);
+                                List<Review> reviews = new_productReview.getReviews();
+                                reviews.add(reviewObj);
+                                new_productReview.setReviews(reviews);
+                                if(rating==1){
+                                    new_productReview.setNosOfOneStars(new_productReview.getNosOfOneStars()+1);
+
+                                }else if(rating==2){
+                                    new_productReview.setNosOfTwoStars(new_productReview.getNosOfTwoStars()+1);
+
+                                }else if(rating==3){
+                                    new_productReview.setNosOfThreeStars(new_productReview.getNosOfThreeStars()+1);
+
+                                }else if(rating==4){
+                                    new_productReview.setNosOfFourStars(new_productReview.getNosOfFourStars()+1);
+
+                                }else if(rating==5) {
+                                    new_productReview.setNosOfFiveStars(new_productReview.getNosOfFiveStars()+1);
+                                }
+                                new_productReview.setTotalRatings(new_productReview.getTotalRatings()+1);
+                                new_productReview.setTotalReviews(new_productReview.getTotalReviews()+1);
+                                double avg = (1*new_productReview.getNosOfOneStars()+ 2*new_productReview.getNosOfTwoStars()+3*new_productReview.getNosOfThreeStars()+4*new_productReview.getNosOfFourStars()+5*new_productReview.getNosOfFiveStars())/new_productReview.getTotalRatings();
+                                new_productReview.setAverageRatings(avg);
+                                productReviewsDao.save(new_productReview);
+                                
+                                ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+                                productDetail.setAverageRating(avg);
+                                productDetailsDao.save(productDetail);
+
+
+
+                                responseMessage.setMessage("Product Review added successfully");
+                                return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                            }
+                            Review reviewObj = new Review();
+                            reviewObj.setDate(date);
+                            reviewObj.setRating(rating);
+                            reviewObj.setReviewer_name(userRequest.getFirstName()+" "+userRequest.getLastName());
+                            reviewObj.setReview(review);
+                            List<Review> reviews = productReviews.getReviews();
+                            reviews.add(reviewObj);
+                            productReviews.setReviews(reviews);
+                            if(rating==1){
+                                productReviews.setNosOfOneStars(productReviews.getNosOfOneStars()+1);
+
+                            }else if(rating==2){
+                                productReviews.setNosOfTwoStars(productReviews.getNosOfTwoStars()+1);
+
+                            }else if(rating==3){
+                                productReviews.setNosOfThreeStars(productReviews.getNosOfThreeStars()+1);
+
+                            }else if(rating==4){
+                                productReviews.setNosOfFourStars(productReviews.getNosOfFourStars()+1);
+
+                            }else if(rating==5) {
+                                productReviews.setNosOfFiveStars(productReviews.getNosOfFiveStars()+1);
+                            }
+                            productReviews.setTotalRatings(productReviews.getTotalRatings()+1);
+                            double avg = (1*productReviews.getNosOfOneStars()+ 2*productReviews.getNosOfTwoStars()+3*productReviews.getNosOfThreeStars()+4*productReviews.getNosOfFourStars()+5*productReviews.getNosOfFiveStars())/(double)(productReviews.getTotalRatings());
+                            productReviews.setAverageRatings(avg);
+                            productReviews.setTotalReviews(productReviews.getTotalReviews()+1);
+                            productReviewsDao.save(productReviews);
+                            responseMessage.setMessage("Product Review added successfully");
+                            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                        }
+                    }
+                    responseMessage.setMessage("Model Not found");
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+                }
+            }
+            responseMessage.setMessage("Order Not Found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }    
+    }
+
     // public ResponseEntity<?> addReview(String auth,String modelNumber,long rating,String review,String date){
     //     try {
     //         String token = auth.substring(7);
@@ -291,86 +420,86 @@ public class ProductDetailsService {
     //             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
     //         }
             
-    //         ProductReviews productReviews = productReviewsDao.findProductReviewsBymodelNumber(modelNumber);
-    //         if(productReviews==null){
-    //             ProductReviews new_productReview = new ProductReviews();
-    //             new_productReview.setAverageRatings(0);
-    //             new_productReview.setModelNumber(modelNumber);
-    //             new_productReview.setNosOfFiveStars(0);
-    //             new_productReview.setNosOfFourStars(0);
-    //             new_productReview.setNosOfOneStars(0);
-    //             new_productReview.setNosOfThreeStars(0);
-    //             new_productReview.setNosOfTwoStars(0);
-    //             new_productReview.setTotalRatings(0);
-    //             new_productReview.setTotalReviews(0);
-    //             new_productReview.setReviews(new ArrayList<>());
-    //             Review reviewObj = new Review();
-    //             reviewObj.setDate(date);
-    //             reviewObj.setRating(rating);
-    //             reviewObj.setReviewer_name(userRequest.getFirstName()+" "+userRequest.getLastName());
-    //             reviewObj.setReview(review);
-    //             List<Review> reviews = new_productReview.getReviews();
-    //             reviews.add(reviewObj);
-    //             new_productReview.setReviews(reviews);
-    //             if(rating==1){
-    //                 new_productReview.setNosOfOneStars(new_productReview.getNosOfOneStars()+1);
+            // ProductReviews productReviews = productReviewsDao.findProductReviewsBymodelNumber(modelNumber);
+            // if(productReviews==null){
+            //     ProductReviews new_productReview = new ProductReviews();
+            //     new_productReview.setAverageRatings(0);
+            //     new_productReview.setModelNumber(modelNumber);
+            //     new_productReview.setNosOfFiveStars(0);
+            //     new_productReview.setNosOfFourStars(0);
+            //     new_productReview.setNosOfOneStars(0);
+            //     new_productReview.setNosOfThreeStars(0);
+            //     new_productReview.setNosOfTwoStars(0);
+            //     new_productReview.setTotalRatings(0);
+            //     new_productReview.setTotalReviews(0);
+            //     new_productReview.setReviews(new ArrayList<>());
+            //     Review reviewObj = new Review();
+            //     reviewObj.setDate(date);
+            //     reviewObj.setRating(rating);
+            //     reviewObj.setReviewer_name(userRequest.getFirstName()+" "+userRequest.getLastName());
+            //     reviewObj.setReview(review);
+            //     List<Review> reviews = new_productReview.getReviews();
+            //     reviews.add(reviewObj);
+            //     new_productReview.setReviews(reviews);
+            //     if(rating==1){
+            //         new_productReview.setNosOfOneStars(new_productReview.getNosOfOneStars()+1);
 
-    //             }else if(rating==2){
-    //                 new_productReview.setNosOfTwoStars(new_productReview.getNosOfTwoStars()+1);
+            //     }else if(rating==2){
+            //         new_productReview.setNosOfTwoStars(new_productReview.getNosOfTwoStars()+1);
 
-    //             }else if(rating==3){
-    //                 new_productReview.setNosOfThreeStars(new_productReview.getNosOfThreeStars()+1);
+            //     }else if(rating==3){
+            //         new_productReview.setNosOfThreeStars(new_productReview.getNosOfThreeStars()+1);
 
-    //             }else if(rating==4){
-    //                 new_productReview.setNosOfFourStars(new_productReview.getNosOfFourStars()+1);
+            //     }else if(rating==4){
+            //         new_productReview.setNosOfFourStars(new_productReview.getNosOfFourStars()+1);
 
-    //             }else if(rating==5) {
-    //                 new_productReview.setNosOfFiveStars(new_productReview.getNosOfFiveStars()+1);
-    //             }
-    //             new_productReview.setTotalRatings(new_productReview.getTotalRatings()+1);
-    //             new_productReview.setTotalReviews(new_productReview.getTotalReviews()+1);
-    //             double avg = (1*new_productReview.getNosOfOneStars()+ 2*new_productReview.getNosOfTwoStars()+3*new_productReview.getNosOfThreeStars()+4*new_productReview.getNosOfFourStars()+5*new_productReview.getNosOfFiveStars())/new_productReview.getTotalRatings();
-    //             new_productReview.setAverageRatings(avg);
-    //             productReviewsDao.save(new_productReview);
+            //     }else if(rating==5) {
+            //         new_productReview.setNosOfFiveStars(new_productReview.getNosOfFiveStars()+1);
+            //     }
+            //     new_productReview.setTotalRatings(new_productReview.getTotalRatings()+1);
+            //     new_productReview.setTotalReviews(new_productReview.getTotalReviews()+1);
+            //     double avg = (1*new_productReview.getNosOfOneStars()+ 2*new_productReview.getNosOfTwoStars()+3*new_productReview.getNosOfThreeStars()+4*new_productReview.getNosOfFourStars()+5*new_productReview.getNosOfFiveStars())/new_productReview.getTotalRatings();
+            //     new_productReview.setAverageRatings(avg);
+            //     productReviewsDao.save(new_productReview);
                 
-    //             ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
-    //             productDetail.setAverageRating(avg);
-    //             productDetailsDao.save(productDetail);
+            //     ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+            //     productDetail.setAverageRating(avg);
+            //     productDetailsDao.save(productDetail);
 
-    //             responseMessage.setMessage("Product Review added successfully");
-    //             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    //         }
-    //         Review reviewObj = new Review();
-    //         reviewObj.setDate(date);
-    //         reviewObj.setRating(rating);
-    //         reviewObj.setReviewer_name(userRequest.getFirstName()+" "+userRequest.getLastName());
-    //         reviewObj.setReview(review);
-    //         List<Review> reviews = productReviews.getReviews();
-    //         reviews.add(reviewObj);
-    //         productReviews.setReviews(reviews);
-    //         if(rating==1){
-    //             productReviews.setNosOfOneStars(productReviews.getNosOfOneStars()+1);
+            //     responseMessage.setMessage("Product Review added successfully");
+            //     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+            // }
+            // Review reviewObj = new Review();
+            // reviewObj.setDate(date);
+            // reviewObj.setRating(rating);
+            // reviewObj.setReviewer_name(userRequest.getFirstName()+" "+userRequest.getLastName());
+            // reviewObj.setReview(review);
+            // List<Review> reviews = productReviews.getReviews();
+            // reviews.add(reviewObj);
+            // productReviews.setReviews(reviews);
+            // if(rating==1){
+            //     productReviews.setNosOfOneStars(productReviews.getNosOfOneStars()+1);
 
-    //         }else if(rating==2){
-    //             productReviews.setNosOfTwoStars(productReviews.getNosOfTwoStars()+1);
+            // }else if(rating==2){
+            //     productReviews.setNosOfTwoStars(productReviews.getNosOfTwoStars()+1);
 
-    //         }else if(rating==3){
-    //             productReviews.setNosOfThreeStars(productReviews.getNosOfThreeStars()+1);
+            // }else if(rating==3){
+        //         productReviews.setNosOfThreeStars(productReviews.getNosOfThreeStars()+1);
 
-    //         }else if(rating==4){
-    //             productReviews.setNosOfFourStars(productReviews.getNosOfFourStars()+1);
+        //     }else if(rating==4){
+        //         productReviews.setNosOfFourStars(productReviews.getNosOfFourStars()+1);
 
-    //         }else if(rating==5) {
-    //             productReviews.setNosOfFiveStars(productReviews.getNosOfFiveStars()+1);
-    //         }
-    //         productReviews.setTotalRatings(productReviews.getTotalRatings()+1);
-    //         double avg = (1*productReviews.getNosOfOneStars()+ 2*productReviews.getNosOfTwoStars()+3*productReviews.getNosOfThreeStars()+4*productReviews.getNosOfFourStars()+5*productReviews.getNosOfFiveStars())/(double)(productReviews.getTotalRatings());
-    //         productReviews.setAverageRatings(avg);
-    //         productReviews.setTotalReviews(productReviews.getTotalReviews()+1);
-    //         productReviewsDao.save(productReviews);
-    //         responseMessage.setMessage("Product Review added successfully");
-    //         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-    //     } catch (Exception e) {
+        //     }else if(rating==5) {
+        //         productReviews.setNosOfFiveStars(productReviews.getNosOfFiveStars()+1);
+        //     }
+        //     productReviews.setTotalRatings(productReviews.getTotalRatings()+1);
+        //     double avg = (1*productReviews.getNosOfOneStars()+ 2*productReviews.getNosOfTwoStars()+3*productReviews.getNosOfThreeStars()+4*productReviews.getNosOfFourStars()+5*productReviews.getNosOfFiveStars())/(double)(productReviews.getTotalRatings());
+        //     productReviews.setAverageRatings(avg);
+        //     productReviews.setTotalReviews(productReviews.getTotalReviews()+1);
+        //     productReviewsDao.save(productReviews);
+        //     responseMessage.setMessage("Product Review added successfully");
+        //     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        // } catch (Exception e) {
     //         e.printStackTrace();
     //         responseMessage.setMessage(e.getMessage());
     //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
