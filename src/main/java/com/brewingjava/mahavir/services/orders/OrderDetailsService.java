@@ -19,6 +19,7 @@ import com.brewingjava.mahavir.entities.orders.OrderDetails;
 import com.brewingjava.mahavir.entities.user.UserRequest;
 import com.brewingjava.mahavir.helper.JwtUtil;
 import com.brewingjava.mahavir.helper.ResponseMessage;
+import com.brewingjava.mahavir.helper.orders.EmailOrder;
 
 @Component
 public class OrderDetailsService {
@@ -31,6 +32,9 @@ public class OrderDetailsService {
 
     @Autowired
     public JwtUtil jwtUtil;
+
+    @Autowired
+    public EmailOrder emailOrder;
 
 
     @Autowired
@@ -71,6 +75,10 @@ public class OrderDetailsService {
             }
 
             orderDetailsDao.save(orderDetails);
+
+            emailOrder.sendEmailToAdmin("shivam380.testing@gmail.com",orderDetails);
+            emailOrder.sendEmailToUser(email, userRequest.getFirstName(), orderDetails);
+
             List<OrderDetails> productsBoughtByUser = userRequest.getProductsBoughtByUser();
             if(productsBoughtByUser==null){
                 productsBoughtByUser = new ArrayList<>();
@@ -103,6 +111,16 @@ public class OrderDetailsService {
                 return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
             }
             return ResponseEntity.status(HttpStatus.OK).body(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getAllOrders(){
+        try {
+            return ResponseEntity.ok().body(orderDetailsDao.findAll());
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

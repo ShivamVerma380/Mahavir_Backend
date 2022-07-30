@@ -54,4 +54,15 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/orders")
+    public ResponseEntity<?> getAllOrders(){
+        try {
+            return orderDetailsService.getAllOrders();
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);       
+        }
+    }
+
 }
