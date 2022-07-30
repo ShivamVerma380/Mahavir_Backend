@@ -66,7 +66,7 @@ public class EmailOrder {
            
 
 
-            String message = "Dear Sushil,\n"+"Deliver The Following order:\n"+orderDetails.toString()+"\nThanks & Regards,\nShivam Verma";
+            String message = "Dear Sushil,\n"+"Deliver The Following order:\n"+"Buy Date:"+orderDetails.getBuyDate()+""+"\nThanks & Regards,\nShivam Verma";
 
             m.setText(message);
 
