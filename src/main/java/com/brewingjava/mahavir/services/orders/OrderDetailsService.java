@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import com.brewingjava.mahavir.daos.admin.AdminDao;
 import com.brewingjava.mahavir.daos.orders.OrderDetailsDao;
 import com.brewingjava.mahavir.daos.user.UserDao;
 import com.brewingjava.mahavir.entities.admin.Admin;
@@ -40,6 +41,9 @@ public class OrderDetailsService {
     @Autowired
     public UserDao userDao;
 
+    @Autowired
+    public AdminDao adminDao;
+  
     public ResponseEntity<?> addOrder(String authorization,OrderDetails orderDetails){
         try {
             String token = authorization.substring(7);
@@ -138,6 +142,44 @@ public class OrderDetailsService {
                 }
             }
             return ResponseEntity.ok().body(pendingOrders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getCompletedOrders() {
+        try {
+            ArrayList<OrderDetails> list = (ArrayList<OrderDetails>)orderDetailsDao.findAll();
+            ArrayList<OrderDetails> completedOrders = new ArrayList<>();
+            for(int i=0;i<list.size();i++){
+                if(list.get(i).isOrderCompleted()){
+                    completedOrders.add(list.get(i));
+                }
+            }
+            return ResponseEntity.ok().body(completedOrders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> updateOrderStatus(String authorization,int orderId,String deliveryDate) {
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            Admin admin = adminDao.findByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Admin Not Found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            OrderDetails orderDetails = orderDetailsDao.getOrderDetailsByOrderId(orderId);
+            orderDetails.setDeliveryDate(deliveryDate);
+            orderDetails.setOrderCompleted(true);
+            responseMessage.setMessage("Order updated successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

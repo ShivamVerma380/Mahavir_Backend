@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -76,4 +78,25 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/completed-orders")
+    public ResponseEntity<?> getCompletedOrders(){
+        try {
+            return orderDetailsService.getCompletedOrders();
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @PutMapping("/order/{orderId}/{deliveryDate}")
+    public ResponseEntity<?> updateOrderStatus(@RequestHeader("Authorization") String authorization,@PathVariable("orderId") String orderId,@PathVariable("deliveryDate") String deliveryDate){
+        try {
+            return orderDetailsService.updateOrderStatus(authorization,Integer.parseInt(orderId),deliveryDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 }
