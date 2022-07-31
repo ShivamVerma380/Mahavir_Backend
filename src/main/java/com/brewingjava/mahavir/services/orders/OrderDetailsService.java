@@ -178,6 +178,7 @@ public class OrderDetailsService {
             OrderDetails orderDetails = orderDetailsDao.getOrderDetailsByOrderId(orderId);
             orderDetails.setDeliveryDate(deliveryDate);
             orderDetails.setOrderCompleted(true);
+            orderDetailsDao.save(orderDetails);
             responseMessage.setMessage("Order updated successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {

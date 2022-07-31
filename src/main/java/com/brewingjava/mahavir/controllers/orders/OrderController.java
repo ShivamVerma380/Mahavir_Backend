@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brewingjava.mahavir.daos.orders.OrderDetailsDao;
@@ -89,8 +90,8 @@ public class OrderController {
         }
     }
 
-    @PutMapping("/order/{orderId}/{deliveryDate}")
-    public ResponseEntity<?> updateOrderStatus(@RequestHeader("Authorization") String authorization,@PathVariable("orderId") String orderId,@PathVariable("deliveryDate") String deliveryDate){
+    @PostMapping("/order-status")
+    public ResponseEntity<?> updateOrderStatus(@RequestHeader("Authorization") String authorization,@RequestParam("orderId") String orderId,@RequestParam("deliveryDate") String deliveryDate){
         try {
             return orderDetailsService.updateOrderStatus(authorization,Integer.parseInt(orderId),deliveryDate);
         } catch (Exception e) {
