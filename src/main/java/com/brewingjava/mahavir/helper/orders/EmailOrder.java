@@ -1,5 +1,6 @@
 package com.brewingjava.mahavir.helper.orders;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -71,15 +72,21 @@ public class EmailOrder {
             m.setSubject(subject);
 
            
-            Map<String,Integer> map = new HashMap<>();
+            // Map<String,Integer> map = new HashMap<>();
+            ArrayList<OrderResponse> list = new ArrayList<>();
             for(Map.Entry<String,Integer> mp: orderDetails.getProducts().entrySet()){
                 String modelNumber = mp.getKey();
                 ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
-                map.put(productDetail.getProductName(),mp.getValue());
+                // map.put(productDetail.getProductName(),mp.getValue());
+                OrderResponse orderResponse = new OrderResponse();
+                orderResponse.setProductId(productDetail.getProductId());
+                orderResponse.setProductName(productDetail.getProductName());
+                orderResponse.setQuantity(mp.getValue());
+                list.add(orderResponse);
             }
 
             String message = "Dear Sushil,\n"+"Deliver The Following order:\n"+"Buy Date:"+orderDetails.getBuyDate()+"\nBuyer Email: "+orderDetails.getBuyerEmail()+"\nPayment Amount:Rs "+orderDetails.getPaymentAmount()+"\nPayment Mode:"+orderDetails.getPaymentMode()+"\nUser Address:"+orderDetails.getUserAddress()+
-            "\nOrder To Deliver:"+map+"\nThanks & Regards,\nShivam Verma";
+            "\nOrder To Deliver:\n"+list+"\nThanks & Regards,\nShivam Verma";
 
             m.setText(message);
 
