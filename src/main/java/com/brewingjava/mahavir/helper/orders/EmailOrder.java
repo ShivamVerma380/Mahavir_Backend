@@ -1,5 +1,7 @@
 package com.brewingjava.mahavir.helper.orders;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -16,13 +18,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
 import com.brewingjava.mahavir.entities.orders.OrderDetails;
+import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.helper.ResponseMessage;
 
 
 @Component
 public class EmailOrder {
 
+
+    @Autowired
+    public ProductDetailsDao productDetailsDao;
     
 
     public void sendEmailToAdmin(String email,OrderDetails orderDetails){
@@ -64,9 +71,15 @@ public class EmailOrder {
             m.setSubject(subject);
 
            
+            Map<String,Integer> map = new HashMap<>();
+            for(Map.Entry<String,Integer> mp: orderDetails.getProducts().entrySet()){
+                String modelNumber = mp.getKey();
+                ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+                map.put(productDetail.getProductName(),mp.getValue());
+            }
 
-
-            String message = "Dear Sushil,\n"+"Deliver The Following order:\n"+"Buy Date:"+orderDetails.getBuyDate()+""+"\nThanks & Regards,\nShivam Verma";
+            String message = "Dear Sushil,\n"+"Deliver The Following order:\n"+"Buy Date:"+orderDetails.getBuyDate()+"\nBuyer Email: "+orderDetails.getBuyerEmail()+"\nPayment Amount:Rs "+orderDetails.getPaymentAmount()+"\nPayment Mode:"+orderDetails.getPaymentMode()+"\nUser Address:"+orderDetails.getUserAddress()+
+            "\nOrder To Deliver:"+map+"\nThanks & Regards,\nShivam Verma";
 
             m.setText(message);
 
@@ -115,10 +128,16 @@ public class EmailOrder {
 
             m.setSubject(subject);
 
+            Map<String,Integer> map = new HashMap<>();
+            for(Map.Entry<String,Integer> mp: orderDetails.getProducts().entrySet()){
+                String modelNumber = mp.getKey();
+                ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+                map.put(productDetail.getProductName(),mp.getValue());
+            }
            
 
 
-            String message = "Dear "+name+",\n"+"Thank you for shopping with Mahavir Electronics.\nYour order:\n"+orderDetails.toString()+"\nThanks & Regards,\nSushil Oswal";
+            String message = "Dear "+name+",\n"+"Thank you for shopping with Mahavir Electronics.\n"+"Buy Date:"+orderDetails.getBuyDate()+"\nBuyer Email: "+orderDetails.getBuyerEmail()+"\nPayment Amount:Rs "+orderDetails.getPaymentAmount()+"\nPayment Mode:"+orderDetails.getPaymentMode()+"\nUser Address:"+orderDetails.getUserAddress()+"\nOrder Details:"+map+"\nThanks & Regards,\nSushil Oswal";
 
             m.setText(message);
 

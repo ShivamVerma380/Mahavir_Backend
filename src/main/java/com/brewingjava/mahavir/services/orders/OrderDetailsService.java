@@ -128,4 +128,23 @@ public class OrderDetailsService {
         }
     }
 
+    public ResponseEntity<?> getPendingOrders() {
+        try {
+            ArrayList<OrderDetails> list = (ArrayList<OrderDetails>)orderDetailsDao.findAll();
+            ArrayList<OrderDetails> pendingOrders = new ArrayList<>();
+            for(int i=0;i<list.size();i++){
+                if(!list.get(i).isOrderCompleted()){
+                    pendingOrders.add(list.get(i));
+                }
+            }
+            return ResponseEntity.ok().body(pendingOrders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    
+
 }

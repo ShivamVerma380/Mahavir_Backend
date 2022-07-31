@@ -31,6 +31,8 @@ public class OrderDetails {
 
     private String paymentAmount;
 
+    private boolean isOrderCompleted = false;
+
 
     public OrderDetails() {
     
@@ -140,12 +142,27 @@ public class OrderDetails {
     }
 
 
+    public boolean isOrderCompleted() {
+        return isOrderCompleted;
+    }
+    
+
+
+    public void setOrderCompleted(boolean isOrderCompleted) {
+        this.isOrderCompleted = isOrderCompleted;
+    }
+
+
     @Override
     public String toString() {
         return "OrderDetails [buyDate=" + buyDate + ", buyerEmail=" + buyerEmail + ", deliveryDate=" + deliveryDate
-                + ", isProductRated=" + isProductRated + ", orderId=" + orderId + ", paymentAmount=" + paymentAmount
-                + ", paymentMode=" + paymentMode + ", products=" + products + ", userAddress=" + userAddress + "]";
+                + ", isOrderCompleted=" + isOrderCompleted + ", isProductRated=" + isProductRated + ", orderId="
+                + orderId + ", paymentAmount=" + paymentAmount + ", paymentMode=" + paymentMode + ", products="
+                + products + ", userAddress=" + userAddress + "]";
     }
+
+
+    
 
         
 

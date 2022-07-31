@@ -65,4 +65,15 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/pending-orders")
+    public ResponseEntity<?> getPendingOrders(){
+        try {
+            return orderDetailsService.getPendingOrders();
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 }
