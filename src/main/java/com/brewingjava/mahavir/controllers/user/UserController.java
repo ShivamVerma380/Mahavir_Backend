@@ -203,4 +203,15 @@ public class UserController {
     }
 
 
+    @GetMapping("/my-orders")
+    public ResponseEntity<?> getMyOrders(@RequestHeader("Authorization") String authorization){
+        try {
+            return userService.getMyOrders(authorization);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 }

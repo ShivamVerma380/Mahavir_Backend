@@ -1,9 +1,11 @@
 package com.brewingjava.mahavir.services.user;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import com.brewingjava.mahavir.config.MySecurityConfig;
 import com.brewingjava.mahavir.daos.admin.AdminDao;
@@ -13,12 +15,14 @@ import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
 import com.brewingjava.mahavir.daos.user.UserDao;
 import com.brewingjava.mahavir.entities.admin.Admin;
 import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
+import com.brewingjava.mahavir.entities.orders.OrderDetails;
 import com.brewingjava.mahavir.entities.product.ProductDetail;
 import com.brewingjava.mahavir.entities.user.UserAddress;
 import com.brewingjava.mahavir.entities.user.UserRequest;
 import com.brewingjava.mahavir.helper.JwtResponse;
 import com.brewingjava.mahavir.helper.JwtUtil;
 import com.brewingjava.mahavir.helper.ResponseMessage;
+import com.brewingjava.mahavir.helper.orders.MyOrdersUserResponse;
 import com.brewingjava.mahavir.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators.Add;
@@ -545,6 +549,48 @@ public class UserService {
             }
             responseMessage.setMessage("Product not found in wishlist");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getMyOrders(String authorization) {
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest userRequest = userDao.findByEmail(email);
+            ArrayList<OrderDetails> list = (ArrayList<OrderDetails>) userRequest.getProductsBoughtByUser();
+            ArrayList<MyOrdersUserResponse> myOrders = new ArrayList<>();
+            for(int i=0;i<list.size();i++){
+                HashMap<String,Integer> map = list.get(i).getProducts();
+                HashMap<String,Boolean> rating = list.get(i).getIsProductRated();
+                for(Map.Entry<String,Integer> mp:map.entrySet()){
+                    String modelNumber = mp.getKey();
+                    ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+                    MyOrdersUserResponse myOrdersUserResponse = new MyOrdersUserResponse();
+                    myOrdersUserResponse.setModelNumber(modelNumber);
+                    myOrdersUserResponse.setProductId(productDetail.getProductId());
+                    myOrdersUserResponse.setProductPrice(productDetail.getProductPrice());
+                    myOrdersUserResponse.setOfferPrice(productDetail.getOfferPrice());
+                    myOrdersUserResponse.setCategory(productDetail.getCategory());
+                    myOrdersUserResponse.setBuyDate(list.get(i).getBuyDate());
+                    myOrdersUserResponse.setDeliveryDate(list.get(i).getDeliveryDate());
+                    myOrdersUserResponse.setOrderCompleted(list.get(i).isOrderCompleted());
+                    myOrdersUserResponse.setQuantity(mp.getValue());
+                    myOrdersUserResponse.setPaymentMode(list.get(i).getPaymentMode());
+                    // myOrdersUserResponse.setPaymentAmount(list.get(i).get());
+                    myOrdersUserResponse.setFiltercriterias(productDetail.getFiltercriterias());
+                    myOrdersUserResponse.setProductHighlights(productDetail.getProductHighlights());
+                    myOrdersUserResponse.setProductImage1(productDetail.getProductImage1());
+                    myOrdersUserResponse.setSubCategoryMap(productDetail.getSubCategoryMap());
+                    myOrdersUserResponse.setUserAddress(list.get(i).getUserAddress());
+                    myOrders.add(myOrdersUserResponse);
+                }
+
+            }
+            return ResponseEntity.ok(myOrders);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
