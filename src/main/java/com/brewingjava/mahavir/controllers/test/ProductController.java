@@ -41,6 +41,18 @@ public class ProductController {
     public ProductDetailsDao productDao;
     
 
+    @GetMapping("/")
+    public ResponseEntity<?> getWelcome(){
+        try {
+            responseMessage.setMessage("Welcome");
+            return ResponseEntity.ok(responseMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 
     @PostMapping("/excel/products")
     public ResponseEntity<?> addProducts(@RequestParam("file") MultipartFile file){
