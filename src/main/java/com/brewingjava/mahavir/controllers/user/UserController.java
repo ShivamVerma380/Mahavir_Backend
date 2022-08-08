@@ -39,8 +39,8 @@ public class UserController {
         }
     }
 
-    @PutMapping("/updatePassword/{password}")
-    public ResponseEntity<?> updatePassword(@RequestHeader("Authorization") String authorization,@PathVariable("password") String password){
+    @PostMapping("/updatePassword")
+    public ResponseEntity<?> updatePassword(@RequestHeader("Authorization") String authorization,@RequestParam("password") String password){
         try {
             return userService.updatePassword(authorization, password);
         } catch (Exception e) {
