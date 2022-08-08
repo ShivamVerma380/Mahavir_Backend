@@ -598,5 +598,34 @@ public class UserService {
         }
     }
 
+    public ResponseEntity<?> deleteAddress(String authorization, UserAddress userAddress) {
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest userRequest = userDao.findByEmail(email);
+            if(userRequest==null){
+                responseMessage.setMessage("User Not Found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            ArrayList<UserAddress> address = userRequest.getUserAdresses();
+            for(int i=0;i<address.size();i++){
+                if(address.get(i).getAddress().equals(userAddress.getAddress()) && address.get(i).getCity().equals(userAddress.getCity()) && address.get(i).getState().equals(userAddress.getState()) && address.get(i).getPincode().equals(userAddress.getPincode())){
+                    address.remove(i);
+                    userRequest.setUserAdresses(address);
+                    userDao.save(userRequest);
+                    responseMessage.setMessage("Address deleted");
+                    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+                }
+            }
+            responseMessage.setMessage("Address not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 
 }

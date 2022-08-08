@@ -61,6 +61,17 @@ public class UserController {
         }
     }
 
+    @PostMapping("/delete-address")
+    public ResponseEntity<?> deleteAddress(@RequestHeader("Authorization") String authorization, @RequestBody UserAddress userAddress){
+        try {
+            return userService.deleteAddress(authorization,userAddress);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 
     @GetMapping("/address")
     public ResponseEntity<?> getAddresses(@RequestHeader("Authorization") String authorization){
