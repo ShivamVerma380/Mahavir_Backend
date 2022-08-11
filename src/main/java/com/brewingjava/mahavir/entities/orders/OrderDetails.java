@@ -31,6 +31,8 @@ public class OrderDetails {
 
     private String paymentAmount;
 
+    private String paymentId;
+
     private boolean isOrderCompleted = false;
 
 
@@ -39,17 +41,27 @@ public class OrderDetails {
     }
 
 
-    public OrderDetails(int orderId, HashMap<String, Integer> products, String buyerEmail, String buyDate,
-            String deliveryDate, UserAddress userAddress, String paymentMode, String paymentAmount) {
+    
+
+
+    public OrderDetails(int orderId, HashMap<String, Integer> products, HashMap<String, Boolean> isProductRated,
+            String buyerEmail, String buyDate, String deliveryDate, UserAddress userAddress, String paymentMode,
+            String paymentAmount, String paymentId, boolean isOrderCompleted) {
         this.orderId = orderId;
         this.products = products;
+        this.isProductRated = isProductRated;
         this.buyerEmail = buyerEmail;
         this.buyDate = buyDate;
         this.deliveryDate = deliveryDate;
         this.userAddress = userAddress;
         this.paymentMode = paymentMode;
         this.paymentAmount = paymentAmount;
+        this.paymentId = paymentId;
+        this.isOrderCompleted = isOrderCompleted;
     }
+
+
+
 
 
     public int getOrderId() {
@@ -153,14 +165,35 @@ public class OrderDetails {
     }
 
 
+
+
+
+    public String getPaymentId() {
+        return paymentId;
+    }
+
+
+
+
+
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
+
+
+
+
+
     @Override
     public String toString() {
         return "OrderDetails [buyDate=" + buyDate + ", buyerEmail=" + buyerEmail + ", deliveryDate=" + deliveryDate
                 + ", isOrderCompleted=" + isOrderCompleted + ", isProductRated=" + isProductRated + ", orderId="
-                + orderId + ", paymentAmount=" + paymentAmount + ", paymentMode=" + paymentMode + ", products="
-                + products + ", userAddress=" + userAddress + "]";
+                + orderId + ", paymentAmount=" + paymentAmount + ", paymentId=" + paymentId + ", paymentMode="
+                + paymentMode + ", products=" + products + ", userAddress=" + userAddress + "]";
     }
 
+    
+    
 
     
 
