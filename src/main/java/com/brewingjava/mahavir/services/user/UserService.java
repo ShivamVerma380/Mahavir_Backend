@@ -571,6 +571,7 @@ public class UserService {
                     ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
                     MyOrdersUserResponse myOrdersUserResponse = new MyOrdersUserResponse();
                     myOrdersUserResponse.setModelNumber(modelNumber);
+                    myOrdersUserResponse.setProductName(productDetail.getProductName());
                     myOrdersUserResponse.setProductId(productDetail.getProductId());
                     myOrdersUserResponse.setProductPrice(productDetail.getProductPrice());
                     myOrdersUserResponse.setOfferPrice(productDetail.getOfferPrice());
