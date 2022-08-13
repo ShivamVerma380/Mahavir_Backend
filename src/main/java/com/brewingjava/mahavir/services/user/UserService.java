@@ -580,6 +580,7 @@ public class UserService {
                     String modelNumber = mp.getKey();
                     ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
                     MyOrdersUserResponse myOrdersUserResponse = new MyOrdersUserResponse();
+                    myOrdersUserResponse.setOrderId(list.get(i).getOrderId());
                     myOrdersUserResponse.setModelNumber(modelNumber);
                     myOrdersUserResponse.setProductName(productDetail.getProductName());
                     myOrdersUserResponse.setProductId(productDetail.getProductId());

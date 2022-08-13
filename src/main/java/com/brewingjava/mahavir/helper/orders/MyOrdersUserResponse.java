@@ -9,6 +9,8 @@ import com.brewingjava.mahavir.entities.user.UserAddress;
 
 @Component
 public class MyOrdersUserResponse {
+
+    public int orderId;
     
     public String modelNumber;
 
@@ -76,6 +78,8 @@ public class MyOrdersUserResponse {
         this.isProductRated = isProductRated;
         this.userAddress = userAddress;
     }
+
+    
 
     public String getModelNumber() {
         return modelNumber;
@@ -230,6 +234,14 @@ public class MyOrdersUserResponse {
                 + productHighlights + ", productId=" + productId + ", productImage1=" + productImage1 + ", productName="
                 + productName + ", productPrice=" + productPrice + ", quantity=" + quantity + ", subCategoryMap="
                 + subCategoryMap + ", userAddress=" + userAddress + "]";
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
 }
