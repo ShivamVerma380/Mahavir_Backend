@@ -598,6 +598,13 @@ public class UserService {
                     myOrdersUserResponse.setProductImage1(productDetail.getProductImage1());
                     myOrdersUserResponse.setSubCategoryMap(productDetail.getSubCategoryMap());
                     myOrdersUserResponse.setUserAddress(list.get(i).getUserAddress());
+                    // if(rating.get(modelNumber).equals("true")){
+                    //     myOrdersUserResponse.setIsProductRated(true);
+                    // }else{
+                    //     myOrdersUserResponse.setProductRated(false);
+                    // }
+                    myOrdersUserResponse.setProductRated(rating.get(modelNumber));
+                    
                     myOrders.add(myOrdersUserResponse);
                 }
 
