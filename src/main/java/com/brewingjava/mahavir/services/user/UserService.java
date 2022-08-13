@@ -561,7 +561,17 @@ public class UserService {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
             UserRequest userRequest = userDao.findByEmail(email);
-            ArrayList<OrderDetails> list = (ArrayList<OrderDetails>) userRequest.getProductsBoughtByUser();
+            
+            ArrayList<OrderDetails> userList = (ArrayList<OrderDetails>) userRequest.getProductsBoughtByUser();
+            
+            ArrayList<OrderDetails> list = new ArrayList<>();
+
+            for(int i=0;i<userList.size();i++){
+                OrderDetails orderDetails = userList.get(i);
+                OrderDetails updatedOrder = orderDetailsDao.getOrderDetailsByOrderId(orderDetails.getOrderId());
+                list.add(updatedOrder);
+            }
+            
             ArrayList<MyOrdersUserResponse> myOrders = new ArrayList<>();
             for(int i=0;i<list.size();i++){
                 HashMap<String,Integer> map = list.get(i).getProducts();
