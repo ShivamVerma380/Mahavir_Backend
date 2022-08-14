@@ -592,12 +592,15 @@ public class UserService {
                     myOrdersUserResponse.setOrderCompleted(list.get(i).isOrderCompleted());
                     myOrdersUserResponse.setQuantity(mp.getValue());
                     myOrdersUserResponse.setPaymentMode(list.get(i).getPaymentMode());
+                    myOrdersUserResponse.setPaymentAmount(list.get(i).getPaymentAmount());
                     // myOrdersUserResponse.setPaymentAmount(list.get(i).get());
                     myOrdersUserResponse.setFiltercriterias(productDetail.getFiltercriterias());
                     myOrdersUserResponse.setProductHighlights(productDetail.getProductHighlights());
                     myOrdersUserResponse.setProductImage1(productDetail.getProductImage1());
                     myOrdersUserResponse.setSubCategoryMap(productDetail.getSubCategoryMap());
                     myOrdersUserResponse.setUserAddress(list.get(i).getUserAddress());
+                    System.out.println("payment Id"+list.get(i).getPaymentId());
+                    myOrdersUserResponse.setPaymentId(list.get(i).getPaymentId());
                     // if(rating.get(modelNumber).equals("true")){
                     //     myOrdersUserResponse.setIsProductRated(true);
                     // }else{

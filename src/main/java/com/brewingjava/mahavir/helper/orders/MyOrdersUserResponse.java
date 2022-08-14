@@ -50,6 +50,8 @@ public class MyOrdersUserResponse {
 
     private UserAddress userAddress;
 
+    private String paymentId;
+
     public MyOrdersUserResponse() {
 
     }
@@ -225,6 +227,8 @@ public class MyOrdersUserResponse {
         this.userAddress = userAddress;
     }
 
+
+    
     @Override
     public String toString() {
         return "MyOrdersUserResponse [OfferPrice=" + OfferPrice + ", buyDate=" + buyDate + ", category=" + category
@@ -242,6 +246,14 @@ public class MyOrdersUserResponse {
 
     public void setOrderId(int orderId) {
         this.orderId = orderId;
+    }
+
+    public String getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
     }
 
 }
