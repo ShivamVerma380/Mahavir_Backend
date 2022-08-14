@@ -766,7 +766,7 @@ public class ProductDetailsService {
             List<SearchResponse> list = new ArrayList<>();
             
             List<CategoriesToDisplay> existingCategoriesToDisplay = categoriesToDisplayDao.findAll();
-            //Add all categories
+            // Add all categories
             for(int i=0;i<existingCategoriesToDisplay.size();i++){
                 try {
                     SearchResponse searchResponse = new SearchResponse(existingCategoriesToDisplay.get(i).getCategory(),existingCategoriesToDisplay.get(i).getCategory());
@@ -790,6 +790,9 @@ public class ProductDetailsService {
                             SearchResponse searchResponse = new SearchResponse(name,name);
                             searchResponse.setType("subSubCategory");
                             searchResponse.setCategory(existingCategoriesToDisplay.get(i).getCategory());
+                            searchResponse.setSubCategory(existingSubCategories.get(j).getSubCategoryName());
+                            
+                            System.out.println(existingSubCategories.get(j).getSubCategoryName()+"\n\n\n");
                             searchResponse.setSubSubCategory(existingSubSubCategories.get(k).getSubSubCategoryName());
                             HashSet<String> modelNos = existingSubSubCategories.get(k).getmodelNumber();
                             
