@@ -790,14 +790,14 @@ public class ExcelHelper {
                             value = formatter.formatCellValue(cells.next());
                             if(offerPosters==null) break;
                             System.out.println(value);
-                            imageUrl = new URL(value);
-                            image = ImageIO.read(imageUrl);
-                            byteArrayOutputStream = new ByteArrayOutputStream();
-                            ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            fileName = "sample.jpg";
-                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
+                            // imageUrl = new URL(value);
+                            // image = ImageIO.read(imageUrl);
+                            // byteArrayOutputStream = new ByteArrayOutputStream();
+                            // ImageIO.write(image,"jpg",byteArrayOutputStream);
+                            // fileName = "sample.jpg";
+                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
                             
-                            offerPosters.setImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                            offerPosters.setImageUrl(value);
                         break;
                         case 2:
                             value = formatter.formatCellValue(cells.next());

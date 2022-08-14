@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Document(collection="offer_posters")
 public class OfferPosters {
 
-    private Binary image;
+    private String imageUrl;
 
     private List<String> modelNumbers;
 
@@ -22,21 +22,15 @@ public class OfferPosters {
     public OfferPosters() {
     }
 
-    public OfferPosters(Binary image, List<String> modelNumbers,
+    public OfferPosters(String image, List<String> modelNumbers,
             String category) {
-        this.image = image;
+        this.imageUrl = image;
         this.modelNumbers = modelNumbers;
         this.category = category;
     }
 
-    public Binary getImage() {
-        return image;
-    }
-
-    public void setImage(Binary image) {
-        this.image = image;
-    }
-
+    
+    
     public List<String> getModelNumbers() {
         return modelNumbers;
     }
@@ -64,8 +58,16 @@ public class OfferPosters {
 
     @Override
     public String toString() {
-        return "OfferPosters [category=" + category + ", image=" + image + ", isMegaPoster=" + isMegaPoster
+        return "OfferPosters [category=" + category + ", image=" + imageUrl + ", isMegaPoster=" + isMegaPoster
                 + ", modelNumbers=" + modelNumbers + "]";
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }   
     
     
