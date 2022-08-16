@@ -32,13 +32,13 @@ public class OfferPosterController {
 
 
     @PostMapping("/add-offers")
-    public ResponseEntity<?> addOffer(@RequestHeader("Authorization") String authorization, @RequestParam("offerPoster") MultipartFile multipartFile,@RequestParam("category") String category,@RequestParam("modelNumber") List<String> modelNumber, @RequestParam("isMegaPoster") String isMegaPoster) {
+    public ResponseEntity<?> addOffer(@RequestHeader("Authorization") String authorization, @RequestParam("offerPoster") String imageUrl,@RequestParam("category") String category,@RequestParam("modelNumber") List<String> modelNumber, @RequestParam("isMegaPoster") String isMegaPoster) {
         try{
             // return offerPosterService.addOffer(multipartFile,modelNumber,offerType,offerPrice,category);
             // for(int i=0;i<modelNumber.size();i++){
             //     System.out.println(modelNumber.get(i));
             // }
-            return offerPosterService.addOffer(authorization,multipartFile, modelNumber, category,isMegaPoster);
+            return offerPosterService.addOffer(authorization,imageUrl, modelNumber, category,isMegaPoster);
         }catch(Exception e){
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

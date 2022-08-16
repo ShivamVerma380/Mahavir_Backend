@@ -48,7 +48,7 @@ public class OfferPosterService{
     public AdminDao adminDao;
     
 
-    public ResponseEntity<?> addOffer(String authorization,MultipartFile multipartFile, List<String> modelNumber, String category,String isMegaPoster){
+    public ResponseEntity<?> addOffer(String authorization,String imageUrl, List<String> modelNumber, String category,String isMegaPoster){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -57,7 +57,8 @@ public class OfferPosterService{
                 responseMessage.setMessage("Only admins can add offers");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
-            offerPosters.setImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+            offerPosters.setImageUrl(imageUrl);
+            // offerPosters.setImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
             HashSet<String> hashSet = new HashSet<>();
             for(int i=0;i<modelNumber.size();i++){
                 try {
