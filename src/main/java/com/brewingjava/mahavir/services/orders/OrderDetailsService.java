@@ -188,6 +188,30 @@ public class OrderDetailsService {
         }
     }
 
+    public ResponseEntity<?> getMyOrders(String authorization) {
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            UserRequest userRequest = userDao.findByEmail(email);
+            if(userRequest==null){
+                responseMessage.setMessage("User Not Found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+            List<OrderDetails> list = orderDetailsDao.findAll();
+            List<OrderDetails> userOrders = new ArrayList<>();
+            for(int i=0;i<list.size();i++){
+                if(list.get(i).getBuyerEmail().equals(email)){
+                    userOrders.add(list.get(i));
+                }
+            }
+            return ResponseEntity.ok(userOrders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     
 
 }

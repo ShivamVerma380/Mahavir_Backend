@@ -68,6 +68,17 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/my-invoice")
+    public ResponseEntity<?> getMyOrders(@RequestHeader("Authorization")String authorization){
+        try {
+            return orderDetailsService.getMyOrders(authorization);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @GetMapping("/pending-orders")
     public ResponseEntity<?> getPendingOrders(){
         try {
