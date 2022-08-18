@@ -1,6 +1,8 @@
 package com.brewingjava.mahavir.services.orders;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -204,6 +206,7 @@ public class OrderDetailsService {
                     userOrders.add(list.get(i));
                 }
             }
+            Collections.reverse(userOrders);
             return ResponseEntity.ok(userOrders);
         } catch (Exception e) {
             e.printStackTrace();
