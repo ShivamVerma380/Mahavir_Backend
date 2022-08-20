@@ -40,11 +40,12 @@ public class EmailVerificationService {
 
     public ResponseEntity<?> getOtp(String email){
         try{
-            String from = "shivam380.testing@gmail.com";
+            // String from = "shivam380.testing@gmail.com";
+            String from = "edata@mahavirelectronics.net";
             String to = email;
             String subject = "Mahavir Electronics-OTP Verification";
             
-            String host = "smtp.gmail.com";
+            String host = "smtpout.secureserver.net";
 
             Properties properties = System.getProperties();
 
@@ -59,7 +60,8 @@ public class EmailVerificationService {
             
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication(){
-                    return new PasswordAuthentication(from, "xzdiplmftkwjhlqy   ");
+                    // return new PasswordAuthentication(from, "xzdiplmftkwjhlqy   ");
+                    return new PasswordAuthentication(from,"edata@1234");
                 }
 
             });
@@ -111,7 +113,11 @@ public class EmailVerificationService {
     private Configuration freemarkerConfig;
 
     public void sendSimpleMessage(Mail mail) throws MessagingException, IOException, TemplateException {
+
+        System.out.println("In Send Simple Message");
         MimeMessage message = emailSender.createMimeMessage();
+
+        System.out.println("Message from "+mail.getFrom());
         MimeMessageHelper helper = new MimeMessageHelper(message,
                 MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name());

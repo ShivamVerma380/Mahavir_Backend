@@ -33,16 +33,21 @@ public class EmailVerification {
     @GetMapping("/verify-email/{email}")
     public ResponseEntity<?> getOTP(@PathVariable("email")String email){
         try {
+            System.out.println("Processing request to get OTP for email: " + email);
+            // return emailVerificationService.getOtp(email);
             Random random = new Random();
             int number = random.nextInt(999999);
 
             String otp = String.format("%06d", number);
             
             Mail mail = new Mail();
-            mail.setFrom("shivam380.testing@gmail.com");
+
+            // mail.setFrom("shivam380.testing@gmail.com");
+            mail.setFrom("edata@mahavirelectronics.net");
             mail.setTo(email);
             mail.setSubject("Mahavir Electronics-OTP Verification");
 
+            
 
             Map model = new HashMap();
             model.put("name", "Customer,");
@@ -50,8 +55,9 @@ public class EmailVerification {
             model.put("signature", "https://memorynotfound.com");
             model.put("otp", otp);
             mail.setModel(model);
-
+            System.out.println("Calling sendSimpleMessage function");
             emailVerificationService.sendSimpleMessage(mail);
+            System.out.println("Called sendSimpleMessage function");
             otpResponse.setMessage("Email sent successfully");
             otpResponse.setOtp(otp);
             return ResponseEntity.status(HttpStatus.OK).body(otpResponse);
@@ -70,7 +76,7 @@ public class EmailVerification {
             String otp = String.format("%06d", number);
             
             Mail mail = new Mail();
-            mail.setFrom("shivam380.testing@gmail.com");
+            mail.setFrom("edata@mahavirelectronics.net");
             mail.setTo(email);
             mail.setSubject("Mahavir Electronics-New OTP");
 
@@ -101,7 +107,7 @@ public class EmailVerification {
             String otp = String.format("%06d", number);
             
             Mail mail = new Mail();
-            mail.setFrom("shivam380.testing@gmail.com");
+            mail.setFrom("edata@mahavirelectronics.net");
             mail.setTo(email);
             mail.setSubject("Forgot Password-Mahavir Electronics");
 
