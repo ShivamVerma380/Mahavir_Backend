@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,7 @@ public class CategoriesToDisplay {
     @Id
     private String category;
 
-    private Binary category_image;
+    private String category_image_url;
 
     
     private List<SubCategories> subCategories;
@@ -31,19 +30,19 @@ public class CategoriesToDisplay {
     public CategoriesToDisplay() {
     }
 
-    public CategoriesToDisplay(String category, Binary category_image) {
+    public CategoriesToDisplay(String category, String category_image_url) {
         this.category = category;
-        this.category_image = category_image;
+        this.category_image_url = category_image_url;
     }
 
     
 
     
 
-    public CategoriesToDisplay(String category, Binary category_image, List<SubCategories> subCategories,
+    public CategoriesToDisplay(String category, String category_image_url, List<SubCategories> subCategories,
             List<ProductInformationItem> productInformationItemList) {
         this.category = category;
-        this.category_image = category_image;
+        this.category_image_url = category_image_url;
         this.subCategories = subCategories;
         this.productInformationItemList = productInformationItemList;
     }
@@ -56,12 +55,12 @@ public class CategoriesToDisplay {
         this.category = category;
     }
 
-    public Binary getCategory_image() {
-        return category_image;
+    public String getCategory_image() {
+        return category_image_url;
     }
 
-    public void setCategory_image(Binary category_image) {
-        this.category_image = category_image;
+    public void setCategory_image(String category_image_url) {
+        this.category_image_url = category_image_url;
     }
 
     public List<SubCategories> getSubCategories() {
@@ -92,7 +91,7 @@ public class CategoriesToDisplay {
 
     @Override
     public String toString() {
-        return "CategoriesToDisplay [category=" + category + ", category_image=" + category_image + ", productFilters="
+        return "CategoriesToDisplay [category=" + category + ", category_image_url=" + category_image_url + ", productFilters="
                 + productFilters + ", productInformationItemList=" + productInformationItemList + ", subCategories="
                 + subCategories + "]";
     }

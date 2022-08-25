@@ -583,15 +583,7 @@ public class ExcelHelper {
                             if(categoriesToDisplay==null) break;
                             value = formatter.formatCellValue(cell);
                             System.out.println(value);
-                            if(value.trim().equals("-")) break;
-                            imageUrl = new URL(value);
-                            System.out.println("imageUrl="+imageUrl);
-                            image = ImageIO.read(imageUrl);
-                            byteArrayOutputStream = new ByteArrayOutputStream();
-                            ImageIO.write(image,"jpg",byteArrayOutputStream);
-                            fileName = "sample.jpg";
-                            multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
-                            categoriesToDisplay.setCategory_image(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                            categoriesToDisplay.setCategory_image(value);
                         break;
                         case 2:
                             if(categoriesToDisplay==null) break;

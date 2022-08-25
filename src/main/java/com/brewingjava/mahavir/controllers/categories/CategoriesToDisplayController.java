@@ -35,9 +35,9 @@ public class CategoriesToDisplayController {
     public CategoriesToDisplayDao categoriesToDisplayDao;
 
     @PostMapping("/add-category")
-    public ResponseEntity<?> addCategory(@RequestHeader("Authorization")String authorization,@RequestParam("CategoryName")String category,@RequestParam("CategoryImage")MultipartFile multipartFile){
+    public ResponseEntity<?> addCategory(@RequestHeader("Authorization")String authorization,@RequestParam("CategoryName")String category,@RequestParam("CategoryImage")String  categoryImageUrl){
         try{
-            return categoriesToDisplayService.addCategory(authorization, category,multipartFile);
+            return categoriesToDisplayService.addCategory(authorization, category,categoryImageUrl);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());

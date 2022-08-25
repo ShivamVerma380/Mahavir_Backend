@@ -55,7 +55,7 @@ public class CategoriesToDisplayService {
     @Autowired
     public CategoriesToDisplayDao categoriesToDisplayDao;
     
-    public ResponseEntity<?> addCategory(String authorization,String category,MultipartFile multipartFile){
+    public ResponseEntity<?> addCategory(String authorization,String category,String categoryImageUrl){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -68,7 +68,7 @@ public class CategoriesToDisplayService {
                     responseMessage.setMessage("Category already exist");
                     return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
                 }
-                CategoriesToDisplay categoriesToDisplay = new CategoriesToDisplay(category,new Binary(BsonBinarySubType.BINARY,multipartFile.getBytes()));
+                CategoriesToDisplay categoriesToDisplay = new CategoriesToDisplay(category,categoryImageUrl);
                 categoriesToDisplay.setSubCategories(new ArrayList<>());
                 categoriesToDisplay.setProductInformationItemList(new ArrayList<>());
                 categoriesToDisplay.setProductFilters(new HashMap<>());
