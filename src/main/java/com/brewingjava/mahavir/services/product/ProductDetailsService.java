@@ -1031,75 +1031,60 @@ public class ProductDetailsService {
         }
     }
 
-    public ResponseEntity<?> getSimilarProducts(String modelNumber,String subSubCategory,String subCategory,String Category){
+    public ResponseEntity<?> getSimilarProducts(String modelNumber,String subSubCategory,String Category){
+       
+            
         try {
             List<ProductsDetailsResponse> list = new ArrayList<>();
-            CategoriesToDisplay existingCategoriesToDisplay = categoriesToDisplayDao.findBycategory(Category);
-            if(existingCategoriesToDisplay==null){
-                responseMessage.setMessage("Category not found");
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
+            if(productDetail==null){
+                responseMessage.setMessage("Product Not Found!!");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
             }
-            List<SubCategories> subCategories = existingCategoriesToDisplay.getSubCategories();
-            boolean flag = true;
-            List<SubSubCategories> subSubCategories = new ArrayList<>();
-            for(int i=0;i<subCategories.size();i++){
-                if(subCategories.get(i).getSubCategoryName().equals(subCategory)){
-                    subSubCategories = subCategories.get(i).getSubSubCategories();
-                    for(int j=0;j<subSubCategories.size();j++){
-                        if(subSubCategories.get(j).getSubSubCategoryName().equals(subSubCategory)){
-                            HashSet<String> modelNos = subSubCategories.get(j).getmodelNumber();
-                            modelNos.remove(modelNumber);
-                            for(String modelNo:modelNos){
-                                if(modelNumber!=modelNo){
-                                    ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNo);
-                                    ProductsDetailsResponse productsDetailsResponse = new ProductsDetailsResponse();
-                                    productsDetailsResponse.setModelNumber(productDetail.getModelNumber());
-                                    productsDetailsResponse.setProductName(productDetail.getProductName());
-                                    productsDetailsResponse.setOfferPrice(productDetail.getOfferPrice());
-                                    productsDetailsResponse.setProductHighlights(productDetail.getProductHighlights());
-                                    productsDetailsResponse.setProductImage1(productDetail.getProductImage1());
-                                    productsDetailsResponse.setProductPrice(productDetail.getProductPrice());
-                                    productsDetailsResponse.setSubCategoryMap(productDetail.getSubCategoryMap());
-                                    productsDetailsResponse.setProductId(productDetail.getProductId());
-                                    productsDetailsResponse.setCategory(productDetail.getCategory());
-                                    
+            CategoriesToDisplay categoriesToDisplay = categoriesToDisplayDao.findBycategory(productDetail.getCategory());
+            String subCat="Brand";
+            // HashMap<String,String> subCatMap = productDetail.getSubCategoryMap();
+            // for(Map.Entry<String,String> mp:subCatMap.entrySet()){
+            //     if(mp.getValue().equalsIgnoreCase(subSubCategory)){
+            //         subCat = mp.getKey();
+            //         break;
+            //     }
+            // }
+            String subSubCat = productDetail.getSubCategoryMap().get(subCat);
+            if(subSubCat==null){
+                subCat="BRAND";
+                subSubCat = productDetail.getSubCategoryMap().get(subCat);
+            }
+
+            System.out.println(subCat+":"+subSubCat);
+            List<SubCategories> subCatList = new ArrayList<>(categoriesToDisplay.getSubCategories());
+            for(int i=0;i<subCatList.size();i++){
+                if(subCatList.get(i).getSubCategoryName().equalsIgnoreCase(subCat)){
+                    List<SubSubCategories> subSubCatList = new ArrayList<>(subCatList.get(i).getSubSubCategories());
+                    for(int j=0;j<subSubCatList.size();j++){
+                        if(subSubCatList.get(j).getSubSubCategoryName().equalsIgnoreCase(subSubCat)){
+                            HashSet<String> modelNums = subSubCatList.get(j).getmodelNumber();
+                            for(String model:modelNums){
+                                ProductDetail product = productDetailsDao.findProductDetailBymodelNumber(model);
+                                ProductsDetailsResponse productsDetailsResponse = new ProductsDetailsResponse();
+                                if(product!=null){
+                                    productsDetailsResponse.setModelNumber(product.getModelNumber());
+                                    productsDetailsResponse.setProductId(product.getProductId());
+                                    productsDetailsResponse.setCategory(product.getCategory());
+                                    productsDetailsResponse.setProductName(product.getProductName());
+                                    productsDetailsResponse.setProductHighlights(product.getProductHighlights());
+                                    productsDetailsResponse.setProductImage1(product.getProductImage1());
+                                    productsDetailsResponse.setOfferPrice(product.getOfferPrice());
+                                    productsDetailsResponse.setProductPrice(product.getProductPrice());
+                                    productsDetailsResponse.setSubCategoryMap(product.getSubCategoryMap());
+                                    productsDetailsResponse.setFiltercriterias(product.getFiltercriterias());
                                     list.add(productsDetailsResponse);
                                 }
                             }
-                            if(list.size()>18){
-                                flag = false;
-                                break;
-                            }
-                            subSubCategories.remove(subSubCategories.get(j));
-                            break;
                         }
                     }
                 }
             }
-            if(flag){
-                for(int i=0;i<subSubCategories.size();i++){
-                    HashSet<String> modelNos = subSubCategories.get(i).getmodelNumber();
-                    //modelNos.remove(modelNumber);
-                    for(String modelNo:modelNos){
-                        ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNo);
-                        ProductsDetailsResponse productsDetailsResponse = new ProductsDetailsResponse();
-                        productsDetailsResponse.setModelNumber(productDetail.getModelNumber());
-                        productsDetailsResponse.setProductName(productDetail.getProductName());
-                        productsDetailsResponse.setOfferPrice(productDetail.getOfferPrice());
-                        productsDetailsResponse.setProductHighlights(productDetail.getProductHighlights());
-                        productsDetailsResponse.setProductImage1(productDetail.getProductImage1());
-                        productsDetailsResponse.setProductPrice(productDetail.getProductPrice());
-                        productsDetailsResponse.setSubCategoryMap(productDetail.getSubCategoryMap());
-                        list.add(productsDetailsResponse);
-                    }
-                    if(list.size()>=18){
-                        // return ResponseEntity.ok(list);
-                        break;
-                    }    
-                }
-            }
-
-
             return ResponseEntity.ok(list);
         } catch (Exception e) {
             e.printStackTrace();
