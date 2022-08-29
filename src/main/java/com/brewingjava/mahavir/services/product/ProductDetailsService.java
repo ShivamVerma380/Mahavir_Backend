@@ -994,6 +994,7 @@ public class ProductDetailsService {
                 // System.out.println(productDetails.get(i).getModelNumber());
                 ProductsDetailsResponse obj = new ProductsDetailsResponse();
                 obj.setModelNumber(productDetails.get(i).getModelNumber());
+                obj.setProductName(productDetails.get(i).getProductName());
                 obj.setProductId(productDetails.get(i).getProductId());
                 obj.setCategory(productDetails.get(i).getCategory());
                 obj.setFiltercriterias(productDetails.get(i).getFiltercriterias());
