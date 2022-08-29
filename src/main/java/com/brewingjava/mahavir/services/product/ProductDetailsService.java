@@ -989,10 +989,22 @@ public class ProductDetailsService {
             //     responseMessage.setMessage("Empty");
             //     return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
             // }
+            List<ProductsDetailsResponse> list = new ArrayList<>();
             for(int i=0;i<productDetails.size();i++){
-                System.out.println(productDetails.get(i).getModelNumber());
+                // System.out.println(productDetails.get(i).getModelNumber());
+                ProductsDetailsResponse obj = new ProductsDetailsResponse();
+                obj.setModelNumber(productDetails.get(i).getModelNumber());
+                obj.setProductId(productDetails.get(i).getProductId());
+                obj.setCategory(productDetails.get(i).getCategory());
+                obj.setFiltercriterias(productDetails.get(i).getFiltercriterias());
+                obj.setOfferPrice(productDetails.get(i).getOfferPrice());
+                obj.setProductPrice(productDetails.get(i).getProductPrice());
+                obj.setSubCategoryMap(productDetails.get(i).getSubCategoryMap());
+                obj.setProductImage1(productDetails.get(i).getProductImage1());
+                obj.setProductHighlights(productDetails.get(i).getProductHighlights());
+                list.add(obj);
             }
-            return ResponseEntity.status(HttpStatus.OK).body(productDetails);
+            return ResponseEntity.status(HttpStatus.OK).body(list);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
