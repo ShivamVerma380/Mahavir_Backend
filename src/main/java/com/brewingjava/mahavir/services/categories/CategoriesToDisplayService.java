@@ -445,28 +445,62 @@ public class CategoriesToDisplayService {
                 if(subCategory.equalsIgnoreCase(listIterator.next().getSubCategoryName())){
                     //List<SubSubCategories> existingSubSubCategories = listIterator.next().getSubSubCategories();
                     System.out.println(existingSubCategories.get(j).getSubCategoryName());
-                    List<SubSubCategories> list = existingSubCategories.get(j).getSubSubCategories();
+                    List<SubSubCategories> list = new ArrayList<>(existingSubCategories.get(j).getSubSubCategories());
+                    System.out.println(list);
                     //ArrayList<Class>  ==> Class={subSubCategoryName,Array<modelNumber,modelName>}
                     List<AddToCompareResponse> addToCompareResponses = new ArrayList<>();
                     for(int i=0;i<list.size();i++){
-                        HashSet<String> modelNumber = list.get(i).getmodelNumber();
-                        Iterator<String> iterator = modelNumber.iterator();
+                        System.out.println(list.get(i).getSubSubCategoryName()+":"+list.get(i).getmodelNumber());
                         AddToCompareResponse addToCompareResponse = new AddToCompareResponse();
                         addToCompareResponse.setSubSubCategoryName(list.get(i).getSubSubCategoryName());
                         ArrayList<ModelResponse> modelResponses = new ArrayList<>();
-                        while(iterator.hasNext()){
-                            String mNo = iterator.next();
-                            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(mNo);
-                            ModelResponse modelResponse = new ModelResponse();
-                            
-                            modelResponse.setModelName(productDetail.getProductName());
-                            modelResponse.setModelNumber(mNo);
-                            modelResponses.add(modelResponse);
-                            
+                        for(String mNum:list.get(i).getmodelNumber()){
+                            ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(mNum);
+                            if(productDetail!=null){
+                                ModelResponse modelResponse = new ModelResponse();
+                                modelResponse.setModelName(productDetail.getProductName());
+                                modelResponse.setModelNumber(productDetail.getModelNumber());
+                                // modelResponse.setPrice(productDetail.getPrice());
+                                modelResponses.add(modelResponse);
+                            }
                         }
                         addToCompareResponse.setModelResponses(modelResponses);
                         addToCompareResponses.add(addToCompareResponse);
+                        // addToCompareResponse.setModelResponses(new ArrayList<>());
                     }
+                    /*for(int i=0;i<list.size();i++){
+                        HashSet<String> modelNumber = list.get(i).getmodelNumber();
+                        // Iterator<String> iterator = modelNumber.iterator();
+                        AddToCompareResponse addToCompareResponse = new AddToCompareResponse();
+                        addToCompareResponse.setSubSubCategoryName(list.get(i).getSubSubCategoryName());
+                        ArrayList<ModelResponse> modelResponses = new ArrayList<>();
+                        for(String mNo:modelNumber){
+                            // String mNo = iterator.next();
+                            System.out.println(mNo);
+                            try {
+                                ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(mNo);
+                                if(productDetail==null){
+                                    System.out.println(productDetail);
+                                    ModelResponse modelResponse = new ModelResponse();
+                                
+                                    modelResponse.setModelName(productDetail.getProductName());
+                                    modelResponse.setModelNumber(mNo);
+                                    System.out.println(modelResponse);
+                                    modelResponses.add(modelResponse); 
+                                    // System.out.println(modelResponses);   
+                                }
+                            } catch (Exception e) {
+                                //TODO: handle exception
+                                e.printStackTrace();
+                            }
+                            
+                            
+                            
+                        }
+                        System.out.println(modelResponses);
+                        addToCompareResponse.setModelResponses(modelResponses);
+                        addToCompareResponses.add(addToCompareResponse);
+                    }*/
                     return ResponseEntity.status(HttpStatus.OK).body(addToCompareResponses);
                     // List<SubSubCategories> existingSubSubCategories = existingSubCategories.get(j).getSubSubCategories();
                     // List<String> subSubCategories = new ArrayList<>();
