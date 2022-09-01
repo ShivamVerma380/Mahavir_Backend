@@ -120,10 +120,10 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> updatePassword(String authorization,String password){
+    public ResponseEntity<?> updatePassword(String email,String password){
         try {
-            String token = authorization.substring(7);
-            String email = jwtUtil.extractUsername(token);
+            // String token = authorization.substring(7);
+            // String email = jwtUtil.extractUsername(token);
             UserRequest user = userDao.findByEmail(email);
             if(user==null){
                 responseMessage.setMessage("User not found");

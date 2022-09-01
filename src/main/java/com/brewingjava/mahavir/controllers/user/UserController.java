@@ -39,10 +39,10 @@ public class UserController {
         }
     }
 
-    @PostMapping("/updatePassword/{password}")
-    public ResponseEntity<?> updatePassword(@RequestHeader("Authorization") String authorization,@PathVariable("password") String password){
+    @PostMapping("/updatePassword/{email}")
+    public ResponseEntity<?> updatePassword(@PathVariable("email") String email,@RequestParam("password") String password){
         try {
-            return userService.updatePassword(authorization, password);
+            return userService.updatePassword(email, password);
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
