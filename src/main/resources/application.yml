@@ -1,0 +1,7 @@
+spring:
+    data:
+        mongodb:
+            database: mahavir
+            host: omkargodmongodb
+            port: 27017
+            

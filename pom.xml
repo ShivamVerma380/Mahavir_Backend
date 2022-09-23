@@ -140,7 +140,7 @@
               </executions>
             </plugin>
         </plugins>
-		<finalName>spring-boot-docker</finalName>
+		<finalName>springboot-mongo-docker</finalName>
 	</build>
 
 </project>
