@@ -21,8 +21,8 @@
 
     <table align="left" border="0" cellpadding="0" cellspacing="0" width="300" height="450" style="border-collapse: collapse;">
         <tr>
-            <td align="center" background="https://i.ibb.co/sj3955N/OTP-bg.jpg"  bgcolor="#000000" >
-                <p style="color:black">Dear ${name}<br></br>Here is your OTP:<b>${otp}</b><br></br>Thanks and keep shopping with Mahavir Electronics.</p>
+            <td align="center" background="https://i.ibb.co/sj3955N/OTP-bg.jpg"  bgcolor="#000000"  >
+                <p style="color:#FF0000">Dear ${name}<br></br>Here is your OTP:<b>${otp}</b><br>Thanks and keep shopping with Mahavir Electronics.</p>
             </td>
         </tr>
     </table>
