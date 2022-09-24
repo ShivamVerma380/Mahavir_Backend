@@ -77,7 +77,7 @@ public class ExcelHelper {
 
     public ResponseEntity<?> addProducts(InputStream inputStream) {
         try {
-
+            String message="";
             DataFormatter formatter = new DataFormatter();
             PictureData pict;
             byte[] data;
@@ -504,15 +504,18 @@ public class ExcelHelper {
                 try {
                     if(flag || productDetail!=null || !productDetail.getModelNumber().equals(""))
                         productDetailsDao.save(productDetail);
-                    else
+                    else{
                         System.out.println("Product Details not saved"+productDetail.getModelNumber());
+                        message+=productDetail.getModelNumber()+",";
+                    }
+                        
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 
                 rowNumber++;
             }
-            responseMessage.setMessage("Products saved successfully");
+            responseMessage.setMessage("Products saved successfully\nNot Saved for:"+message);
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
             e.printStackTrace();
