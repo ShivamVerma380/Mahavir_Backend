@@ -35,11 +35,12 @@ public class EmailOrder {
 
     public void sendEmailToAdmin(String email,OrderDetails orderDetails){
         try {
-            String from = "shivam380.testing@gmail.com";
+           
             String to = email;
+            String from = "edata@mahavirelectronics.net";
             String subject = "Mahavir Electronics-Pending Order";
             
-            String host = "smtp.gmail.com";
+            String host = "smtpout.secureserver.net";
 
             Properties properties = System.getProperties();
 
@@ -54,7 +55,7 @@ public class EmailOrder {
             
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication(){
-                    return new PasswordAuthentication(from, "rzlzpbuushaytpmk");
+                    return new PasswordAuthentication(from, "edata@1234");
                 }
 
             });
@@ -86,7 +87,7 @@ public class EmailOrder {
             }
 
             String message = "Dear Sushil,\n"+"Deliver The Following order:\n"+"Buy Date:"+orderDetails.getBuyDate()+"\nBuyer Email: "+orderDetails.getBuyerEmail()+"\nPayment Amount:Rs "+orderDetails.getPaymentAmount()+"\nPayment Mode:"+orderDetails.getPaymentMode()+"\nUser Address:"+orderDetails.getUserAddress().getAddress()+","+orderDetails.getUserAddress().getCity()+","+orderDetails.getUserAddress().getState()+","+orderDetails.getUserAddress().getPincode()+
-            "\nOrder To Deliver:\n"+list+"\nThanks & Regards,\nShivam Verma";
+            "\nOrder To Deliver:\n"+list+"\nThanks & Regards,\nMahavir Electronics";
 
             m.setText(message);
 
@@ -100,10 +101,10 @@ public class EmailOrder {
 
     public void sendEmailToUser(String to,String name,OrderDetails orderDetails){
         try {
-            String from = "shivam380.testing@gmail.com";
+            String from = "edata@mahavirelectronics.net";
             String subject = "Mahavir Electronics-Order Purchased";
             
-            String host = "smtp.gmail.com";
+            String host = "smtpout.secureserver.net";
 
             Properties properties = System.getProperties();
 
@@ -118,7 +119,7 @@ public class EmailOrder {
             
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication(){
-                    return new PasswordAuthentication(from, "rzlzpbuushaytpmk");
+                    return new PasswordAuthentication(from, "edata@1234");
                 }
 
             });
@@ -144,7 +145,7 @@ public class EmailOrder {
            
 
 
-            String message = "Dear "+name+",\n"+"Thank you for shopping with Mahavir Electronics.\n"+"Buy Date:"+orderDetails.getBuyDate()+"\nBuyer Email: "+orderDetails.getBuyerEmail()+"\nPayment Amount:Rs "+orderDetails.getPaymentAmount()+"\nPayment Mode:"+orderDetails.getPaymentMode()+"\nUser Address:"+orderDetails.getUserAddress().getAddress()+","+orderDetails.getUserAddress().getCity()+","+orderDetails.getUserAddress().getState()+","+orderDetails.getUserAddress().getPincode()+"\nOrder Details:"+map+"\nThanks & Regards,\nSushil Oswal";
+            String message = "Dear "+name+",\n"+"Thank you for shopping with Mahavir Electronics.\n"+"Buy Date:"+orderDetails.getBuyDate()+"\nBuyer Email: "+orderDetails.getBuyerEmail()+"\nPayment Amount:Rs "+orderDetails.getPaymentAmount()+"\nPayment Mode:"+orderDetails.getPaymentMode()+"\nUser Address:"+orderDetails.getUserAddress().getAddress()+","+orderDetails.getUserAddress().getCity()+","+orderDetails.getUserAddress().getState()+","+orderDetails.getUserAddress().getPincode()+"\nOrder Details:"+map+"\nThanks & Regards,\nMahavir Electronics";
 
             m.setText(message);
 
