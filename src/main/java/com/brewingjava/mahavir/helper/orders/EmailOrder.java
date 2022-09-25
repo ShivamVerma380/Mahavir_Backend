@@ -85,7 +85,7 @@ public class EmailOrder {
                 list.add(orderResponse);
             }
 
-            String message = "Dear Sushil,\n"+"Deliver The Following order:\n"+"Buy Date:"+orderDetails.getBuyDate()+"\nBuyer Email: "+orderDetails.getBuyerEmail()+"\nPayment Amount:Rs "+orderDetails.getPaymentAmount()+"\nPayment Mode:"+orderDetails.getPaymentMode()+"\nUser Address:"+orderDetails.getUserAddress()+
+            String message = "Dear Sushil,\n"+"Deliver The Following order:\n"+"Buy Date:"+orderDetails.getBuyDate()+"\nBuyer Email: "+orderDetails.getBuyerEmail()+"\nPayment Amount:Rs "+orderDetails.getPaymentAmount()+"\nPayment Mode:"+orderDetails.getPaymentMode()+"\nUser Address:"+orderDetails.getUserAddress().getAddress()+","+orderDetails.getUserAddress().getCity()+","+orderDetails.getUserAddress().getState()+","+orderDetails.getUserAddress().getPincode()+
             "\nOrder To Deliver:\n"+list+"\nThanks & Regards,\nShivam Verma";
 
             m.setText(message);
@@ -144,7 +144,7 @@ public class EmailOrder {
            
 
 
-            String message = "Dear "+name+",\n"+"Thank you for shopping with Mahavir Electronics.\n"+"Buy Date:"+orderDetails.getBuyDate()+"\nBuyer Email: "+orderDetails.getBuyerEmail()+"\nPayment Amount:Rs "+orderDetails.getPaymentAmount()+"\nPayment Mode:"+orderDetails.getPaymentMode()+"\nUser Address:"+orderDetails.getUserAddress()+"\nOrder Details:"+map+"\nThanks & Regards,\nSushil Oswal";
+            String message = "Dear "+name+",\n"+"Thank you for shopping with Mahavir Electronics.\n"+"Buy Date:"+orderDetails.getBuyDate()+"\nBuyer Email: "+orderDetails.getBuyerEmail()+"\nPayment Amount:Rs "+orderDetails.getPaymentAmount()+"\nPayment Mode:"+orderDetails.getPaymentMode()+"\nUser Address:"+orderDetails.getUserAddress().getAddress()+","+orderDetails.getUserAddress().getCity()+","+orderDetails.getUserAddress().getState()+","+orderDetails.getUserAddress().getPincode()+"\nOrder Details:"+map+"\nThanks & Regards,\nSushil Oswal";
 
             m.setText(message);
 
