@@ -976,6 +976,7 @@ public class ExcelHelper {
 
     public ResponseEntity<?> addDeals(InputStream is){
         try {
+            System.out.println("In deals");
             XSSFWorkbook workbook = new XSSFWorkbook(is);
             XSSFSheet sheet = workbook.getSheet("Deals");
             int rowNumber=0;
@@ -983,12 +984,14 @@ public class ExcelHelper {
             String value;
             Iterator<Row> iterator = sheet.iterator();
             while(iterator.hasNext()){
+                dealsDao.deleteAll();
                 Row row = iterator.next();
                 if(rowNumber<=1){
                     rowNumber++;
                     continue;
                 }
                 Iterator<Cell> cells = row.iterator();
+                String t;
                 int cid=0;
                 Deals deals = new Deals();
                 HashSet<ProductsDetailsResponse> products = new HashSet<>();
@@ -1004,10 +1007,12 @@ public class ExcelHelper {
                                 break;
                             }
                             System.out.println(value);
+                            t = value;
                             deals.setTitle(value);
                         break;
                         case 1:
                             value = formatter.formatCellValue(cell);
+                            System.out.println("In case 1");
                             if(deals==null || value.trim().equals("")) break;
                             System.out.println(value);
                             String mNums[] = value.split(";");
@@ -1028,9 +1033,14 @@ public class ExcelHelper {
                                     categories.add(productDetail.getCategory());
                                 }
                             }
-                            deals.setProducts(products);
-                            deals.setCategories(new ArrayList<>(categories));
+                            // System.out.println("Products:"+products);
+                            // System.out.println("\nCategories:"+categories);
+                            // Deals d = new Deals(t,products,new ArrayList<>(categories));
+                            // deals.setProducts(products);
+                            // deals.setCategories(new ArrayList<>(categories));
+                            System.out.println("Deals:\n"+deals);
                             dealsDao.save(deals);
+                            System.out.println("Saved");
                         break;
                         default:
                         break;
