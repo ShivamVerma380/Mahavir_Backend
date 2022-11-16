@@ -1162,6 +1162,12 @@ public class ExcelHelper {
                                 }
                             }
                             parent.setCategories(list);
+                            break;
+
+                        case 2:
+                            value = formatter.formatCellValue(cell);
+                            System.out.println(value);
+                            parent.setImgUrl(value);
                             parentToDisplayDao.save(parent);
                             break;
                         default:
