@@ -91,10 +91,17 @@ public class CategoriesToDisplayService {
 
     public ResponseEntity<?> getCategories(){
         try {
-            List<CategoriesToDisplay> allCategories = categoriesToDisplayDao.findAll();
-            if(allCategories==null){
+            List<CategoriesToDisplay> categoriesToDisplayList = categoriesToDisplayDao.findAll();
+            // List<CategoriesToDisplay> allCategories = categoriesToDisplayDao.findAll();
+            List<CategoriesToDisplay> allCategories = new ArrayList<>();
+            if(categoriesToDisplayList==null){
                 responseMessage.setMessage("Sorry....No Categories found");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+
+            for(int i=0;i<categoriesToDisplayList.size();i++){
+                if(categoriesToDisplayList.get(i).isInNavbar()) 
+                    allCategories.add(categoriesToDisplayList.get(i));
             }
             ListIterator<CategoriesToDisplay> listIterator = allCategories.listIterator();
             int i=0;
