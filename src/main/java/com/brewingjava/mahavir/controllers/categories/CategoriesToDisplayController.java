@@ -80,6 +80,18 @@ public class CategoriesToDisplayController {
         }
     }
 
+    @GetMapping("/get-all-categories")
+    public ResponseEntity<?> getAllCategories(){
+        try {
+            return categoriesToDisplayService.getAllCategories();
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @GetMapping("/get-categories/admin")
     public ResponseEntity<?> getAdminCategories(){
         try {

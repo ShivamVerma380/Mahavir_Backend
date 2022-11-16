@@ -140,6 +140,57 @@ public class CategoriesToDisplayService {
         }
     }
 
+    public ResponseEntity<?> getAllCategories() {
+        try {
+            // List<CategoriesToDisplay> categoriesToDisplayList = categoriesToDisplayDao.findAll();
+            // List<CategoriesToDisplay> allCategories = categoriesToDisplayDao.findAll();
+            List<CategoriesToDisplay> allCategories = categoriesToDisplayDao.findAll();
+            if(allCategories==null){
+                responseMessage.setMessage("Sorry....No Categories found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+
+            // for(int i=0;i<categoriesToDisplayList.size();i++){
+            //     if(categoriesToDisplayList.get(i).isInNavbar()) 
+            //         allCategories.add(categoriesToDisplayList.get(i));
+            // }
+            ListIterator<CategoriesToDisplay> listIterator = allCategories.listIterator();
+            int i=0;
+            while(listIterator.hasNext()){
+                if(listIterator.next().getSubCategories()==null){
+                    allCategories.get(i).setSubCategories(new ArrayList<>());
+                }
+                List<SubCategories> subCategories = allCategories.get(i).getSubCategories();
+                ListIterator<SubCategories> sCListIterator = subCategories.listIterator();
+                int j=0;
+                while(sCListIterator.hasNext()){
+                    if(sCListIterator.next().getSubSubCategories()==null){
+                        allCategories.get(i).getSubCategories().get(j).setSubSubCategories(new ArrayList<>());
+                    }
+                    int k=0;
+                    List<SubSubCategories> subSubCategories = allCategories.get(i).getSubCategories().get(j).getSubSubCategories();
+                    ListIterator<SubSubCategories> subSubCatListIterator = subSubCategories.listIterator();
+                    while(subSubCatListIterator.hasNext()){
+                        if(subSubCatListIterator.next().modelNumber==null){
+                            allCategories.get(i).getSubCategories().get(j).getSubSubCategories().get(k).setmodelNumber(new HashSet<>());
+                        }
+                        k++;
+                    }
+
+                    j++;
+                }
+                i++;
+            }
+            
+
+            return ResponseEntity.status(HttpStatus.OK).body(allCategories);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+    
     public ResponseEntity<?> getCategoriesAdmin(){
         try {
             List<CategoriesToDisplay> list = categoriesToDisplayDao.findAll();
@@ -578,5 +629,8 @@ public class CategoriesToDisplayService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+
+    
 
 }
