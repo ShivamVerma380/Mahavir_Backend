@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.brewingjava.mahavir.daos.HomepageComponents.DealsDao;
 import com.brewingjava.mahavir.daos.HomepageComponents.ShopByBrandsDao;
 import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
+import com.brewingjava.mahavir.daos.categories.ExtraCategories.ParentToDisplayDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
 import com.brewingjava.mahavir.entities.HomepageComponents.BrandCategory;
 import com.brewingjava.mahavir.entities.HomepageComponents.ShopByBrands;
@@ -224,6 +225,20 @@ public class ProductController {
     public ResponseEntity<?> addParentCategories(@RequestParam("file") MultipartFile file){
         try {
             return excelHelper.addParentCategories(file.getInputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @Autowired
+    public ParentToDisplayDao parentCategoriesDao;
+
+    @GetMapping("/extraCategories")
+    public ResponseEntity<?> getParentCategories(){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(parentCategoriesDao.findAll());
         } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
