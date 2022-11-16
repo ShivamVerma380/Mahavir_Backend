@@ -219,5 +219,16 @@ public class ProductController {
         }
     }
 
+
+    @PostMapping("/excel/parentCategories")
+    public ResponseEntity<?> addParentCategories(@RequestParam("file") MultipartFile file){
+        try {
+            return excelHelper.addParentCategories(file.getInputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 }
 

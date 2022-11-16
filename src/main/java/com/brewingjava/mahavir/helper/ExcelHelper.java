@@ -39,6 +39,7 @@ import java.awt.image.BufferedImage;
 import com.brewingjava.mahavir.daos.HomepageComponents.DealsDao;
 import com.brewingjava.mahavir.daos.HomepageComponents.ShopByBrandsDao;
 import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
+import com.brewingjava.mahavir.daos.categories.ExtraCategories.ParentToDisplayDao;
 import com.brewingjava.mahavir.daos.offers.OfferPosterDao;
 import com.brewingjava.mahavir.daos.product.FilterCriteriasDao;
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
@@ -49,6 +50,7 @@ import com.brewingjava.mahavir.entities.HomepageComponents.ShopByBrands;
 import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
 import com.brewingjava.mahavir.entities.categories.SubCategories;
 import com.brewingjava.mahavir.entities.categories.SubSubCategories;
+import com.brewingjava.mahavir.entities.categories.ExtraCategories.Parent;
 import com.brewingjava.mahavir.entities.offers.OfferPosters;
 import com.brewingjava.mahavir.entities.product.Factors;
 import com.brewingjava.mahavir.entities.product.FilterCriterias;
@@ -1107,6 +1109,70 @@ public class ExcelHelper {
             }
             responseMessage.setMessage("Categories Is In Navbar saved successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @Autowired
+    private ParentToDisplayDao parentToDisplayDao;
+
+    public ResponseEntity<?> addParentCategories(InputStream inputStream) {
+        try {
+            System.out.println("In addParentCategories");
+            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+            XSSFSheet sheet = workbook.getSheet("Extra Categories");
+            int rowNumber=0;
+            DataFormatter formatter = new DataFormatter();
+            String value;
+            Iterator<Row> iterator = sheet.iterator();
+            
+            while(iterator.hasNext()){
+                // dealsDao.deleteAll();
+                Row row = iterator.next();
+                if(rowNumber<=1){
+                    rowNumber++;
+                    continue;
+                }
+                Iterator<Cell> cells = row.iterator();
+                String t;
+                int cid=0;
+                Parent parent = new Parent();
+                while(cells.hasNext()){
+                    Cell cell = cells.next();
+                    switch(cid){
+                        case 0:
+                            value = formatter.formatCellValue(cell);
+                            System.out.println(value);
+                            parent.setParentName(value);
+                            break;
+                        case 1:
+                            value = formatter.formatCellValue(cell);
+                            System.out.println(value);
+                            String arr[] = value.split(";");
+                            ArrayList<CategoriesToDisplay> list = new ArrayList<>();
+
+                            for(int i=0;i<arr.length;i++){
+                                CategoriesToDisplay categoriesToDisplay = categoriesToDisplayDao.findBycategory(arr[i]);
+                                if(categoriesToDisplay!=null){
+                                    list.add(categoriesToDisplay);
+                                }
+                            }
+                            parent.setCategories(list);
+                            parentToDisplayDao.save(parent);
+                            break;
+                        default:
+                            break;
+                    }
+                    cid++;     
+                }
+            }
+            responseMessage.setMessage("Parent Categories saved successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
