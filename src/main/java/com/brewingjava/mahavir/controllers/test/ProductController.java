@@ -207,5 +207,17 @@ public class ProductController {
         }
     }
 
+    @PostMapping("/excel/isCategoryInNavbar")
+    public ResponseEntity<?> addIsInNavbar(@RequestParam("file") MultipartFile file){
+        try {
+            return excelHelper.addCategoryIsInNavBar(file.getInputStream());
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 }
 

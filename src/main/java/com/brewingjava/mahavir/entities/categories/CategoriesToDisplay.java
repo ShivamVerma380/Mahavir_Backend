@@ -27,6 +27,8 @@ public class CategoriesToDisplay {
 
     private HashMap<String,HashSet<String>> productFilters; //For storing filters
 
+    private boolean isInNavbar; // Boolean variable to store whether category is in Navbar Or Not.
+
     public CategoriesToDisplay() {
     }
 
@@ -89,11 +91,29 @@ public class CategoriesToDisplay {
         this.productFilters = productFilters;
     }
 
+    public String getCategory_image_url() {
+        return category_image_url;
+    }
+
+    public void setCategory_image_url(String category_image_url) {
+        this.category_image_url = category_image_url;
+    }
+
+    public boolean isInNavbar() {
+        return isInNavbar;
+    }
+
+    public void setInNavbar(boolean isInNavbar) {
+        this.isInNavbar = isInNavbar;
+    }
+
     @Override
     public String toString() {
-        return "CategoriesToDisplay [category=" + category + ", category_image_url=" + category_image_url + ", productFilters="
-                + productFilters + ", productInformationItemList=" + productInformationItemList + ", subCategories="
-                + subCategories + "]";
+        return "CategoriesToDisplay [category=" + category + ", category_image_url=" + category_image_url
+                + ", subCategories=" + subCategories + ", productInformationItemList=" + productInformationItemList
+                + ", productFilters=" + productFilters + ", isInNavbar=" + isInNavbar + "]";
     }
+
+    
     
 }

@@ -1058,7 +1058,62 @@ public class ExcelHelper {
         }
     }
 
-    
+    public ResponseEntity<?> addCategoryIsInNavBar(InputStream is){
+        try {
+            System.out.println("In addCategoryIsInNavBar");
+            XSSFWorkbook workbook = new XSSFWorkbook(is);
+            XSSFSheet sheet = workbook.getSheet("Is In Navbar");
+            int rowNumber=0;
+            DataFormatter formatter = new DataFormatter();
+            String value;
+            Iterator<Row> iterator = sheet.iterator();
+            while(iterator.hasNext()){
+                // dealsDao.deleteAll();
+                Row row = iterator.next();
+                if(rowNumber<=1){
+                    rowNumber++;
+                    continue;
+                }
+                Iterator<Cell> cells = row.iterator();
+                String t;
+                int cid=0;
+                CategoriesToDisplay categoriesToDisplay = null;
+                while(cells.hasNext()){
+                    Cell cell = cells.next();
+                    
+                    switch(cid){
+                        case 0:
+                            value = formatter.formatCellValue(cell);
+                            System.out.println(value);
+                            t = value;
+                            categoriesToDisplay = categoriesToDisplayDao.findBycategory(value);
+                            break;
+                        case 1:
+                            value = formatter.formatCellValue(cell);
+                            System.out.println(value);
+                            if(value.equalsIgnoreCase("Yes") && categoriesToDisplay!=null){
+                                categoriesToDisplay.setInNavbar(true);
+                                categoriesToDisplayDao.save(categoriesToDisplay);
+                            }else if(value.equalsIgnoreCase("No") && categoriesToDisplay!=null){
+                                categoriesToDisplay.setInNavbar(false);
+                                categoriesToDisplayDao.save(categoriesToDisplay);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    cid++;
+                }
+            }
+            responseMessage.setMessage("Categories Is In Navbar saved successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 
 
 
