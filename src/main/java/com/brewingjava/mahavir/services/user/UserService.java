@@ -289,7 +289,13 @@ public class UserService {
                     jwtResponse.setMessage(fetch_user.getFirstName()+" "+fetch_user.getLastName());
                     //String token = fetch_user.getToken();
 
-                    jwtResponse.setToken(fetch_user.getToken());
+                    // UserDetails userDetails = new UserD(fetch_user.getEmail(),fetch_user.getPassword(),new ArrayList<>());
+
+                    UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
+                    String token = jwtUtil.generateToken(userDetails);
+                    // String token = jwtUtil.generateToken(userDetails);
+
+                    jwtResponse.setToken(token);
                     return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
                 }
                 responseMessage.setMessage("Bad Credentials");

@@ -3,6 +3,7 @@ package com.brewingjava.mahavir.controllers.orders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import com.brewingjava.mahavir.helper.ResponseMessage;
 import com.brewingjava.mahavir.services.orders.OrderDetailsService;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class OrderController {
     
     @Autowired
