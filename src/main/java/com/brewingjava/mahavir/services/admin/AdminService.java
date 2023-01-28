@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -86,5 +87,45 @@ public class AdminService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
 
+    }
+
+    public ResponseEntity<?> loginAdmin(String email, String password) {
+        try {
+            Admin admin = adminDao.findByEmail(email);
+
+            if(admin==null){
+                responseMessage.setMessage("No admin account exists with this email");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+
+            //spring security
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+            if(!bCryptPasswordEncoder.matches(password, admin.getPassword())){
+                responseMessage.setMessage("Password is incorrect");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
+            String token = jwtUtil.generateToken(userDetails);
+            // String token = jwtUtil.generateToken(userDetails);
+
+            jwtResponse.setMessage("Admin logged in successfully");
+
+            jwtResponse.setToken(token);
+            return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
+            
+            // authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email,password));
+
+            //Admin is authenticated successfully
+
+
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
     }
 }
