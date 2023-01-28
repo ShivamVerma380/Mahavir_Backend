@@ -985,10 +985,13 @@ public class ExcelHelper {
             DataFormatter formatter = new DataFormatter();
             String value;
             Iterator<Row> iterator = sheet.iterator();
+            
+            dealsDao.deleteAll();
+            
             while(iterator.hasNext()){
-                dealsDao.deleteAll();
+                
                 Row row = iterator.next();
-                if(rowNumber<=1){
+                if(rowNumber<1){
                     rowNumber++;
                     continue;
                 }
@@ -1041,6 +1044,8 @@ public class ExcelHelper {
                             // deals.setProducts(products);
                             // deals.setCategories(new ArrayList<>(categories));
                             System.out.println("Deals:\n"+deals);
+                            deals.setProducts(products);
+                            deals.setCategories(new ArrayList<>(categories));
                             dealsDao.save(deals);
                             System.out.println("Saved");
                         break;
