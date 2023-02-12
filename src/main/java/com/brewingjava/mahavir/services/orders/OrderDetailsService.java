@@ -181,6 +181,15 @@ public class OrderDetailsService {
             orderDetails.setDeliveryDate(deliveryDate);
             orderDetails.setOrderCompleted(true);
             orderDetailsDao.save(orderDetails);
+
+            try {
+                
+                emailOrder.sendOrderDeliveredEmailToUser(orderDetails.getBuyerEmail(), orderDetails);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            // EmailOrder emailOrder = new EmailOrder();
+            // emailOrder.sendOrderDeliveredEmailToUser(orderDetails.getBuyerEmail(), orderDetails);
             responseMessage.setMessage("Order updated successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {

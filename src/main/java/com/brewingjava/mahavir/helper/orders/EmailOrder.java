@@ -118,4 +118,19 @@ public class EmailOrder {
         javaMailSender.send(mailMessage);
     }
 
+
+    public void sendOrderDeliveredEmailToUser(String to,OrderDetails orderDetails){
+        // Creating a Simple Mail Message object
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        // Setting up necessary details
+        mailMessage.setFrom("edatamahavir@gmail.com");
+        mailMessage.setTo(to);
+        mailMessage.setText("Thank you for shopping with Mahavir Electronics.\n"+"\nYour order has been delivered successfully with order id is #MEF100"+orderDetails.getOrderId()+"\nThanks & Regards,\nMahavir Electronics");
+        mailMessage.setSubject("Mahavir Electronics-Order Delivered");
+
+        // Sending the mail
+        javaMailSender.send(mailMessage);
+    }
+
 }
