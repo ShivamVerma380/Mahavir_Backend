@@ -17,6 +17,8 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import com.brewingjava.mahavir.daos.product.ProductDetailsDao;
@@ -31,6 +33,9 @@ public class EmailOrder {
 
     @Autowired
     public ProductDetailsDao productDetailsDao;
+
+    @Autowired private JavaMailSender javaMailSender;
+    
     
 
     public void sendEmailToAdmin(String email,OrderDetails orderDetails){
@@ -100,61 +105,17 @@ public class EmailOrder {
     }
 
     public void sendEmailToUser(String to,String name,OrderDetails orderDetails){
-        try {
-            String from = "edata@mahavirelectronics.net";
-            String subject = "Mahavir Electronics-Order Purchased";
-            
-            String host = "smtpout.secureserver.net";
+        // Creating a Simple Mail Message object
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-            Properties properties = System.getProperties();
+        // Setting up necessary details
+        mailMessage.setFrom("edatamahavir@gmail.com");
+        mailMessage.setTo(to);
+        mailMessage.setText("Dear "+name+",\n"+"Thank you for shopping with Mahavir Electronics.\n"+"\nYour order id is #MEF100"+orderDetails.getOrderId()+"\nThanks & Regards,\nMahavir Electronics");
+        mailMessage.setSubject("Mahavir Electronics-Order Purchased");
 
-            properties.put("mail.smtp.host", host);  //set up host as gmail.com
-            properties.put("mail.smtp.port", "465"); // gmail port number
-            properties.put("mail.smtp.ssl.enable", "true"); // security purposes
-            properties.put("mail.smtp.auth", "true"); //for authentication
-
-            // Step 1: Create session class object and override PasswordAuthentication method to set from
-
-            Session session = Session.getInstance(properties, new Authenticator() {
-            
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication(){
-                    return new PasswordAuthentication(from, "edata@1234");
-                }
-
-            });
-
-            session.setDebug(true);
-
-            //Step 2 Use Mimemessage class to send mail
-
-            MimeMessage m = new MimeMessage(session);
-
-            m.setFrom(from);
-
-            m.addRecipient(RecipientType.TO, new InternetAddress(to));
-
-            m.setSubject(subject);
-
-            Map<String,Integer> map = new HashMap<>();
-            for(Map.Entry<String,Integer> mp: orderDetails.getProducts().entrySet()){
-                String modelNumber = mp.getKey();
-                ProductDetail productDetail = productDetailsDao.findProductDetailBymodelNumber(modelNumber);
-                map.put(productDetail.getProductName(),mp.getValue());
-            }
-           
-
-
-            String message = "Dear "+name+",\n"+"Thank you for shopping with Mahavir Electronics.\n"+"Buy Date:"+orderDetails.getBuyDate()+"\nBuyer Email: "+orderDetails.getBuyerEmail()+"\nPayment Amount:Rs "+orderDetails.getPaymentAmount()+"\nPayment Mode:"+orderDetails.getPaymentMode()+"\nUser Address:"+orderDetails.getUserAddress().getAddress()+","+orderDetails.getUserAddress().getCity()+","+orderDetails.getUserAddress().getState()+","+orderDetails.getUserAddress().getPincode()+"\nOrder Details:"+map+"\nThanks & Regards,\nMahavir Electronics";
-
-            m.setText(message);
-
-            //Step 3: Transport mail
-            Transport.send(m);  //message send karne ke liye
-        } catch (Exception e) {
-            System.out.println("Error in sendEmailToUser");
-            e.printStackTrace();
-        }
+        // Sending the mail
+        javaMailSender.send(mailMessage);
     }
 
 }
